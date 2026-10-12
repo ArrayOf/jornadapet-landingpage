@@ -25,3 +25,11 @@ test('privacidade, obrigado e 404 existem', async ({ page }) => {
   expect(r?.status()).toBe(404);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Página não encontrada');
 });
+
+test('canonical e og:url sem index.html nem .html', async ({ page }) => {
+  for (const [rota, esperado] of [['/', 'http://localhost:4321/'], ['/privacidade', 'http://localhost:4321/privacidade']]) {
+    await page.goto(rota);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', esperado);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', esperado);
+  }
+});

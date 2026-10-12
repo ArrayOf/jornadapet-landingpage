@@ -1,0 +1,24 @@
+---
+import Simbolo from './Simbolo.astro';
+import { CONTATO_EMAIL } from '../data/conteudo';
+---
+<footer class="border-t border-line bg-surface">
+  <div class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 sm:px-6 md:flex-row md:items-start md:justify-between">
+    <div class="max-w-[32ch]">
+      <div class="flex items-center gap-2 text-ink"><Simbolo /><span class="display text-[18px] font-bold" translate="no">JornadaPet</span></div>
+      <p class="mt-3 text-[14px] leading-relaxed">Clientes, agenda e valores a receber para profissionais do cuidado animal.</p>
+    </div>
+    <div class="grid gap-x-12 gap-y-2 text-[14px] sm:grid-cols-2">
+      <a class="hover:text-ink" href="/#como-funciona">Como funciona</a>
+      <span class="select-all text-ink">{CONTATO_EMAIL}</span>
+      <a class="hover:text-ink" href="/#para-quem">Para quem</a>
+      <a class="hover:text-ink" href="/privacidade">Política de privacidade</a>
+      <a class="hover:text-ink" href="/#sobre">Sobre</a>
+      <a class="hover:text-ink" href="/#perguntas">Perguntas</a>
+    </div>
+  </div>
+  <div class="mx-auto flex max-w-6xl flex-col gap-1 border-t border-line px-4 py-5 text-[14px] text-mute sm:flex-row sm:justify-between sm:px-6">
+    <span>JornadaPet é um produto da <a href="https://arrayof.com.br" target="_blank" rel="noopener" class="text-ink underline decoration-line decoration-2 hover:decoration-accent">ArrayOf</a>.</span>
+    <span>© 2026 ArrayOf</span>
+  </div>
+</footer>

@@ -1,0 +1,12 @@
+---
+/** Símbolo "J-guia" (DESIGN.md, Shapes): J de traço único com argola de mosquetão. Cores fixas nos dois temas. */
+interface Props { tamanho?: 'sm' | 'md' | 'lg'; forma?: 'quadrado' | 'circulo' }
+const { tamanho = 'md', forma = 'quadrado' } = Astro.props;
+const caixa = { sm: 'size-6', md: 'size-8', lg: 'size-10' }[tamanho];
+const traco = { sm: 'size-3.5', md: 'size-5', lg: 'size-6' }[tamanho];
+---
+<span class:list={['grid shrink-0 place-items-center bg-[#e1e7d6] text-[#3f5a2c]', caixa, forma === 'circulo' ? 'rounded-full' : 'r-ctl']}>
+  <svg data-simbolo class={traco} viewBox="-1.75 -1 26 32" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" aria-hidden="true">
+    <path d="M20 4.5V18.5a7.25 7.25 0 0 1-14.5 0" /><circle cx="5.5" cy="13.75" r="3" />
+  </svg>
+</span>

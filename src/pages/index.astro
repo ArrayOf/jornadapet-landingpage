@@ -1,6 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Rodape from '../components/Rodape.astro';
+import BarraCelular from '../components/BarraCelular.astro';
 ---
 <Base title="JornadaPet: agenda e clientes para adestradores de cães" description="Organize tutores, pets, sessões e valores a receber do seu trabalho de adestramento no Telegram, sem instalar outro app. Acesso por convite.">
-  <main id="conteudo"><h1 class="text-[clamp(2.3rem,4.4vw,3.6rem)] font-bold leading-[1.04]">Adestrador: saiba quem já pagou e quem ainda falta.</h1></main>
+  <div x-data="pagina" :class="{ 'overflow-hidden': menu }">
+    <BarraCelular />
+    <Nav />
+    <main id="conteudo">
+      <h1 class="text-[clamp(2.3rem,4.4vw,3.6rem)] font-bold leading-[1.04]">Adestrador: saiba quem já pagou e quem ainda falta.</h1>
+    </main>
+    <Rodape />
+  </div>
 </Base>

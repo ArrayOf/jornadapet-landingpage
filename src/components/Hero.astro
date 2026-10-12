@@ -1,0 +1,50 @@
+---
+import { Picture } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import Simbolo from './Simbolo.astro';
+import thorHero from '../assets/thor-hero.jpg';
+---
+<section id="topo" class="relative overflow-hidden">
+  <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-8 pb-16 sm:px-6 md:pt-14 lg:grid-cols-[1.25fr_1fr] lg:gap-12 lg:pb-24">
+    <div class="hero-in flex flex-col items-start gap-5">
+      <span class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-[14px] font-medium text-ink">
+        <Icon name="ph:hammer" class="size-4" aria-hidden="true" /> Em construção, ouvindo adestradores
+      </span>
+      <h1 class="text-[clamp(2.3rem,4.4vw,3.6rem)] font-bold leading-[1.04]">Adestrador: saiba quem já pagou e quem ainda falta.</h1>
+      <p class="max-w-[46ch] text-[18px] leading-relaxed">Clientes, sessões e valores a receber organizados no Telegram. Sem caderno, sem planilha, sem instalar outro app.</p>
+      <div class="flex flex-wrap items-center gap-4 pt-1" x-intersect:enter="heroCta = true" x-intersect:leave="heroCta = false">
+        <a href="#participe" class="cta r-ctl inline-flex items-center gap-2 px-5 py-3.5 text-[16px] font-semibold">Quero testar <Icon name="ph:arrow-right" class="seta size-4" aria-hidden="true" /></a>
+        <a href="#como-funciona" class="text-[16px] font-medium text-ink underline decoration-line decoration-2 hover:decoration-accent">Ver como funciona</a>
+      </div>
+      <p class="flex items-center gap-2 text-[14px] text-mute"><Icon name="ph:envelope-simple-open" class="size-4 text-accent" aria-hidden="true" /> Acesso por convite. A gente chama você no WhatsApp.</p>
+    </div>
+
+    <div class="relative mx-auto w-full max-w-[520px]">
+      <div class="blob b1 -top-10 right-6 size-72"></div>
+      <div class="blob b2 top-40 -right-10 size-64"></div>
+      <div class="blob b3 -bottom-6 left-0 size-60"></div>
+      <figure class="hero-photo relative ml-auto w-[78%] overflow-hidden r-card" style="aspect-ratio: 5/6">
+        <Picture src={thorHero} formats={['avif', 'webp']} widths={[320, 480, 640, 800]} sizes="(min-width: 1024px) 410px, 78vw"
+          alt="Border collie correndo atrás de uma bolinha de tênis durante o treino" class="size-full object-cover" loading="eager" fetchpriority="high" />
+      </figure>
+      <div class="note n1 glass r-card absolute bottom-[3%] left-0 w-[78%] max-w-[300px] p-3 text-[14px] leading-snug text-ink" style="--r:-1.5deg"
+        role="img" aria-label="Exemplo: conversa com o bot da JornadaPet no Telegram, com o botão Abrir JornadaPet">
+        <div class="flex items-center gap-2 border-b border-line/60 pb-2">
+          <Simbolo tamanho="sm" forma="circulo" />
+          <div class="leading-tight"><div class="font-semibold">JornadaPet</div><div class="text-[12px] text-mute">bot</div></div>
+          <Icon name="ph:telegram-logo" class="ml-auto size-[18px] text-mute" aria-hidden="true" />
+        </div>
+        <div class="mt-2.5 flex flex-col gap-2">
+          <span class="self-end rounded-[14px] rounded-br-[4px] bg-accent px-3 py-1.5 font-medium text-accent-ink">/start</span>
+          <span class="max-w-[90%] self-start rounded-[14px] rounded-bl-[4px] bg-surface/90 px-3 py-2">Oi, Camila! Sua agenda, seus clientes e o que falta receber estão aqui.</span>
+          <span class="flex items-center justify-center gap-2 r-ctl bg-surface/90 py-2 font-semibold text-accent"><Icon name="ph:app-window" class="size-4" aria-hidden="true" /> Abrir JornadaPet</span>
+        </div>
+      </div>
+      <div class="note n2 glass r-card absolute right-[-2%] top-[8%] w-[56%] max-w-[220px] p-3.5 text-[14px] leading-snug text-ink" style="--r:2deg"
+        role="img" aria-label="Exemplo: Marina pagou 100 reais e faltam 200">
+        <div class="flex items-center gap-2 font-semibold"><Icon name="ph:check-circle-fill" class="size-4 text-accent" aria-hidden="true" /> Marina pagou R$ 100</div>
+        <div class="mt-1 text-[14px] text-mute">Faltam R$ 200 do pacote</div>
+      </div>
+    </div>
+  </div>
+</section>

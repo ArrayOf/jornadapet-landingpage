@@ -2,8 +2,7 @@
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import { SOCIOS } from '../data/conteudo';
-import selo from '../assets/marca/selo.png';
-import seloClaro from '../assets/marca/selo-claro.png';
+import Selo from './Selo.astro';
 const blocos = [
   { icone: 'ph:wrench', titulo: 'Em construção', texto: 'Acesso pelo Telegram, carteira de clientes, agenda e valores a receber.', classe: 'border border-line bg-bg' },
   { icone: 'ph:flask', titulo: 'Em estudo', texto: 'Pedidos por áudio e resumo da sessão para o tutor.', classe: 'bg-lilac' },
@@ -15,8 +14,7 @@ const blocos = [
     <div class="flex flex-col-reverse gap-6 md:flex-row md:items-start md:justify-between">
       <h2 class="max-w-[24ch] text-[clamp(1.8rem,3.6vw,2.8rem)] font-bold leading-[1.12]">Uma empresa pequena, que prefere ouvir antes de vender.</h2>
       {/* Selo redondo (NT-002): nunca abaixo de 96px; traço creme no tema escuro. */}
-      <Image src={selo} width={128} height={128} densities={[1, 2]} alt="JornadaPet, do adestrador" class="size-28 shrink-0 md:size-32 dark:hidden" />
-      <Image src={seloClaro} width={128} height={128} densities={[1, 2]} alt="JornadaPet, do adestrador" class="hidden size-28 shrink-0 md:size-32 dark:block" />
+      <Selo px={128} alt="JornadaPet, do adestrador" loading="lazy" />
     </div>
     <div class="mt-8 grid gap-6 text-[18px] leading-relaxed md:grid-cols-2 md:gap-12">
       <p>A JornadaPet nasceu de conversas com adestradores sobre a rotina de quem trabalha sozinho: atender bem, manter a agenda em ordem e lembrar quem ainda falta pagar, tudo ao mesmo tempo.</p>

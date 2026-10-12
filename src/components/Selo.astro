@@ -1,0 +1,10 @@
+---
+/** Selo redondo da marca (NT-002): traço oliva no tema claro, creme no escuro. Nunca abaixo de 42px no topo nem de 96px fora dele. */
+import { Image } from 'astro:assets';
+import selo from '../assets/marca/selo.png';
+import seloClaro from '../assets/marca/selo-claro.png';
+interface Props { px: number; alt?: string; class?: string; loading?: 'eager' | 'lazy' }
+const { px, alt = '', class: classe = '', loading = 'eager' } = Astro.props;
+---
+<Image data-selo src={selo} width={px} height={px} densities={[1, 2, 3]} {alt} {loading} class:list={['shrink-0 dark:hidden', classe]} style={`width:${px}px;height:${px}px`} />
+<Image data-selo src={seloClaro} width={px} height={px} densities={[1, 2, 3]} {alt} {loading} class:list={['hidden shrink-0 dark:block', classe]} style={`width:${px}px;height:${px}px`} />

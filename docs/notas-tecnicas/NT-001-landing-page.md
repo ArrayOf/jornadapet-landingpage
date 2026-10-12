@@ -653,8 +653,9 @@ plaqueta do J. Ele **substitui o J-guia** desta nota (§10.4 e §10.8). O que mu
   cabeça do mascote, assim como os favicons de 16 e 32 px. Nos tamanhos grandes entra o **selo
   redondo** (decisão do Thiago em 2026-10-12): apple-touch-icon, ícones de 192 e 512 px sobre o
   fundo da página, a imagem de compartilhamento (selo no lugar da cabeça) e um selo de 128px no
-  Sobre, com o traço creme no tema escuro. Abaixo de 96px o selo não se lê, por isso não vai no
-  favicon nem no menu (NT-002 §7).
+  Sobre, com o traço creme no tema escuro. No topo e no rodapé da página o selo também substitui a cabeça
+  (pedido do Thiago): 42px ao lado do nome, no topo de 64px. É a exceção à regra
+  dos 96px da NT-002 §7, e o nome ao lado garante a leitura. O favicon segue com a cabeça.
 - **Paleta:** o token `caramelo` passou de `#d17c3a` para `#dba05a`. Entraram `orelha` `#c7853f`,
   `creme` `#f6e3c4` e `lingua` `#e98a9a` como cores de ilustração, nunca em texto. O oliva segue
   como única cor de ação.

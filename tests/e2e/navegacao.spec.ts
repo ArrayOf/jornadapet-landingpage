@@ -35,12 +35,14 @@ test('rodapé tem endosso da ArrayOf, e-mail visível e link para a política', 
   await expect(rodape.getByRole('link', { name: 'Política de privacidade' })).toHaveAttribute('href', '/privacidade');
 });
 
-test('o símbolo é a cabeça do mascote (NT-002), sem fonte de ícones', async ({ page }) => {
+test('o topo mostra o selo redondo (NT-002) com 42px, sem fonte de ícones', async ({ page }) => {
   await page.goto('/');
-  const simbolo = page.locator('header img[data-simbolo]');
-  await expect(simbolo).toHaveCount(1);
-  await expect(simbolo).toHaveAttribute('alt', '');
-  expect(await simbolo.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+  const selo = page.locator('header img[data-selo]:visible');
+  await expect(selo).toHaveCount(1);
+  await expect(selo).toHaveAttribute('alt', '');
+  expect(await selo.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+  expect((await selo.boundingBox())!.width).toBeGreaterThanOrEqual(42);
+  await expect(page.locator('header img[data-simbolo]')).toHaveCount(0);
   expect(await page.locator('link[href*="phosphor"], .ph, svg[data-simbolo]').count()).toBe(0);
 });
 
@@ -54,4 +56,10 @@ test('fora da página inicial, "Quero testar" leva ao formulário da página ini
   }
   await expect(page).toHaveURL(/\/#participe$/);
   await expect(page.locator('#participe form')).toBeVisible();
+});
+
+test('o rodapé também mostra o selo redondo, como o topo', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('footer img[data-selo]:visible')).toHaveCount(1);
+  await expect(page.locator('footer img[data-simbolo]')).toHaveCount(0);
 });

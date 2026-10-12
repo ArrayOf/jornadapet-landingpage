@@ -311,8 +311,9 @@ O **símbolo** é a cabeça do mascote da [NT-002](docs/notas-tecnicas/NT-002-ma
 vira-lata caramelo de coleira oliva com a plaqueta do J, sobre sálvia. Na página, quadrado de 12px
 de raio (menu, rodapé) ou círculo (avatar do bot). Vem de `NT-002-assets/png/icon-512.png`,
 reduzido pelo Astro; o SVG vetorizado (cerca de 170 KB) não vai inline na página. Favicons de
-16 e 32px também são a cabeça. O **selo redondo** (traço oliva; creme no tema escuro) vai só de 96px
-para cima: ícone iOS, ícones do manifest, imagem de compartilhamento e o selo de 128px no Sobre. O
+16 e 32px também são a cabeça. O **selo redondo** (traço oliva; versão oliva com traço creme no
+tema escuro) é o logotipo do topo e do rodapé, com 42px ao lado do nome, num topo de 64px; fora do topo vai só de
+96px para cima: ícone iOS, ícones do manifest, imagem de compartilhamento e o selo de 128px no Sobre. O
 "J-guia" da NT-001 foi descartado.
 
 ## Components

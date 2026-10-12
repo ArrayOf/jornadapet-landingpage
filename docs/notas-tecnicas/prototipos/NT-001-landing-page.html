@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JornadaPet</title>
+<meta name="theme-color" content="#fcfcfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121214" media="(prefers-color-scheme: dark)">
+<meta name="description" content="A JornadaPet ajuda profissionais de cuidado e comportamento animal a registrar cada sessão e manter o Tutor bem informado.">
+<!--
+  PROTÓTIPO NT-001 (sem código de produto).
+  Abre direto do disco. Precisa de internet só para fontes, Tailwind, Alpine e ícones (CDN).
+  O painel "Protótipo" (canto inferior esquerdo) simula tema, envio do formulário, movimento e transparência.
+  Fotos: placedog.net, baixadas em NT-001-assets/. Substituir por fotos próprias antes de publicar.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://unpkg.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/fill/style.css">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script>
+<script>
+  // Antes de tudo: tema, movimento e transparência vindos do sistema (o painel pode sobrescrever).
+  (function () {
+    var h = document.documentElement, mm = function (q) { return window.matchMedia && matchMedia(q).matches; };
+    h.classList.remove('no-js'); h.classList.add('js');
+    if (mm('(prefers-color-scheme: dark)')) h.classList.add('dark');
+    if (mm('(prefers-reduced-motion: reduce)')) h.classList.add('rm');
+    if (mm('(prefers-reduced-transparency: reduce)')) h.classList.add('solid');
+  })();
+</script>
+<style type="text/tailwindcss">
+  @custom-variant dark (&:where(.dark, .dark *));
+  @theme inline {
+    --font-display: var(--f-display);
+    --font-sans: var(--f-sans);
+    --color-bg: var(--bg);
+    --color-surface: var(--surface);
+    --color-ink: var(--ink);
+    --color-body: var(--body);
+    --color-mute: var(--mute);
+    --color-line: var(--line);
+    --color-accent: var(--accent);
+    --color-accent-ink: var(--accent-ink);
+    --color-mint: var(--mint);
+    --color-butter: var(--butter);
+    --color-peach: var(--peach);
+    --color-sky: var(--sky);
+    --color-lilac: var(--lilac);
+    --color-rose: var(--rose);
+    --color-danger: var(--danger);
+  }
+</style>
+<style>
+  /* ============ TOKENS ============ */
+  :root {
+    --f-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+    --f-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+    --bg: #fcfcfb; --surface: #ffffff; --ink: #18181b; --body: #3f3f46; --mute: #63636b; --line: #e7e5e0;
+    --accent: #1f7a52; --accent-ink: #ffffff; --danger: #b42318;
+    --mint: #d9f3e1; --butter: #fef3c4; --peach: #ffe8d4; --sky: #dcecfa; --lilac: #e6e0f5; --rose: #fde0ec;
+    --blob-1: #ffd6b8; --blob-2: #bfe9cc; --blob-3: #f7c9dc; --blob-op: .85;
+    --glass: rgba(255,255,255,.58); --glass-edge: rgba(255,255,255,.85); --glass-hi: rgba(255,255,255,.9);
+    --shadow: 0 18px 40px -22px rgba(64,48,32,.35);
+    --cta: #18181b; --cta-ink: #fcfcfb;
+    color-scheme: light;
+  }
+  .dark {
+    --bg: #121214; --surface: #1a1a1d; --ink: #f4f4f5; --body: #cfcfd4; --mute: #a0a0a8; --line: #2b2b30;
+    --accent: #5fd39a; --accent-ink: #0f2a1d; --danger: #ff8a80;
+    --mint: #1f3a2c; --butter: #3a3420; --peach: #3e2b20; --sky: #1d2c3e; --lilac: #2c2642; --rose: #3d2231;
+    --blob-1: #6b3d22; --blob-2: #1f5a3a; --blob-3: #5a2440; --blob-op: .55;
+    --glass: rgba(32,32,36,.55); --glass-edge: rgba(255,255,255,.10); --glass-hi: rgba(255,255,255,.08);
+    --shadow: 0 18px 40px -22px rgba(0,0,0,.7);
+    --cta: #f4f4f5; --cta-ink: #121214;
+    color-scheme: dark;
+  }
+
+  @layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 5rem; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+  a, button, label, input, select { touch-action: manipulation; }
+  html.rm { scroll-behavior: auto; }
+  body { background: var(--bg); color: var(--body); font-family: var(--f-sans); font-feature-settings: "ss01"; }
+  h1, h2, h3, .display { font-family: var(--f-display); color: var(--ink); text-wrap: balance; letter-spacing: -0.025em; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--mint); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  input, select, textarea { caret-color: var(--accent); }
+  a { text-underline-offset: 3px; }
+  html { scrollbar-color: var(--line) transparent; }
+  }
+
+  /* Raios (trava de forma): cartões 16px, controles 12px, chips e selos em pílula. */
+  .r-card { border-radius: 16px; }
+  .r-ctl  { border-radius: 12px; }
+
+  /* ============ VIDRO ============ */
+  .glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid var(--glass-edge);
+    box-shadow: inset 0 1px 0 var(--glass-hi), var(--shadow);
+  }
+  .solid .glass { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; border-color: var(--line); }
+
+  /* ============ BLOBS ============ */
+  .blob { position: absolute; border-radius: 9999px; filter: blur(48px); opacity: var(--blob-op); pointer-events: none; will-change: transform; }
+  .blob.b1 { background: var(--blob-1); } .blob.b2 { background: var(--blob-2); } .blob.b3 { background: var(--blob-3); }
+
+  /* ============ BOTÃO ============ */
+  .cta { background: var(--cta); color: var(--cta-ink); transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s cubic-bezier(.16,1,.3,1); }
+  .cta:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -12px rgba(24,24,27,.45); }
+  .cta:active { transform: translateY(0) scale(.98); }
+  .cta .ph { transition: transform .25s cubic-bezier(.16,1,.3,1); }
+  .cta:hover .ph-arrow-right { transform: translateX(3px); }
+
+  /* ============ MOTION (tudo escopado em html:not(.rm)) ============ */
+  @keyframes rise   { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes pop    { from { opacity: 0; transform: translateY(16px) rotate(var(--r,0deg)) scale(.97); } to { opacity: 1; transform: rotate(var(--r,0deg)); } }
+  @keyframes float  { 0%,100% { transform: rotate(var(--r,0deg)) translateY(0); } 50% { transform: rotate(var(--r,0deg)) translateY(-5px); } }
+  @keyframes drift  { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-28px,22px) scale(1.12); } }
+  @keyframes bar    { 0%,100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+  @keyframes fill   { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  .note { transform: rotate(var(--r,0deg)); }
+  html:not(.rm) .hero-in > * { animation: rise .8s cubic-bezier(.16,1,.3,1) both; }
+  html:not(.rm) .hero-in > *:nth-child(2) { animation-delay: .07s; }
+  html:not(.rm) .hero-in > *:nth-child(3) { animation-delay: .14s; }
+  html:not(.rm) .hero-in > *:nth-child(4) { animation-delay: .21s; }
+  html:not(.rm) .hero-photo { animation: rise 1s cubic-bezier(.16,1,.3,1) .1s both; }
+  html:not(.rm) .note { animation: pop .8s cubic-bezier(.16,1,.3,1) both, float 7s ease-in-out infinite; }
+  html:not(.rm) .note.n1 { animation-delay: .45s, 1.25s; }
+  html:not(.rm) .note.n2 { animation-delay: .65s, 1.6s; }
+  html:not(.rm) .note.n3 { animation-delay: .85s, 1.9s; }
+  html:not(.rm) .blob { animation: drift 16s ease-in-out infinite; }
+  html:not(.rm) .blob.b2 { animation-duration: 19s; animation-direction: reverse; }
+  html:not(.rm) .blob.b3 { animation-duration: 23s; }
+  .wave i { display: block; width: 3px; height: 14px; border-radius: 3px; background: currentColor; transform-origin: bottom; transform: scaleY(.5); }
+  html:not(.rm) .wave.live i { animation: bar 1.1s ease-in-out infinite; }
+  .wave i:nth-child(2n) { animation-delay: .18s !important; } .wave i:nth-child(3n) { animation-delay: .36s !important; } .wave i:nth-child(5n) { animation-delay: .54s !important; }
+
+  /* Revelação no scroll: só quando há JS e movimento. Sem JS, tudo já visível. */
+  /* Revelação parte de um estado visível: só desliza. O conteúdo nunca fica invisível esperando o scroll. */
+  html.js:not(.rm) [data-reveal] { transform: translateY(18px); transition: transform .8s cubic-bezier(.16,1,.3,1); transition-delay: calc(var(--i, 0) * 90ms); }
+  html.js:not(.rm) [data-reveal].in { transform: none; }
+
+  /* Como funciona: troca de estado do palco */
+  .stage-card { transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1), filter .55s cubic-bezier(.16,1,.3,1); }
+  .stage-card[data-on="false"] { opacity: 0; transform: translateY(14px) scale(.98); filter: blur(6px); pointer-events: none; }
+  html.rm .stage-card { transition: none; filter: none !important; }
+  .step-progress { transform-origin: left; transform: scaleX(0); }
+  html:not(.rm) .step-progress.run { animation: fill var(--dur, 6s) linear forwards; }
+  html.rm .step-progress.run { transform: scaleX(1); }
+  .paused .step-progress.run { animation-play-state: paused; }
+
+  .bento-tile img { transition: transform .9s cubic-bezier(.16,1,.3,1); }
+  html:not(.rm) .bento-tile:hover img { transform: scale(1.04); }
+
+  /* Formulário */
+  .field { background: var(--surface); border: 1px solid var(--line); color: var(--ink); transition: border-color .2s, box-shadow .2s; }
+  .field::placeholder { color: var(--mute); }
+  .field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 22%, transparent); }
+  .field[aria-invalid="true"] { border-color: var(--danger); }
+  .chip-opt input { position: absolute; opacity: 0; pointer-events: none; }
+  .chip-opt span { border: 1px solid var(--line); background: var(--surface); color: var(--body); transition: background .2s, color .2s, border-color .2s; }
+  .chip-opt input:checked + span { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .chip-opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  [x-cloak] { display: none !important; }
+</style>
+</head>
+
+<body class="antialiased" x-data="page()" x-init="init()" :class="{ 'overflow-hidden': menu }">
+
+<a href="#conteudo" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 bg-surface text-ink px-4 py-2 r-ctl">Pular para o conteúdo</a>
+
+<!-- ============ NAV ============ -->
+<header class="sticky top-0 z-40 border-b transition-colors duration-300"
+        :class="scrolled ? 'border-line bg-bg/80 backdrop-blur-md' : 'border-transparent bg-transparent'">
+  <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6" aria-label="Principal">
+    <a href="#topo" class="flex items-center gap-2 text-ink" aria-label="JornadaPet, início">
+      <span class="grid size-8 place-items-center r-ctl bg-mint text-accent dark:text-ink"><i class="ph-fill ph-paw-print text-lg" aria-hidden="true"></i></span>
+      <span class="display text-[18px] font-bold" translate="no">JornadaPet</span>
+    </a>
+    <ul class="hidden items-center gap-7 text-[14px] font-medium text-body md:flex">
+      <li><a class="hover:text-ink" href="#como-funciona">Como funciona</a></li>
+      <li><a class="hover:text-ink" href="#para-quem">Para quem</a></li>
+      <li><a class="hover:text-ink" href="#sobre">Sobre</a></li>
+      <li><a class="hover:text-ink" href="#perguntas">Perguntas</a></li>
+    </ul>
+    <div class="flex items-center gap-2">
+      <a href="#participe" class="cta r-ctl hidden items-center gap-2 px-4 py-2.5 text-[14px] font-semibold sm:inline-flex">Quero participar</a>
+      <button type="button" class="grid size-10 place-items-center r-ctl text-ink md:hidden" @click="menu = !menu" :aria-expanded="menu" aria-controls="menu-mobile" :aria-label="menu ? 'Fechar menu' : 'Abrir menu'">
+        <i class="ph text-2xl" :class="menu ? 'ph-x' : 'ph-list'" aria-hidden="true"></i>
+      </button>
+    </div>
+  </nav>
+  <div id="menu-mobile" x-cloak x-show="menu" x-transition.opacity class="fixed inset-x-0 top-16 bottom-0 z-40 overscroll-contain bg-bg px-4 pt-4 md:hidden" @keydown.escape.window="menu=false">
+    <ul class="flex flex-col text-[20px] font-medium text-ink display">
+      <template x-for="l in [['Como funciona','#como-funciona'],['Para quem','#para-quem'],['Sobre','#sobre'],['Perguntas','#perguntas']]">
+        <li><a class="block border-b border-line py-4" :href="l[1]" x-text="l[0]" @click="menu=false"></a></li>
+      </template>
+    </ul>
+    <a href="#participe" @click="menu=false" class="cta r-ctl mt-6 flex items-center justify-center gap-2 px-5 py-3.5 font-semibold">Quero participar</a>
+  </div>
+</header>
+
+<main id="conteudo">
+
+<!-- ============ 1. HERO ============ -->
+<section id="topo" class="relative overflow-hidden">
+  <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-8 pb-16 sm:px-6 md:pt-14 lg:grid-cols-[1.25fr_1fr] lg:gap-12 lg:pb-24">
+    <div class="hero-in flex flex-col items-start gap-5">
+      <span class="inline-flex items-center gap-2 rounded-full bg-butter px-3 py-1 text-[14px] font-medium text-ink">
+        <i class="ph ph-hammer" aria-hidden="true"></i> Em construção com adestradores
+      </span>
+      <h1 class="text-[clamp(2.3rem,4.4vw,3.6rem)] font-bold leading-[1.04]">Cada sessão vira um registro. Cada Tutor, bem informado.</h1>
+      <p class="max-w-[46ch] text-[18px] leading-relaxed sm:text-[18px]">Grave um áudio depois do treino. A JornadaPet organiza a evolução do Pet e prepara o resumo para você revisar.</p>
+      <div class="flex flex-wrap items-center gap-4 pt-1">
+        <a href="#participe" class="cta r-ctl inline-flex items-center gap-2 px-5 py-3.5 text-[16px] font-semibold">Quero participar <i class="ph ph-arrow-right" aria-hidden="true"></i></a>
+        <a href="#como-funciona" class="text-[16px] font-medium text-ink underline decoration-line decoration-2 hover:decoration-accent">Ver como funciona</a>
+      </div>
+    </div>
+
+    <div class="relative mx-auto w-full max-w-[520px]">
+      <div class="blob b1 -top-10 right-6 size-72"></div>
+      <div class="blob b2 top-40 -right-10 size-64"></div>
+      <div class="blob b3 -bottom-6 left-0 size-60"></div>
+      <figure class="hero-photo relative ml-auto w-[78%] overflow-hidden r-card" style="aspect-ratio: 5/6">
+        <img src="NT-001-assets/thor-hero.jpg" alt="Border collie correndo atrás de uma bolinha de tênis durante o treino" class="size-full object-cover" width="1000" height="1200" fetchpriority="high">
+      </figure>
+      <div class="note n1 glass r-card absolute left-0 top-[8%] w-[66%] max-w-[260px] p-3.5 text-[14px] leading-snug text-ink" style="--r:-2.5deg">
+        <div class="mb-1.5 flex items-center gap-2 text-[12px] font-medium text-mute"><i class="ph-fill ph-microphone text-accent" aria-hidden="true"></i> Áudio de 1min12
+          <span class="wave live ml-auto flex items-end gap-[3px] text-accent" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
+        “Thor segurou o senta por 30 segundos, mesmo com distração.”
+      </div>
+      <div class="note n2 glass r-card absolute right-[-2%] top-[46%] w-[58%] max-w-[230px] p-3.5 text-[14px] leading-snug text-ink" style="--r:2deg">
+        <div class="flex items-center gap-2 font-semibold"><i class="ph ph-note text-accent" aria-hidden="true"></i> Resumo da sessão 4</div>
+        <div class="mt-1 text-[12px] text-mute">Pronto para sua revisão</div>
+      </div>
+      <div class="note n3 glass r-card absolute bottom-[4%] left-[4%] w-[64%] max-w-[220px] p-3.5 text-[14px] leading-snug text-ink" style="--r:-1deg">
+        <div class="flex items-center gap-2 font-semibold"><i class="ph-fill ph-check-circle text-accent" aria-hidden="true"></i> Enviado para a Marina</div>
+        <div class="mt-1 text-[12px] text-mute">Tutora do Thor</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. COMO FUNCIONA (momento de motion) ============ -->
+<section id="como-funciona" class="scroll-mt-20 bg-surface py-20 sm:py-24"
+         x-data="stepper()" x-intersect:enter="visible=true; start()" x-intersect:leave="visible=false; stop()"
+         @mouseenter="hold=true" @mouseleave="hold=false" @focusin="hold=true" @focusout="hold=false" :class="{ paused: hold }">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <h2 class="max-w-[18ch] text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">Do treino ao Tutor, sem abrir o computador.</h2>
+    <p class="mt-4 max-w-[52ch] text-[18px] leading-relaxed">Você fala do jeito que já fala. A organização e o texto ficam com a gente. A palavra final é sempre sua.</p>
+
+    <div class="mt-12 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
+      <!-- passos -->
+      <div role="tablist" aria-label="Passos" class="grid grid-cols-3 gap-2 lg:flex lg:flex-col lg:gap-3">
+        <template x-for="(s, i) in steps" :key="s.id">
+          <button type="button" role="tab" :id="'tab-'+s.id" :aria-selected="cur===i" :aria-controls="'painel-'+s.id" :tabindex="cur===i ? 0 : -1"
+                  @click="go(i)" @keydown.arrow-down.prevent="go((i+1)%3, true)" @keydown.arrow-right.prevent="go((i+1)%3, true)" @keydown.arrow-up.prevent="go((i+2)%3, true)" @keydown.arrow-left.prevent="go((i+2)%3, true)"
+                  class="group relative overflow-hidden r-card border p-3 text-left transition-colors duration-300 lg:p-5"
+                  :class="cur===i ? 'border-transparent bg-bg' : 'border-line hover:bg-bg/60'">
+            <div class="flex flex-col items-start gap-2 lg:flex-row lg:items-center lg:gap-3">
+              <span class="grid size-10 shrink-0 place-items-center r-ctl transition-colors duration-300" :class="cur===i ? s.tint + ' text-ink' : 'bg-bg text-mute'">
+                <i class="ph text-xl" :class="s.icon" aria-hidden="true"></i></span>
+              <span class="display text-[14px] font-semibold text-ink sm:text-[16px] lg:text-[20px]" x-text="s.title"></span>
+            </div>
+            <p class="mt-2 hidden max-w-[40ch] text-[16px] leading-relaxed lg:block" x-text="s.text"></p>
+            <span class="absolute inset-x-0 bottom-0 h-[3px] bg-line/60" aria-hidden="true">
+              <span class="step-progress block h-full bg-accent" :class="{ run: cur===i && auto }" :style="'--dur:'+dur+'ms'" @animationend="next()"></span>
+            </span>
+          </button>
+        </template>
+      </div>
+
+      <!-- palco -->
+      <div class="relative min-h-[540px] overflow-hidden r-card bg-bg p-5 sm:min-h-[440px] sm:p-8">
+        <div class="blob b1 -top-16 -left-10 size-72"></div>
+        <div class="blob b2 -bottom-20 right-0 size-80"></div>
+        <button type="button" x-show="!reduced" class="absolute right-3 top-3 z-10 grid size-9 place-items-center rounded-full border border-line bg-surface/80 text-ink hover:bg-surface" @click="auto ? stop() : (auto = true)" :aria-label="auto ? 'Pausar a demonstração' : 'Retomar a demonstração'"><i class="ph" :class="auto ? 'ph-pause' : 'ph-play'" aria-hidden="true"></i></button>
+        <p class="relative pr-10 text-[16px] leading-relaxed text-body lg:hidden" x-text="steps[cur].text"></p>
+
+        <!-- Fale -->
+        <div id="painel-fale" role="tabpanel" tabindex="0" aria-labelledby="tab-fale" class="stage-card absolute inset-x-4 top-32 sm:inset-x-10 sm:top-10 lg:top-12" :data-on="String(cur===0)" :aria-hidden="cur!==0">
+          <div class="glass r-card mx-auto max-w-[380px] p-4">
+            <div class="flex items-center gap-3 border-b border-line/70 pb-3">
+              <span class="grid size-9 place-items-center rounded-full bg-mint text-accent dark:text-ink"><i class="ph-fill ph-paw-print" aria-hidden="true"></i></span>
+              <div><div class="text-[14px] font-semibold text-ink">JornadaPet</div><div class="text-[12px] text-mute">no seu Telegram</div></div>
+            </div>
+            <div class="mt-4 flex flex-col gap-2.5 text-[14px]">
+              <div class="self-start r-ctl bg-surface px-3 py-2 text-ink shadow-sm">Como foi a sessão do Thor hoje?</div>
+              <div class="flex items-center gap-3 self-end r-ctl bg-mint px-3 py-2.5 text-ink">
+                <i class="ph-fill ph-play text-accent dark:text-ink" aria-hidden="true"></i>
+                <span class="wave flex items-end gap-[3px] text-accent dark:text-ink" :class="{ live: cur===0 }" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                <span class="text-[12px] text-mute">1:12</span>
+              </div>
+              <div class="flex items-center gap-2 self-end text-[12px] text-mute"><i class="ph ph-image" aria-hidden="true"></i> 2 fotos anexadas</div>
+              <div class="self-start r-ctl bg-surface px-3 py-2 text-ink shadow-sm">Recebi! Estou montando o resumo.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Revise -->
+        <div id="painel-revise" role="tabpanel" tabindex="0" aria-labelledby="tab-revise" class="stage-card absolute inset-x-4 top-32 sm:inset-x-10 sm:top-10 lg:top-12" :data-on="String(cur===1)" :aria-hidden="cur!==1">
+          <div class="glass r-card mx-auto max-w-[400px] p-5 text-[14px]">
+            <div class="flex items-center justify-between"><span class="text-[12px] font-medium text-mute">Rascunho</span><span class="rounded-full bg-butter px-2.5 py-0.5 text-[12px] font-medium text-ink">Aguardando você</span></div>
+            <h3 class="mt-2 text-[20px] font-semibold">Thor, sessão 4 de 8</h3>
+            <dl class="mt-3 space-y-3">
+              <div><dt class="text-[12px] font-semibold text-mute">O que trabalhamos</dt><dd class="text-ink">Senta e fica com distração, andar junto na calçada.</dd></div>
+              <div><dt class="text-[12px] font-semibold text-mute">Como ele foi</dt><dd class="text-ink">Segurou o senta por 30 segundos. Ainda puxa a guia quando vê outro cão.</dd></div>
+              <div><dt class="text-[12px] font-semibold text-mute">Para praticar em casa</dt><dd class="text-ink">Duas séries de 5 minutos por dia, antes da refeição.</dd></div>
+            </dl>
+            <div class="mt-4 flex gap-2">
+              <span class="inline-flex items-center gap-1.5 r-ctl border border-line bg-surface px-3 py-2 text-[14px] font-medium text-ink"><i class="ph ph-pencil-simple" aria-hidden="true"></i> Editar</span>
+              <span class="inline-flex items-center gap-1.5 r-ctl bg-accent px-3 py-2 text-[14px] font-semibold text-accent-ink"><i class="ph ph-check" aria-hidden="true"></i> Aprovar</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compartilhe -->
+        <div id="painel-compartilhe" role="tabpanel" tabindex="0" aria-labelledby="tab-compartilhe" class="stage-card absolute inset-x-4 top-32 sm:inset-x-10 sm:top-10 lg:top-12" :data-on="String(cur===2)" :aria-hidden="cur!==2">
+          <div class="glass r-card mx-auto max-w-[380px] p-5 text-[14px]">
+            <div class="flex items-center gap-2 text-[14px] font-medium text-accent"><i class="ph-fill ph-check-circle" aria-hidden="true"></i> Resumo aprovado</div>
+            <div class="mt-3 flex items-center gap-3 r-ctl border border-line bg-surface p-3">
+              <img src="NT-001-assets/thor-avatar.jpg" alt="" width="44" height="44" loading="lazy" class="size-11 rounded-full object-cover">
+              <div class="min-w-0"><div class="font-semibold text-ink">Resumo da sessão do Thor</div><div class="truncate text-[12px] text-mute">jornadapet.com.br/r/thor-s4</div></div>
+            </div>
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <span class="inline-flex items-center justify-center gap-1.5 r-ctl border border-line bg-surface px-3 py-2.5 text-[14px] font-medium text-ink"><i class="ph ph-copy" aria-hidden="true"></i> Copiar link</span>
+              <span class="inline-flex items-center justify-center gap-1.5 r-ctl bg-accent px-3 py-2.5 text-[14px] font-semibold text-accent-ink"><i class="ph ph-whatsapp-logo" aria-hidden="true"></i> Enviar</span>
+            </div>
+            <p class="mt-3 flex items-center gap-1.5 text-[12px] text-mute"><i class="ph ph-clock" aria-hidden="true"></i> Somente leitura, válido por 7&nbsp;dias.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. O QUE O TUTOR RECEBE ============ -->
+<section class="relative overflow-hidden py-20 sm:py-28">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div class="mx-auto max-w-[40ch] text-center">
+      <h2 class="text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">O que a Marina abre no celular.</h2>
+      <p class="mt-4 text-[18px] leading-relaxed">Um resumo claro da sessão, com as fotos que você escolheu. Sem instalar nada e sem criar conta.</p>
+    </div>
+
+    <div class="mt-14 grid items-center gap-10 lg:grid-cols-[1fr_auto_1fr] lg:gap-12">
+      <ul class="order-2 flex flex-col gap-5 lg:order-1 lg:items-end lg:text-right" x-data x-intersect.once="$el.querySelectorAll('[data-reveal]').forEach(e=>e.classList.add('in'))">
+        <li data-reveal style="--i:0" class="max-w-[30ch]"><i class="ph ph-microphone-stage mb-2 block text-2xl text-accent" aria-hidden="true"></i><span class="display text-[18px] font-semibold text-ink">Na sua voz</span><p class="mt-1 text-[16px] leading-relaxed">O texto parte do que você falou. Você edita o que quiser antes de enviar.</p></li>
+        <li data-reveal style="--i:1" class="max-w-[30ch]"><i class="ph ph-images mb-2 block text-2xl text-accent" aria-hidden="true"></i><span class="display text-[18px] font-semibold text-ink">Fotos e vídeos escolhidos</span><p class="mt-1 text-[16px] leading-relaxed">Só vai o que você marcou para compartilhar.</p></li>
+      </ul>
+
+      <!-- celular: prévia real do resumo -->
+      <div class="relative order-1 mx-auto lg:order-2">
+        <div class="blob b3 -left-16 top-10 size-72"></div>
+        <div class="blob b2 -right-16 bottom-0 size-72"></div>
+        <div class="relative w-[300px] rounded-[44px] border border-line bg-ink p-2.5 shadow-[0_30px_60px_-30px_rgba(24,24,27,.5)] dark:bg-[#2a2a2e]">
+          <div class="h-[580px] overflow-hidden rounded-[36px] bg-surface">
+            <div class="relative h-40">
+              <img src="NT-001-assets/thor-hero.jpg" alt="" width="1000" height="1200" loading="lazy" class="size-full object-cover object-[50%_30%]">
+              <div class="absolute inset-x-3 bottom-3 glass r-ctl px-3 py-2"><div class="text-[12px] text-mute">Sessão 4 de 8, 9 de outubro</div><div class="display text-[18px] font-bold text-ink">Thor</div></div>
+            </div>
+            <div class="space-y-4 p-4 text-[14px] leading-relaxed text-body">
+              <div class="flex items-center gap-2 text-[12px] text-mute"><span class="grid size-6 place-items-center rounded-full bg-mint text-accent dark:text-ink"><i class="ph-fill ph-paw-print text-[12px]" aria-hidden="true"></i></span> Adestramento com Camila Duarte</div>
+              <div><div class="text-[12px] font-semibold uppercase tracking-wide text-mute">O que trabalhamos</div><p class="text-ink">Senta e fica com distração. Andar junto na calçada.</p></div>
+              <div><div class="text-[12px] font-semibold uppercase tracking-wide text-mute">Como ele foi</div><p class="text-ink">Segurou o senta por 30 segundos. Ainda puxa a guia quando vê outro cão, e é nisso que vamos focar.</p></div>
+              <div class="grid grid-cols-2 gap-2"><img src="NT-001-assets/sessao-1.jpg" alt="" width="400" height="300" loading="lazy" class="h-20 w-full r-ctl object-cover"><img src="NT-001-assets/sessao-2.jpg" alt="" width="400" height="300" loading="lazy" class="h-20 w-full r-ctl object-cover"></div>
+              <div class="r-ctl bg-butter p-3"><div class="text-[12px] font-semibold uppercase tracking-wide text-ink/70">Para praticar em casa</div>
+                <ul class="mt-1 space-y-1 text-ink"><li class="flex gap-2"><i class="ph ph-check-square text-[16px]" aria-hidden="true"></i> 2 séries de 5&nbsp;min por dia</li><li class="flex gap-2"><i class="ph ph-check-square text-[16px]" aria-hidden="true"></i> Petisco só depois do “fica”</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="order-3 flex flex-col gap-5" x-data x-intersect.once="$el.querySelectorAll('[data-reveal]').forEach(e=>e.classList.add('in'))">
+        <li data-reveal style="--i:2" class="max-w-[30ch]"><i class="ph ph-link mb-2 block text-2xl text-accent" aria-hidden="true"></i><span class="display text-[18px] font-semibold text-ink">Abre direto do link</span><p class="mt-1 text-[16px] leading-relaxed">Você manda pelo WhatsApp, como já faz hoje. A Marina toca e lê.</p></li>
+        <li data-reveal style="--i:3" class="max-w-[30ch]"><i class="ph ph-lock-simple mb-2 block text-2xl text-accent" aria-hidden="true"></i><span class="display text-[18px] font-semibold text-ink">Só leitura, por tempo limitado</span><p class="mt-1 text-[16px] leading-relaxed">O link expira. Nada fica público para sempre.</p></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. PARA QUEM ============ -->
+<section id="para-quem" class="scroll-mt-20 bg-surface py-20 sm:py-24">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <h2 class="max-w-[20ch] text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">Feito primeiro para adestradores. Aberto a quem cuida.</h2>
+    <p class="mt-4 max-w-[54ch] text-[18px] leading-relaxed">Estamos começando com quem acompanha a evolução do Pet sessão a sessão. Se o seu trabalho é outro, queremos ouvir você também.</p>
+
+    <div class="mt-12 grid auto-rows-[minmax(200px,auto)] gap-3 sm:grid-cols-2 lg:grid-cols-4" x-data x-intersect.once="$el.querySelectorAll('[data-reveal]').forEach(e=>e.classList.add('in'))">
+      <article data-reveal style="--i:0" class="bento-tile group relative overflow-hidden r-card sm:col-span-2 lg:row-span-2">
+        <img src="NT-001-assets/adestrador.jpg" alt="Bull terrier saltando em um campo aberto" width="900" height="900" loading="lazy" class="absolute inset-0 size-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+        <div class="relative flex h-full min-h-[320px] flex-col justify-end p-6 text-white">
+          <span class="mb-3 w-max rounded-full bg-mint px-3 py-1 text-[12px] font-semibold text-[#14532d]">Agora</span>
+          <h3 class="text-[28px] font-bold text-white">Adestradores</h3>
+          <p class="mt-1 max-w-[38ch] text-[16px] text-white/90">Autônomos com carteira recorrente. É com vocês que estamos construindo agora.</p>
+        </div>
+      </article>
+      <template x-for="(t, i) in [
+          {img:'passeador',  alt:'Golden retriever sorrindo',          title:'Passeadores e pet sitters', tint:'bg-peach'},
+          {img:'creche',     alt:'Cão de pelo branco deitado em um sofá', title:'Creches e hotéis',         tint:'bg-sky'},
+          {img:'banho-tosa', alt:'Buldogue francês olhando para a câmera', title:'Banho e tosa',            tint:'bg-lilac'},
+          {img:'veterinario',alt:'Golden retriever descansando no chão', title:'Veterinários',              tint:'bg-rose'}]">
+        <article data-reveal :style="'--i:'+(i+1)" class="bento-tile flex overflow-hidden r-card" :class="t.tint">
+          <div class="flex flex-1 flex-col justify-between p-5">
+            <h3 class="text-[20px] font-semibold leading-tight" x-text="t.title"></h3>
+            <p class="text-[14px] text-ink/75">Queremos ouvir você também.</p>
+          </div>
+          <img :src="'NT-001-assets/'+t.img+'.jpg'" :alt="t.alt" width="600" height="600" loading="lazy" class="w-[42%] object-cover">
+        </article>
+      </template>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. SOBRE ============ -->
+<section id="sobre" class="scroll-mt-20 py-20 sm:py-28">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <h2 class="max-w-[24ch] text-[clamp(1.8rem,3.6vw,2.8rem)] font-semibold leading-[1.12]">Uma empresa pequena, construindo junto com quem atende. Preferimos ouvir antes de vender.</h2>
+    <div class="mt-8 grid gap-6 text-[18px] leading-relaxed md:grid-cols-2 md:gap-12">
+      <p>A JornadaPet nasceu de conversas com uma adestradora que passava as noites escrevendo para os tutores o que tinha acontecido no treino. O trabalho era bom, mas o registro tomava o tempo que ela não tinha.</p>
+      <p>Hoje estamos transformando essa ideia em produto, com profissionais de verdade testando cada parte. Somos dois sócios, e respondemos pessoalmente quem se inscreve.</p>
+    </div>
+
+    <div class="mt-14 grid gap-3 md:grid-cols-3">
+      <div class="r-card bg-mint p-6"><div class="flex items-center gap-2 text-[14px] font-semibold text-ink"><i class="ph ph-wrench" aria-hidden="true"></i> Em construção</div><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Acesso pelo Telegram, carteira de clientes e agenda das sessões.</p></div>
+      <div class="r-card bg-butter p-6"><div class="flex items-center gap-2 text-[14px] font-semibold text-ink"><i class="ph ph-flask" aria-hidden="true"></i> Em teste</div><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Resumo da sessão escrito a partir do áudio e revisado por você.</p></div>
+      <div class="r-card bg-lilac p-6"><div class="flex items-center gap-2 text-[14px] font-semibold text-ink"><i class="ph ph-magnifying-glass" aria-hidden="true"></i> Ainda descobrindo</div><p class="mt-3 text-[16px] leading-relaxed text-ink/85">Preço, quais profissionais mais precisam disso e se o Telegram é o canal certo.</p></div>
+    </div>
+
+    <!-- PLACEHOLDER: fotos e nomes dos sócios -->
+    <div class="mt-10 flex flex-wrap gap-6">
+      <template x-for="n in [1,2]">
+        <div class="flex items-center gap-4">
+          <div class="grid size-14 place-items-center rounded-full border-2 border-dashed border-line text-mute"><i class="ph ph-user" aria-hidden="true"></i></div>
+          <div><div class="font-semibold text-ink">[Nome do sócio]</div><div class="text-[14px] text-mute">[Papel na JornadaPet]</div></div>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. PARTICIPE ============ -->
+<section id="participe" class="scroll-mt-20 relative overflow-hidden bg-surface py-20 sm:py-28">
+  <div class="blob b1 top-10 right-[10%] size-[420px]"></div>
+  <div class="blob b2 bottom-0 right-[30%] size-[360px]"></div>
+  <div class="blob b3 top-1/3 right-0 size-[300px]"></div>
+  <div class="relative mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+    <div>
+      <h2 class="max-w-[16ch] text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">Participe da construção.</h2>
+      <p class="mt-4 max-w-[44ch] text-[18px] leading-relaxed">Deixe seu contato. A gente chama você no WhatsApp para entender a sua rotina, sem compromisso.</p>
+      <ul class="mt-8 space-y-5">
+        <li class="flex gap-4"><span class="grid size-10 shrink-0 place-items-center r-ctl bg-mint text-ink"><i class="ph ph-chats-circle text-xl" aria-hidden="true"></i></span><div><div class="font-semibold text-ink">Uma conversa sobre o seu dia a dia</div><p class="text-[16px]">No horário que for melhor para você.</p></div></li>
+        <li class="flex gap-4"><span class="grid size-10 shrink-0 place-items-center r-ctl bg-peach text-ink"><i class="ph ph-key text-xl" aria-hidden="true"></i></span><div><div class="font-semibold text-ink">Acesso ao teste antes de todo mundo</div><p class="text-[16px]">Sem custo enquanto estivermos testando.</p></div></li>
+        <li class="flex gap-4"><span class="grid size-10 shrink-0 place-items-center r-ctl bg-lilac text-ink"><i class="ph ph-compass text-xl" aria-hidden="true"></i></span><div><div class="font-semibold text-ink">Sua opinião decidindo o produto</div><p class="text-[16px]">O que você pedir entra na nossa lista de prioridades.</p></div></li>
+      </ul>
+    </div>
+
+    <div class="glass r-card p-5 sm:p-8" x-data="form()">
+      <!-- sucesso -->
+      <div x-cloak x-show="status==='ok'" x-transition.opacity.duration.400ms class="flex min-h-[420px] flex-col items-start justify-center" role="status" tabindex="-1" x-ref="ok">
+        <span class="grid size-14 place-items-center rounded-full bg-mint text-accent dark:text-ink"><i class="ph-fill ph-check-circle text-3xl" aria-hidden="true"></i></span>
+        <h3 class="mt-5 break-words text-[28px] font-bold">Recebemos, <span x-text="first()"></span>!</h3>
+        <p class="mt-2 max-w-[38ch] text-[16px] leading-relaxed">Vamos chamar você no WhatsApp <span class="font-semibold text-ink" x-text="f.whatsapp"></span> nos próximos dias.</p>
+        <button type="button" class="mt-6 text-[14px] font-medium text-ink underline decoration-line decoration-2 hover:decoration-accent" @click="reset()">Enviar outro contato</button>
+      </div>
+
+      <form x-show="status!=='ok'" @submit.prevent="submit()" novalidate class="space-y-5" aria-describedby="form-erro">
+        <div class="space-y-2">
+          <label for="f-nome" class="block text-[14px] font-semibold text-ink">Seu nome</label>
+          <input id="f-nome" name="nome" x-model.trim="f.nome" @blur="touch('nome')" :aria-invalid="!!err.nome" aria-describedby="e-nome" autocomplete="name" class="field r-ctl w-full px-4 py-3 text-[16px]">
+          <p id="e-nome" aria-live="polite" class="text-[14px] text-danger" x-show="err.nome" x-text="err.nome"></p>
+        </div>
+        <div class="space-y-2">
+          <label for="f-whats" class="block text-[14px] font-semibold text-ink">WhatsApp</label>
+          <input id="f-whats" name="whatsapp" type="tel" x-model="f.whatsapp" @input="mask()" @blur="touch('whatsapp')" :aria-invalid="!!err.whatsapp" aria-describedby="h-whats e-whats" inputmode="tel" autocomplete="tel-national" placeholder="(11) 98765-4321…" class="field r-ctl w-full px-4 py-3 text-[16px]">
+          <p id="h-whats" class="text-[14px] text-mute">Usamos só para falar com você sobre o teste.</p>
+          <p id="e-whats" aria-live="polite" class="text-[14px] text-danger" x-show="err.whatsapp" x-text="err.whatsapp"></p>
+        </div>
+        <fieldset class="space-y-2" aria-describedby="e-perfil" :aria-invalid="!!err.perfil">
+          <legend class="mb-2 block text-[14px] font-semibold text-ink">Você trabalha com</legend>
+          <div class="flex flex-wrap gap-2">
+            <template x-for="o in perfis">
+              <label class="chip-opt relative"><input type="radio" name="perfil" :id="'f-perfil-'+perfis.indexOf(o)" :value="o" x-model="f.perfil" @change="touch('perfil')"><span class="inline-block cursor-pointer rounded-full px-3.5 py-2 text-[14px] hover:border-ink/40" x-text="o"></span></label>
+            </template>
+          </div>
+          <p id="e-perfil" aria-live="polite" class="text-[14px] text-danger" x-show="err.perfil" x-text="err.perfil"></p>
+        </fieldset>
+        <div class="space-y-2">
+          <label for="f-cidade" class="block text-[14px] font-semibold text-ink">Cidade e estado</label>
+          <input id="f-cidade" name="cidade" x-model.trim="f.cidade" @blur="touch('cidade')" :aria-invalid="!!err.cidade" aria-describedby="e-cidade" autocomplete="address-level2" placeholder="Campinas, SP…" class="field r-ctl w-full px-4 py-3 text-[16px]">
+          <p id="e-cidade" aria-live="polite" class="text-[14px] text-danger" x-show="err.cidade" x-text="err.cidade"></p>
+        </div>
+        <input type="text" name="empresa" x-model="f.hp" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+        <div class="space-y-2">
+          <label class="flex items-start gap-3 text-[14px] leading-snug">
+            <input type="checkbox" id="f-aceite" name="aceite" aria-describedby="e-aceite" :aria-invalid="!!err.aceite" x-model="f.aceite" @change="touch('aceite')" class="mt-0.5 size-5 shrink-0 accent-[var(--accent)]">
+            <span>Aceito ser contatado(a) pela JornadaPet sobre o teste. Meus dados não serão compartilhados. <a href="#" class="font-medium text-ink underline">Política de privacidade</a></span>
+          </label>
+          <p id="e-aceite" aria-live="polite" class="text-[14px] text-danger" x-show="err.aceite" x-text="err.aceite"></p>
+        </div>
+
+        <div id="form-erro" x-show="status==='erro'" x-cloak role="alert" class="flex gap-3 r-ctl border border-danger/40 bg-danger/10 p-3 text-[14px] text-ink">
+          <i class="ph ph-warning-circle mt-0.5 text-lg text-danger" aria-hidden="true"></i>
+          <span>Não conseguimos enviar agora. Seus dados continuam aqui: tente de novo em instantes ou escreva para <a href="mailto:contato@jornadapet.com.br" class="font-medium underline">contato@jornadapet.com.br</a>.</span>
+        </div>
+
+        <button type="submit" :disabled="status==='enviando'" class="cta r-ctl flex w-full items-center justify-center gap-2 px-5 py-4 text-[16px] font-semibold disabled:cursor-progress disabled:opacity-80">
+          <template x-if="status!=='enviando'"><span class="inline-flex items-center gap-2">Quero participar <i class="ph ph-arrow-right" aria-hidden="true"></i></span></template>
+          <template x-if="status==='enviando'"><span class="inline-flex items-center gap-2"><i class="ph ph-circle-notch animate-spin" aria-hidden="true"></i> Enviando…</span></template>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. PERGUNTAS ============ -->
+<section id="perguntas" class="scroll-mt-20 py-20 sm:py-28">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <h2 class="text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">Perguntas que já ouvimos.</h2>
+      <p class="mt-4 max-w-[36ch] text-[18px] leading-relaxed">Ficou outra dúvida? Pergunte no formulário, a gente responde na conversa.</p>
+    </div>
+    <div class="divide-y divide-line border-y border-line" x-data="{ open: 0 }">
+      <template x-for="(q, i) in faq" :key="i">
+        <div>
+          <h3 class="font-sans">
+            <button type="button" class="flex w-full items-center justify-between gap-6 py-5 text-left text-[18px] font-semibold text-ink hover:text-accent" @click="open = open===i ? null : i" :aria-expanded="open===i" :aria-controls="'faq-'+i">
+              <span x-text="q.q"></span>
+              <i class="ph ph-plus shrink-0 text-xl transition-transform duration-300" :class="{ 'rotate-45': open===i }" aria-hidden="true"></i>
+            </button>
+          </h3>
+          <div :id="'faq-'+i" x-show="open===i" x-collapse.duration.350ms>
+            <p class="max-w-[60ch] pb-6 text-[16px] leading-relaxed" x-text="q.a"></p>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ 8. RODAPÉ ============ -->
+<footer class="border-t border-line bg-surface">
+  <div class="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 sm:px-6 md:flex-row md:items-start md:justify-between">
+    <div class="max-w-[32ch]">
+      <div class="flex items-center gap-2 text-ink"><span class="grid size-8 place-items-center r-ctl bg-mint text-accent dark:text-ink"><i class="ph-fill ph-paw-print text-lg" aria-hidden="true"></i></span><span class="display text-[18px] font-bold" translate="no">JornadaPet</span></div>
+      <p class="mt-3 text-[14px] leading-relaxed">Registro e acompanhamento para profissionais de cuidado e comportamento animal.</p>
+    </div>
+    <div class="grid gap-x-12 gap-y-2 text-[14px] sm:grid-cols-2">
+      <a class="hover:text-ink" href="#como-funciona">Como funciona</a>
+      <a class="hover:text-ink" href="mailto:contato@jornadapet.com.br">contato@jornadapet.com.br</a>
+      <a class="hover:text-ink" href="#para-quem">Para quem</a>
+      <a class="hover:text-ink" href="#">Política de privacidade</a>
+      <a class="hover:text-ink" href="#sobre">Sobre</a>
+      <a class="hover:text-ink" href="#perguntas">Perguntas</a>
+    </div>
+  </div>
+  <div class="mx-auto max-w-6xl border-t border-line px-4 py-5 text-[14px] text-mute sm:px-6">© 2026 JornadaPet</div>
+</footer>
+
+<!-- ============ PAINEL DO PROTÓTIPO (não vai para o produto) ============ -->
+<div class="fixed bottom-4 left-4 z-50 font-sans text-[14px]" x-data="{ o: false }">
+  <button type="button" @click="o=!o" class="flex items-center gap-2 rounded-full border border-line bg-surface px-3.5 py-2 font-semibold text-ink shadow-lg" :aria-expanded="o"><i class="ph ph-sliders-horizontal" aria-hidden="true"></i> Protótipo</button>
+  <div x-cloak x-show="o" x-transition class="absolute bottom-12 left-0 w-64 space-y-3 r-card border border-line bg-surface p-4 text-ink shadow-xl">
+    <label class="block">Tema
+      <select class="field r-ctl mt-1 w-full px-2 py-1.5" x-model="proto.tema" @change="apply()"><option value="sistema">Sistema</option><option value="claro">Claro</option><option value="escuro">Escuro</option></select></label>
+    <label class="block">Envio do formulário
+      <select class="field r-ctl mt-1 w-full px-2 py-1.5" x-model="proto.envio"><option value="ok">Sucesso</option><option value="erro">Erro</option><option value="lento">Lento (4s) e sucesso</option></select></label>
+    <label class="flex items-center gap-2"><input type="checkbox" x-model="proto.rm" @change="apply()" class="accent-[var(--accent)]"> Reduzir movimento</label>
+    <label class="flex items-center gap-2"><input type="checkbox" x-model="proto.solid" @change="apply()" class="accent-[var(--accent)]"> Reduzir transparência</label>
+  </div>
+</div>
+
+<script>
+  window.proto = { tema: 'sistema', envio: 'ok', rm: document.documentElement.classList.contains('rm'), solid: document.documentElement.classList.contains('solid') };
+
+  function page() {
+    return {
+      menu: false, scrolled: false, proto: window.proto,
+      faq: [
+        { q: 'Quanto vai custar?', a: 'Ainda estamos definindo, junto com os profissionais que participam do teste. Enquanto estivermos testando, você não paga nada.' },
+        { q: 'Preciso usar o Telegram?', a: 'Hoje, sim: é por ele que você envia áudios, textos e fotos. Se o Telegram não combina com a sua rotina, conte para a gente. É uma das coisas que estamos testando.' },
+        { q: 'A IA manda mensagens sozinha para os meus clientes?', a: 'Não. Nada chega ao Tutor sem a sua revisão e aprovação. Você também decide quais fotos e vídeos vão junto.' },
+        { q: 'O Tutor precisa instalar alguma coisa?', a: 'Não. Ele recebe um link e abre o resumo no navegador do celular, sem criar conta.' },
+        { q: 'E os dados dos meus clientes?', a: 'Ficam guardados para o seu trabalho e não são compartilhados. Os links de resumo são somente leitura e expiram. Estamos escrevendo nossa política de dados com base na LGPD.' },
+        { q: 'Atendo outros animais além de cães. Posso participar?', a: 'Pode se inscrever. Começamos pelos cães, e saber quem atende outros animais nos ajuda a decidir os próximos passos.' },
+      ],
+      init() {
+        const io = new IntersectionObserver(([e]) => { this.scrolled = !e.isIntersecting; }, { rootMargin: '-64px 0px 0px 0px' });
+        const s = document.createElement('div'); s.style.cssText = 'position:absolute;top:0;height:1px;width:1px'; document.body.prepend(s); io.observe(s);
+      },
+      apply() {
+        const h = document.documentElement, p = this.proto;
+        const dark = p.tema === 'escuro' || (p.tema === 'sistema' && matchMedia('(prefers-color-scheme: dark)').matches);
+        h.classList.toggle('dark', dark); h.classList.toggle('rm', p.rm); h.classList.toggle('solid', p.solid);
+      },
+    };
+  }
+
+  function stepper() {
+    return {
+      cur: 0, auto: true, hold: false, visible: false, dur: 6000,
+      steps: [
+        { id: 'fale',        title: 'Fale',        icon: 'ph-microphone', tint: 'bg-mint',   text: 'Mande um áudio ou texto no Telegram logo depois da sessão, com as fotos se quiser.' },
+        { id: 'revise',      title: 'Revise',      icon: 'ph-note-pencil', tint: 'bg-butter', text: 'A IA organiza o que você falou em um resumo. Você corrige, completa e aprova.' },
+        { id: 'compartilhe', title: 'Compartilhe', icon: 'ph-paper-plane-tilt', tint: 'bg-lilac', text: 'Envie o link pelo WhatsApp. O Tutor abre o resumo no celular, sem cadastro.' },
+      ],
+      get reduced() { return document.documentElement.classList.contains('rm'); },
+      start() { this.auto = !this.reduced; },
+      stop() { this.auto = false; },
+      go(i, focus) { this.cur = i; this.auto = false; if (focus) this.$nextTick(() => document.getElementById('tab-' + this.steps[i].id).focus()); },
+      next() { if (this.auto && this.visible) this.cur = (this.cur + 1) % this.steps.length; },
+    };
+  }
+
+  function form() {
+    return {
+      perfis: ['Adestramento', 'Passeio ou pet sitter', 'Creche ou hotel', 'Banho e tosa', 'Veterinária', 'Outro'],
+      f: { nome: '', whatsapp: '', perfil: '', cidade: '', aceite: false, hp: '' },
+      err: {}, touched: {}, status: 'idle',
+      first() { return (this.f.nome || '').split(' ')[0]; },
+      mask() {
+        let d = this.f.whatsapp.replace(/\D/g, '').slice(0, 11);
+        if (d.length > 6) this.f.whatsapp = `(${d.slice(0,2)}) ${d.slice(2, d.length-4)}-${d.slice(-4)}`;
+        else if (d.length > 2) this.f.whatsapp = `(${d.slice(0,2)}) ${d.slice(2)}`;
+        else this.f.whatsapp = d;
+      },
+      rules: {
+        nome: v => v.length >= 2 ? '' : 'Diga como podemos chamar você.',
+        whatsapp: v => /^\d{10,11}$/.test(v.replace(/\D/g, '')) ? '' : 'Confira o número com DDD, por exemplo (11) 98765-4321.',
+        perfil: v => v ? '' : 'Escolha a opção mais próxima do seu trabalho.',
+        cidade: v => v.length >= 3 ? '' : 'Informe sua cidade e estado.',
+        aceite: v => v ? '' : 'Precisamos do seu aceite para entrar em contato.',
+      },
+      touch(k) { this.touched[k] = true; this.err[k] = this.rules[k](this.f[k]); },
+      validate() { Object.keys(this.rules).forEach(k => this.touch(k)); return Object.values(this.err).every(e => !e); },
+      async submit() {
+        if (this.f.hp) return;
+        if (!this.validate()) { const k = Object.keys(this.rules).find(k => this.err[k]); const el = document.getElementById({ nome: 'f-nome', whatsapp: 'f-whats', perfil: 'f-perfil-0', cidade: 'f-cidade', aceite: 'f-aceite' }[k]); el && el.focus(); return; }
+        this.status = 'enviando';
+        // Simulação: na implementação real, POST para o serviço de formulário escolhido na spec.
+        const m = window.proto.envio;
+        await new Promise(r => setTimeout(r, m === 'lento' ? 4000 : 1200));
+        this.status = m === 'erro' ? 'erro' : 'ok';
+        if (this.status === 'ok') this.$nextTick(() => this.$refs.ok && this.$refs.ok.focus());
+      },
+      reset() { this.f = { nome: '', whatsapp: '', perfil: '', cidade: '', aceite: false, hp: '' }; this.err = {}; this.status = 'idle'; },
+    };
+  }
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.17.4/dist/cdn.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.17.4/dist/cdn.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
+</body>
+</html>

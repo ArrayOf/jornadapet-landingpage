@@ -681,8 +681,9 @@ terceiros. Substitui o Web3Forms (§6.1 e spec §2.7).
   data do aceite (prova de consentimento, LGPD), página e origem (UTM e `ref`, até 100 caracteres).
   O próprio banco recusa WhatsApp inválido e perfil fora da lista. RLS ligado e nenhum acesso para
   `anon` e `authenticated`: a chave pública não grava nem lê.
-- **Configuração:** `SUPABASE_URL` (texto) e `SUPABASE_SECRET_KEY` (secret) em Settings →
-  Variables and Secrets do Worker `jornadapet`. Localmente, `.dev.vars` (ver `.dev.vars.example`).
+- **Configuração:** `SUPABASE_URL` em `vars` do `wrangler.jsonc` (variável só do painel é apagada a
+  cada deploy) e `SUPABASE_SECRET_KEY` como Secret em Settings → Variables and Secrets do Worker
+  `jornadapet`. Localmente, `.dev.vars` (ver `.dev.vars.example`).
 - **Testes:** `tests/unit/convite.test.ts` cobre o Worker (Supabase simulado); os e2e simulam
   `/api/convite`. Conferido também com `wrangler dev` e um Supabase falso.
 - **Fora deste passo:** aviso a cada pedido (Telegram ou e-mail).

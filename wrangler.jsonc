@@ -13,6 +13,8 @@
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
   },
-  // SUPABASE_URL e SUPABASE_SECRET_KEY ficam no painel (Variables and Secrets), não aqui.
+  // A URL não é sigilosa e fica aqui (variável só do painel some a cada deploy).
+  // SUPABASE_SECRET_KEY é Secret no painel (Variables and Secrets) e nunca vem para o repositório.
+  "vars": { "SUPABASE_URL": "https://stmjxrciznwdbemgoiyk.supabase.co" },
   "observability": { "enabled": true }
 }

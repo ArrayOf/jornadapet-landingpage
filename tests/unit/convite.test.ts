@@ -79,10 +79,11 @@ describe('tratarConvite', () => {
   });
 
   it('Supabase falhando: 502 success false (JSON) ou página de falha (sem JS)', async () => {
-    const falha = vi.fn(async () => new Response('{"message":"x"}', { status: 500 }));
+    const falha = vi.fn(async () => new Response('{"code":"42501","message":"permission denied for table convites"}', { status: 401 }));
     const r1 = await tratarConvite(json(valido), env, falha as unknown as typeof fetch);
     expect(r1.status).toBe(502);
-    expect(await r1.json()).toEqual({ success: false });
+    // Só o código do Supabase, para diagnóstico; nunca a mensagem nem a chave.
+    expect(await r1.json()).toEqual({ success: false, codigo: '401/42501' });
     const r2 = await tratarConvite(form(valido), env, falha as unknown as typeof fetch);
     expect(r2.status).toBe(303);
     expect(r2.headers.get('Location')).toBe('/nao-enviado');

@@ -71,8 +71,12 @@ export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof
   try {
     const r = await fetchFn(`${env.SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/convites`, { method: 'POST', headers: cabecalhos, body: JSON.stringify(linha) });
     if (!r.ok) {
-      console.error('convite: Supabase respondeu', r.status, await r.text().catch(() => ''));
-      return falha(502);
+      const detalhe = await r.text().catch(() => '');
+      console.error('convite: Supabase respondeu', r.status, detalhe);
+      // Só o status e o código do Postgres/PostgREST (ex.: 401/42501), para diagnóstico; nunca a mensagem.
+      let codigo = '';
+      try { codigo = String((JSON.parse(detalhe) as { code?: unknown }).code ?? ''); } catch { /* corpo sem JSON */ }
+      return falha(502, { codigo: codigo ? `${r.status}/${codigo}` : String(r.status) });
     }
   } catch (e) {
     console.error('convite: falha de rede com o Supabase', e);

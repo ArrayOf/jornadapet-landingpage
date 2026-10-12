@@ -33,3 +33,21 @@ test('canonical e og:url sem index.html nem .html', async ({ page }) => {
     await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', esperado);
   }
 });
+
+test('política de privacidade final: controlador, operadores, prazo e direitos', async ({ page }) => {
+  await page.goto('/privacidade');
+  const main = page.locator('main');
+  await expect(main).not.toContainText('Rascunho');
+  await expect(main).not.toContainText('[Preencher');
+  for (const trecho of ['35.998.763/0001-58', 'Cloudflare', 'Supabase', 'São Paulo', 'Telegram', '12 meses', 'consentimento', 'revogar', 'ANPD', 'contato@jornadapet.com.br']) {
+    await expect(main).toContainText(trecho);
+  }
+});
+
+test('aceite cita a política e não promete "não compartilhar"', async ({ page }) => {
+  await page.goto('/#participe');
+  const aceite = page.locator('label', { has: page.locator('#f-aceite') });
+  await expect(aceite).toContainText('Aceito ser contatado(a) pela JornadaPet pelo WhatsApp sobre o teste.');
+  await expect(aceite).not.toContainText('não serão compartilhados');
+  await expect(aceite.getByRole('link', { name: /Política de privacidade/ })).toHaveAttribute('href', '/privacidade');
+});

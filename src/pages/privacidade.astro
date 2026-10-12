@@ -4,30 +4,114 @@ import Nav from '../components/Nav.astro';
 import Rodape from '../components/Rodape.astro';
 import { CONTATO_EMAIL } from '../data/conteudo';
 
-/** Troque para false quando os sócios entregarem o texto final (spec §10.2). */
-const PENDENTE = true;
+/** Texto aprovado pelos sócios em 12/10/2026 (NT-001 §17). Volte para true se o texto voltar a ficar em revisão. */
+const PENDENTE = false;
 if (PENDENTE && import.meta.env.PUBLIC_INDEXAR === 'true') {
   throw new Error('Política de privacidade pendente: preencha src/pages/privacidade.astro antes de publicar (spec §10.2).');
 }
-const secoes = [
-  { titulo: 'Quem cuida dos seus dados', texto: 'A ArrayOf, empresa responsável pela JornadaPet, é a controladora dos dados enviados por esta página.' },
-  { titulo: 'O que coletamos', texto: 'Nome, WhatsApp, área de atuação, cidade e estado, o aceite de contato e, quando houver, a origem da visita (parâmetros utm e ref do link).' },
-  { titulo: 'Para que usamos', texto: 'Para falar com você sobre o teste da JornadaPet e enviar o seu convite. Nada além disso.' },
-  { titulo: 'Com quem compartilhamos', texto: 'O envio passa pelo serviço de formulários que usamos para receber os pedidos. Não vendemos nem cedemos seus dados.' },
-  { titulo: 'Por quanto tempo guardamos', texto: '[Preencher pelos sócios: prazo de guarda dos pedidos de convite.]' },
-  { titulo: 'Seus direitos', texto: `Você pode pedir acesso, correção ou remoção dos seus dados escrevendo para ${CONTATO_EMAIL}.` },
+const ATUALIZADA_EM = '12 de outubro de 2026';
+
+interface Secao { titulo: string; paragrafos?: string[]; itens?: string[] }
+const secoes: Secao[] = [
+  {
+    titulo: 'Quem cuida dos seus dados',
+    paragrafos: [
+      'A JornadaPet é um produto da ArrayOf, inscrita no CNPJ 35.998.763/0001-58, que é a controladora dos dados enviados por esta página.',
+      `Para qualquer assunto sobre os seus dados, fale com a gente pelo e-mail ${CONTATO_EMAIL}. Esse é o nosso canal de comunicação com titulares.`,
+    ],
+  },
+  {
+    titulo: 'O que coletamos',
+    itens: [
+      'Os dados que você digita no pedido de convite: nome, WhatsApp, área de atuação e cidade e estado.',
+      'O registro do seu aceite: o texto que você aceitou e a data e hora do envio.',
+      'A origem da visita, quando o link que você usou tiver esses dados: os parâmetros utm e ref (por exemplo, "instagram").',
+      'Dados técnicos usados só para segurança, como endereço IP e informações do navegador. Eles servem para verificar que o envio veio de uma pessoa e para limitar abusos, e não são guardados no nosso banco de dados.',
+    ],
+  },
+  {
+    titulo: 'Para que usamos',
+    itens: [
+      'Falar com você pelo WhatsApp sobre o teste da JornadaPet e enviar o seu convite.',
+      'Entender de onde vêm os interessados, para decidir onde divulgar o teste.',
+      'Proteger o formulário contra robôs e envios em massa.',
+    ],
+    paragrafos: ['Não usamos seus dados para publicidade e não vendemos nem cedemos seus dados a ninguém.'],
+  },
+  {
+    titulo: 'Base legal',
+    paragrafos: [
+      'O contato sobre o teste se baseia no seu consentimento (LGPD, art. 7º, I), dado ao marcar a caixa de aceite. A proteção contra robôs e abusos se baseia no nosso legítimo interesse em manter o serviço seguro (LGPD, art. 7º, IX).',
+    ],
+  },
+  {
+    titulo: 'Com quem os dados são tratados',
+    paragrafos: ['Usamos três serviços que tratam dados em nosso nome, só para as finalidades acima:'],
+    itens: [
+      'Cloudflare: hospeda esta página, recebe o envio do formulário e faz a verificação contra robôs (Turnstile). Pode processar dados técnicos em servidores fora do Brasil.',
+      'Supabase: guarda os pedidos de convite num banco de dados em servidores em São Paulo.',
+      'Telegram: recebemos um aviso de cada novo pedido, com os dados dele, num grupo privado dos sócios.',
+    ],
+  },
+  {
+    titulo: 'Transferência internacional',
+    paragrafos: [
+      'A Cloudflare e o Telegram podem tratar dados fora do Brasil. Isso acontece apenas para executar o serviço que você pediu e com fornecedores que adotam medidas de segurança compatíveis com a LGPD (art. 33).',
+    ],
+  },
+  {
+    titulo: 'O que fica no seu navegador',
+    paragrafos: [
+      'Esta página não usa cookies próprios nem ferramentas de análise ou de publicidade. Se você chegar por um link com origem (utm ou ref), guardamos essa origem no armazenamento da aba do navegador, que é apagado quando a aba é fechada. A verificação contra robôs da Cloudflare pode ler informações técnicas do navegador no momento do envio.',
+    ],
+  },
+  {
+    titulo: 'Por quanto tempo guardamos',
+    paragrafos: [
+      'Guardamos o pedido de convite por até 12 meses a partir do envio. Depois disso, ou antes, se você pedir, os dados são apagados. O aviso no Telegram é apagado no mesmo prazo.',
+    ],
+  },
+  {
+    titulo: 'Como protegemos',
+    paragrafos: [
+      'O banco de dados não aceita leitura nem gravação pela internet: só o nosso servidor grava, com uma chave secreta, e só os sócios acessam os pedidos.',
+    ],
+  },
+  {
+    titulo: 'Seus direitos',
+    paragrafos: ['Pela LGPD (art. 18), você pode, a qualquer momento:'],
+    itens: [
+      'confirmar se tratamos seus dados e ter acesso a eles;',
+      'corrigir dados incompletos ou desatualizados;',
+      'pedir a eliminação dos seus dados;',
+      'saber com quem compartilhamos seus dados;',
+      'revogar o seu consentimento, o que encerra o contato sobre o teste.',
+    ],
+  },
+  {
+    titulo: 'Como exercer seus direitos',
+    paragrafos: [
+      `Escreva para ${CONTATO_EMAIL} a partir do WhatsApp ou do nome usados no pedido, para podermos localizar seus dados. Respondemos em até 15 dias. Se não ficar satisfeito, você também pode reclamar à Autoridade Nacional de Proteção de Dados (ANPD).`,
+    ],
+  },
+  {
+    titulo: 'Mudanças nesta política',
+    paragrafos: ['Se esta política mudar, a nova versão aparece nesta página com a data de atualização.'],
+  },
 ];
 ---
-<Base title="Política de privacidade: JornadaPet" description="Como a JornadaPet trata os dados enviados pelo formulário de convite.">
+<Base title="Política de privacidade: JornadaPet" description="Como a JornadaPet trata os dados enviados pelo pedido de convite: o que coletamos, para quê, com quem, por quanto tempo e os seus direitos.">
   <div x-data="pagina">
     <Nav />
     <main id="conteudo" class="mx-auto max-w-2xl px-4 py-20 sm:px-6">
       <h1 class="text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">Política de privacidade</h1>
+      <p class="mt-3 text-[14px] text-mute">Atualizada em {ATUALIZADA_EM}.</p>
       {PENDENTE && <p class="mt-4 r-ctl bg-butter p-3 text-[14px] text-ink">Rascunho em revisão. Esta versão ainda não é a final.</p>}
       {secoes.map((s) => (
         <section class="mt-10">
           <h2 class="text-[20px] font-semibold">{s.titulo}</h2>
-          <p class="mt-2 text-[16px] leading-relaxed">{s.texto}</p>
+          {s.paragrafos?.map((p) => <p class="mt-2 text-[16px] leading-relaxed">{p}</p>)}
+          {s.itens && <ul class="mt-2 list-disc space-y-1.5 pl-5 text-[16px] leading-relaxed">{s.itens.map((i) => <li>{i}</li>)}</ul>}
         </section>
       ))}
     </main>

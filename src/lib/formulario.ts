@@ -2,7 +2,9 @@ import type { Dados } from './validacao';
 import type { Origem } from './utm';
 import { mascararWhatsapp } from './whatsapp';
 
-export const TEXTO_DO_ACEITE = 'Aceito ser contatado(a) pela JornadaPet sobre o teste. Meus dados não serão compartilhados.';
+/** Texto do aceite como aparece na tela; o servidor grava exatamente este texto como prova do consentimento. */
+export const ACEITE_INICIO = 'Aceito ser contatado(a) pela JornadaPet pelo WhatsApp sobre o teste. Li a';
+export const TEXTO_DO_ACEITE = `${ACEITE_INICIO} Política de privacidade.`;
 
 /** Corpo do POST para /api/convite. O texto do aceite é gravado pelo servidor, não vem daqui. */
 export function montarEnvio(dados: Dados, origem: Origem): Record<string, string> {

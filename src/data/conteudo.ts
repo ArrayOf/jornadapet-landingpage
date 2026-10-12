@@ -39,6 +39,6 @@ export const PERGUNTAS = [
   { pergunta: 'Como eu entro?', resposta: 'O acesso é por convite. Depois de receber o seu, você confirma o celular por SMS uma única vez e passa a entrar direto pelo Telegram.' },
   { pergunta: 'Meus clientes precisam usar o Telegram?', resposta: 'Não. Só você usa a JornadaPet. A conversa com o tutor continua no seu WhatsApp, como hoje. Um resumo da sessão para o tutor está entre as ideias que estamos estudando.' },
   { pergunta: 'Serve para mensalidade e aula avulsa?', resposta: 'Você registra cada valor combinado com vencimento e cada pagamento, inteiro ou em partes, e vê quanto falta receber. Controle de aulas por pacote e cobrança automática ainda não fazem parte desta primeira versão.' },
-  { pergunta: 'E os dados dos meus clientes?', resposta: 'Cada profissional vê apenas a própria carteira, e os dados não são compartilhados. Estamos escrevendo nossa política de dados com base na LGPD.' },
+  { pergunta: 'E os dados dos meus clientes?', resposta: 'Cada profissional vê apenas a própria carteira, e os dados não são compartilhados. Estamos escrevendo a política de dados do produto com base na LGPD.' },
   { pergunta: 'Atendo outros animais além de cães. Posso participar?', resposta: 'Pode se inscrever. Começamos pelos cães, e saber quem atende outros animais nos ajuda a decidir os próximos passos.' },
 ] as const;

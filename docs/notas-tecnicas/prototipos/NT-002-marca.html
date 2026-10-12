@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marca JornadaPet</title>
+<link rel="icon" href="NT-002-assets/svg/cabeca-colorida.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Folha da marca: cada peça grande, depois aplicada no canal onde vive, depois os arquivos e as regras. */
+:root {
+  --bg: #f4f4f6; --surface: #ffffff; --ink: #23251f; --body: #45473f; --muted: #676a60; --line: #e2e2e6; --accent: #3f5a2c;
+  --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --text: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #151613; --surface: #1d1f1a; --ink: #f1f2ec; --body: #cfd1c7; --muted: #a0a395; --line: #2e3128; --accent: #a3c47f; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #151613; --surface: #1d1f1a; --ink: #f1f2ec; --body: #cfd1c7; --muted: #a0a395; --line: #2e3128; --accent: #a3c47f; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--body); font: 400 16px/1.6 var(--text); padding-inline: 16px; padding-block: 40px 80px; }
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 56px; }
+h1, h2 { font-family: var(--display); color: var(--ink); letter-spacing: -0.025em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.3rem, 4.4vw, 3.6rem); line-height: 1.04; }
+h2 { font-size: 28px; line-height: 1.1; }
+h3 { margin: 0; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+p { margin: 0; max-width: 64ch; }
+a { color: var(--accent); }
+header, section { display: grid; gap: 16px; }
+.lead { font-size: 18px; }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: center; }
+@media (max-width: 760px) { .hero { grid-template-columns: minmax(0, 1fr); } }
+.hero-art { background: #e1e7d6; border-radius: 16px; display: grid; place-items: center; padding: 28px; }
+.hero-art img { width: min(100%, 380px); }
+
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+figure { margin: 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.card .art { aspect-ratio: 1; position: relative; border-radius: 12px; overflow: hidden; }
+.card .art img { position: absolute; inset: 7%; width: 86%; height: 86%; object-fit: contain; }
+.lockups .art { position: static; display: grid; place-items: center; }
+.lockups .art img { position: static; }
+.card figcaption { font-size: 14px; }
+.card figcaption b { color: var(--ink); display: block; font-weight: 600; }
+.w { background: #ffffff; box-shadow: inset 0 0 0 1px #e2e2e6; }
+.d { background: #151613; }
+.s { background: #e1e7d6; }
+.c { background: #f6e3c4; }
+.wide { grid-column: 1 / -1; }
+.lockups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.lockups .art { aspect-ratio: auto; padding: 28px; }
+.lockups .art img { width: auto; max-width: 100%; height: 72px; }
+
+.swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 12px; }
+.sw { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+.sw i { display: block; height: 64px; }
+.sw div { padding: 10px 12px; font-size: 12px; line-height: 1.4; }
+.sw b { color: var(--ink); display: block; font-size: 14px; }
+.sw code { font-variant-numeric: tabular-nums; }
+
+.apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.chat { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 12px; align-items: center; padding: 10px; border-radius: 12px; background: #ffffff; border: 1px solid #e2e2e6; }
+.chat img { width: 52px; height: 52px; border-radius: 50%; }
+.chat b { color: #23251f; font-size: 14px; display: block; line-height: 1.25; }
+.chat span { font-size: 14px; color: #707579; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.chat time { font-size: 12px; color: #707579; align-self: start; font-variant-numeric: tabular-nums; }
+.chat.tg-d { background: #17212b; border-color: #17212b; } .chat.tg-d b { color: #f5f5f5; } .chat.tg-d span, .chat.tg-d time { color: #8b9aa7; }
+.chat.wa time { color: #25a35a; }
+.ig { display: flex; gap: 16px; align-items: center; }
+.ig .ring { padding: 3px; border-radius: 50%; background: conic-gradient(#feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75); flex: none; }
+.ig img { width: 84px; height: 84px; border-radius: 50%; display: block; box-shadow: 0 0 0 3px var(--surface); }
+.ig b { color: var(--ink); display: block; }
+.ig small { color: var(--muted); font-size: 12px; line-height: 1.4; display: block; }
+.sizes { display: flex; gap: 16px; align-items: end; flex-wrap: wrap; }
+.sizes figure { display: grid; gap: 6px; justify-items: center; }
+.sizes figcaption { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tab { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px 12px 0 0; padding: 8px 12px; width: fit-content; font-size: 12px; color: var(--ink); }
+.shot { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); display: block; }
+
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { color: var(--ink); font-size: 14px; font-weight: 600; }
+td:first-child { color: var(--ink); font-weight: 600; }
+td code { font-size: 12px; }
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.rules ul { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+.rules .card h3 { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div style="display:grid;gap:16px">
+      <h3>NT-002 · 11/10/2026</h3>
+      <h1>A marca da JornadaPet</h1>
+      <p class="lead">O mascote é um vira-lata caramelo de coleira oliva. A plaqueta da coleira leva o J da JornadaPet. Ele aparece em três formas: a cabeça colorida (avatar e ícone), o traço numa cor só (selos, carimbo, bordado) e o logotipo com o nome em Bricolage.</p>
+      <p>Arte de referência gerada por IA a partir dos esboços da NT-002, limpa e vetorizada com as cores exatas da paleta. Para a versão definitiva, o recomendado é um ilustrador redesenhar sobre ela.</p>
+    </div>
+    <div class="hero-art"><img src="NT-002-assets/svg/logotipo-empilhado.svg" alt="Logotipo empilhado: cabeça do mascote, JornadaPet e a frase Você cuida do cão. A gente lembra quem falta pagar."></div>
+  </header>
+
+  <section aria-labelledby="pecas">
+    <h2 id="pecas">As peças</h2>
+    <div class="grid">
+      <figure class="card"><div class="art w"><img src="NT-002-assets/svg/cabeca-colorida.svg" alt="Cabeça colorida em círculo sálvia"></div><figcaption><b>Cabeça colorida</b>Avatar do bot, WhatsApp e Instagram. Favicon.</figcaption></figure>
+      <figure class="card"><div class="art w"><img src="NT-002-assets/svg/cabeca-traco.svg" alt="Cabeça em traço oliva"></div><figcaption><b>Cabeça em traço</b>Uma cor e a língua. Há também a versão só em oliva.</figcaption></figure>
+      <figure class="card"><div class="art w"><img src="NT-002-assets/svg/selo-redondo.svg" alt="Selo redondo em traço com JORNADAPET e DO ADESTRADOR"></div><figcaption><b>Selo redondo</b>Carimbo, adesivo, bordado no colete.</figcaption></figure>
+      <figure class="card"><div class="art w"><img src="NT-002-assets/svg/selo-redondo-oliva.svg" alt="Selo redondo cheio, oliva com traço creme"></div><figcaption><b>Selo redondo, cheio</b>Post e capa de destaque do Instagram.</figcaption></figure>
+      <figure class="card"><div class="art w"><img src="NT-002-assets/svg/selo-arco.svg" alt="Selo em arco com o cão sentado e o nome"></div><figcaption><b>Selo em arco</b>O cão sentado ("senta", o primeiro comando). Post e adesivo.</figcaption></figure>
+      <figure class="card"><div class="art" style="background:#dcdbe3"><img src="NT-002-assets/fontes/mascote-3d.png" alt="Mascote 3D: vira-lata caramelo sentado" style="inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 40%"></div><figcaption><b>Mascote 3D</b>Comunicação: página, posts, descrição do bot.</figcaption></figure>
+    </div>
+    <div class="lockups">
+      <figure class="card"><div class="art w"><img src="NT-002-assets/svg/logotipo-horizontal.svg" alt="Logotipo horizontal sobre claro"></div><figcaption><b>Logotipo horizontal</b>Menu e rodapé da página, assinatura de e-mail.</figcaption></figure>
+      <figure class="card"><div class="art d"><img src="NT-002-assets/svg/logotipo-horizontal-escuro.svg" alt="Logotipo horizontal sobre escuro"></div><figcaption><b>Logotipo horizontal, escuro</b>A cabeça não muda; só o nome clareia.</figcaption></figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="cores">
+    <h2 id="cores">Cores</h2>
+    <p>As cores do mascote se somam à paleta da página (DESIGN.md). O oliva continua sendo a única cor de ação. Caramelo, orelha e creme são de ilustração e nunca carregam texto.</p>
+    <div class="swatches">
+      <div class="sw"><i style="background:#3f5a2c"></i><div><b>Oliva</b><code>#3f5a2c</code> coleira, traço, ação</div></div>
+      <div class="sw"><i style="background:#e1e7d6"></i><div><b>Sálvia</b><code>#e1e7d6</code> fundo do avatar</div></div>
+      <div class="sw"><i style="background:#dba05a"></i><div><b>Caramelo</b><code>#dba05a</code> pelo</div></div>
+      <div class="sw"><i style="background:#c7853f"></i><div><b>Orelha</b><code>#c7853f</code> orelhas, sombra</div></div>
+      <div class="sw"><i style="background:#f6e3c4"></i><div><b>Creme</b><code>#f6e3c4</code> focinho, peito, selo</div></div>
+      <div class="sw"><i style="background:#e98a9a"></i><div><b>Língua</b><code>#e98a9a</code> só a língua</div></div>
+      <div class="sw"><i style="background:#23251f"></i><div><b>Tinta</b><code>#23251f</code> contorno, nome</div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="canais">
+    <h2 id="canais">Nos canais</h2>
+    <div class="apps">
+      <div class="card"><h3>Telegram</h3>
+        <div class="chat"><img src="NT-002-assets/png/avatar-telegram-whatsapp-640.png" alt=""><div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>
+        <div class="chat tg-d"><img src="NT-002-assets/png/avatar-telegram-whatsapp-640.png" alt=""><div><b>JornadaPet</b><span>Amanhã: Thor às 9h, Nina às 16h</span></div><time>21:40</time></div>
+      </div>
+      <div class="card"><h3>WhatsApp Business e Instagram</h3>
+        <div class="chat wa"><img src="NT-002-assets/png/avatar-telegram-whatsapp-640.png" alt=""><div><b>JornadaPet</b><span>Oi! Seu convite está pronto.</span></div><time>10:12</time></div>
+        <div class="ig"><span class="ring"><img src="NT-002-assets/png/avatar-instagram-1080.png" alt=""></span><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador. Acesso por convite.</small></div></div>
+      </div>
+      <div class="card"><h3>Página: tamanhos e aba</h3>
+        <div class="sizes">
+          <figure><img src="NT-002-assets/svg/cabeca-colorida.svg" width="64" height="64" alt=""><figcaption>64</figcaption></figure>
+          <figure><img src="NT-002-assets/svg/cabeca-colorida.svg" width="40" height="40" alt=""><figcaption>40</figcaption></figure>
+          <figure><img src="NT-002-assets/svg/cabeca-colorida.svg" width="32" height="32" alt=""><figcaption>32</figcaption></figure>
+          <figure><img src="NT-002-assets/png/favicon-16.png" width="16" height="16" alt=""><figcaption>16</figcaption></figure>
+        </div>
+        <div class="tab"><img src="NT-002-assets/png/favicon-16.png" width="16" height="16" alt="">JornadaPet</div>
+      </div>
+    </div>
+    <div class="apps">
+      <figure class="card"><h3>Imagem de compartilhamento · 1200×630</h3><img class="shot" src="NT-002-assets/png/og-1200x630.png" alt="Imagem de compartilhamento: logotipo empilhado sobre sálvia"></figure>
+      <figure class="card"><h3>Descrição do bot no Telegram · 640×360</h3><img class="shot" src="NT-002-assets/png/telegram-descricao-640x360.png" alt="Descrição do bot: JornadaPet, frase e o mascote 3D"></figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="arquivos">
+    <h2 id="arquivos">Arquivos</h2>
+    <p>Os SVGs são a fonte de tudo: o texto já está em curvas, então não dependem de fonte instalada. Os PNGs são gerados a partir deles por <code>NT-002-assets/ferramentas/exportar.sh</code>.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Uso</th><th scope="col">Arquivo</th><th scope="col">Tamanho</th></tr></thead>
+        <tbody>
+          <tr><td>Foto do bot (Telegram, BotFather)</td><td><a href="NT-002-assets/png/avatar-telegram-whatsapp-640.png"><code>png/avatar-telegram-whatsapp-640.png</code></a></td><td>640×640</td></tr>
+          <tr><td>Imagem da descrição do bot</td><td><a href="NT-002-assets/png/telegram-descricao-640x360.png"><code>png/telegram-descricao-640x360.png</code></a></td><td>640×360</td></tr>
+          <tr><td>WhatsApp Business, foto de perfil</td><td><a href="NT-002-assets/png/avatar-telegram-whatsapp-640.png"><code>png/avatar-telegram-whatsapp-640.png</code></a></td><td>640×640</td></tr>
+          <tr><td>Instagram, foto de perfil</td><td><a href="NT-002-assets/png/avatar-instagram-1080.png"><code>png/avatar-instagram-1080.png</code></a></td><td>1080×1080</td></tr>
+          <tr><td>Instagram, posts e destaques</td><td><code>png/selo-redondo-1080.png</code>, <code>png/selo-redondo-oliva-1080.png</code>, <code>png/selo-arco-810x1080.png</code></td><td>1080 / 810×1080</td></tr>
+          <tr><td>Favicon</td><td><code>svg/cabeca-colorida.svg</code>, <code>png/favicon-32.png</code>, <code>png/favicon-16.png</code></td><td>SVG, 32, 16</td></tr>
+          <tr><td>Ícone da tela inicial (iOS)</td><td><code>png/apple-touch-icon-180.png</code></td><td>180×180</td></tr>
+          <tr><td>Ícones do manifest (Android)</td><td><code>png/icon-192.png</code>, <code>png/icon-512.png</code></td><td>192, 512</td></tr>
+          <tr><td>Imagem de compartilhamento (og)</td><td><code>png/og-1200x630.png</code></td><td>1200×630</td></tr>
+          <tr><td>Menu e rodapé da página</td><td><code>svg/logotipo-horizontal.svg</code>, <code>svg/logotipo-horizontal-escuro.svg</code></td><td>vetor</td></tr>
+          <tr><td>Nome sozinho</td><td><code>svg/nome.svg</code>, <code>svg/nome-escuro.svg</code>, <code>svg/nome-oliva.svg</code></td><td>vetor</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="regras">
+    <h2 id="regras">Regras de uso</h2>
+    <div class="rules">
+      <div class="card"><h3>Faça</h3><ul>
+        <li>Use a cabeça colorida sobre sálvia em todo avatar redondo.</li>
+        <li>Use o traço numa cor só (oliva ou creme) em carimbo, adesivo e bordado.</li>
+        <li>Mantenha a coleira oliva e a plaqueta do J em toda versão do mascote.</li>
+        <li>Escreva "JornadaPet" junto, com P maiúsculo, no feminino ("a JornadaPet").</li>
+        <li>Deixe em volta do logotipo um respiro de pelo menos a altura do J.</li>
+      </ul></div>
+      <div class="card"><h3>Não faça</h3><ul>
+        <li>Não use azul na marca: ela some dentro do Telegram.</li>
+        <li>Não ponha texto em caramelo, orelha ou creme sobre fundo claro.</li>
+        <li>Não use o selo redondo abaixo de 96px: o texto fica ilegível.</li>
+        <li>Não estique, gire ou troque as cores do mascote.</li>
+        <li>Não use foto de cão de banco de imagem no lugar do mascote.</li>
+      </ul></div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

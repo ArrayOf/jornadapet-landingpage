@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Símbolo JornadaPet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Página de símbolo: cada peça da marca grande primeiro, depois aplicada no canal onde vive. */
+:root {
+  --bg: #f4f4f6; --surface: #ffffff; --ink: #23251f; --body: #45473f; --muted: #676a60; --line: #e2e2e6; --accent: #3f5a2c;
+  --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --text: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #151613; --surface: #1d1f1a; --ink: #f1f2ec; --body: #cfd1c7; --muted: #a0a395; --line: #2e3128; --accent: #a3c47f; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #151613; --surface: #1d1f1a; --ink: #f1f2ec; --body: #cfd1c7; --muted: #a0a395; --line: #2e3128; --accent: #a3c47f; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--body); font: 400 16px/1.6 var(--text); padding-inline: 16px; padding-block: 40px 72px; margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 48px; }
+h1, h2 { font-family: var(--display); color: var(--ink); letter-spacing: -0.025em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.05; }
+h2 { font-size: 28px; line-height: 1.1; }
+h3 { margin: 0; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+p { margin: 0; max-width: 64ch; }
+header, section { display: grid; gap: 14px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 12px; align-content: start; justify-items: center; min-width: 0; }
+.card figcaption { font-size: 14px; text-align: center; }
+.card b { color: var(--ink); }
+.stage { width: 100%; aspect-ratio: 1; max-width: 230px; display: grid; place-items: center; border-radius: 14px; }
+.stage svg { width: 100%; height: 100%; display: block; }
+.on-white { background: #ffffff; box-shadow: inset 0 0 0 1px #e2e2e6; }
+.on-creme { background: #f6e3c4; }
+.on-salvia { background: #e1e7d6; }
+.on-oliva { background: #3f5a2c; }
+.on-noite { background: #151613; }
+
+.avatar { border-radius: 50%; overflow: hidden; display: grid; place-items: center; flex: none; }
+.avatar svg { width: 100%; height: 100%; display: block; }
+.apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.app { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.chat { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 12px; align-items: center; padding: 10px; border-radius: 12px; background: #ffffff; border: 1px solid #e2e2e6; }
+.chat .avatar { width: 52px; height: 52px; }
+.chat b { color: #23251f; font-size: 15px; display: block; line-height: 1.25; }
+.chat span { font-size: 14px; color: #707579; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.chat time { font-size: 12px; color: #707579; align-self: start; font-variant-numeric: tabular-nums; }
+.chat.tg-dark { background: #17212b; border-color: #17212b; } .chat.tg-dark b { color: #f5f5f5; } .chat.tg-dark span, .chat.tg-dark time { color: #8b9aa7; }
+.chat.wa { background: #ffffff; } .chat.wa time { color: #25a35a; }
+.ig { display: flex; gap: 16px; align-items: center; }
+.ig .ring { padding: 3px; border-radius: 50%; background: conic-gradient(#feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75); flex: none; }
+.ig .avatar { width: 84px; height: 84px; box-shadow: 0 0 0 3px var(--surface); }
+.ig b { color: var(--ink); display: block; }
+.ig small { color: var(--muted); font-size: 13px; line-height: 1.4; display: block; }
+.sizes { display: flex; gap: 16px; align-items: end; flex-wrap: wrap; }
+.sizes figure { margin: 0; display: grid; gap: 6px; justify-items: center; }
+.sizes figcaption { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tab { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px 10px 0 0; padding: 8px 12px; width: fit-content; font-size: 13px; color: var(--ink); }
+.nav { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px; }
+.nav .wm { font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: -0.035em; }
+.nav.l { background: #f4f4f6; } .nav.l .wm { color: #23251f; }
+.nav.d { background: #151613; } .nav.d .wm { color: #f1f2ec; }
+.note { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+.note ul { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 6px; }
+.badge-text { font-family: var(--display); font-weight: 800; letter-spacing: .1em; }
+.badge-sub { font-family: var(--text); font-weight: 600; letter-spacing: .16em; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- Sistema de traço (em unidades do desenho de 200): contorno 4,5 · detalhe 3 · cantos e pontas arredondados.
+         Mesmas formas na versão colorida e na de traço. -->
+    <path id="p-ear-l" d="M84 44 C72 38 56 40 46 50 C38 58 38 76 42 88 C44 96 52 98 56 92 C60 86 60 76 62 68 C66 58 74 50 84 44 Z"/>
+    <path id="p-ear-r" d="M116 44 C128 38 144 40 154 50 C162 58 162 76 158 88 C156 96 148 98 144 92 C140 86 140 76 138 68 C134 58 126 50 116 44 Z"/>
+    <path id="p-head" d="M100 40 C126 40 142 56 142 80 C142 96 136 108 126 116 C118 122 110 126 100 126 C90 126 82 122 74 116 C64 108 58 96 58 80 C58 56 74 40 100 40 Z"/>
+    <path id="p-blaze" d="M100 54 C96 54 94 66 93 80 C84 81 78 88 78 97 C78 110 88 116 100 116 C112 116 122 110 122 97 C122 88 116 81 107 80 C106 66 104 54 100 54 Z"/>
+    <path id="p-nose" d="M90 88 C90 83 110 83 110 88 C110 94 104 98 100 98 C96 98 90 94 90 88 Z"/>
+    <path id="p-mouth" d="M88 104 C92 114 108 114 112 104 C106 108 94 108 88 104 Z"/>
+    <path id="p-tongue" d="M94 109.5 C93 121 107 121 106 109.5 C102 111.5 98 111.5 94 109.5 Z"/>
+    <path id="p-smile" d="M84 100 C88 107 95 108 100 102 C105 108 112 107 116 100"/>
+    <path id="p-brows" d="M76 62 Q82 57.5 88 60.5 M112 60.5 Q118 57.5 124 62"/>
+    <path id="p-folds" d="M52 51 C57 56 60 62 62 68 M148 51 C143 56 140 62 138 68"/>
+    <path id="p-collar" d="M72 120 Q100 136 128 120"/>
+    <path id="p-jtag" d="M102.8 130.2 V136.4 A2.9 2.9 0 0 1 97 136.4"/>
+
+    <!-- Cabeça colorida -->
+    <symbol id="head" viewBox="0 0 200 200">
+      <g transform="rotate(-4 100 90)">
+        <g stroke="#23251f" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round">
+          <use href="#p-ear-l" fill="#c7853f"/><use href="#p-ear-r" fill="#c7853f"/>
+          <use href="#p-folds" fill="none" stroke="#9a6128" stroke-width="3"/>
+          <use href="#p-head" fill="#dba05a"/>
+        </g>
+        <use href="#p-blaze" fill="#f6e3c4"/>
+        <g fill="none" stroke="#23251f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <use href="#p-brows"/>
+          <use href="#p-mouth" fill="#3a2414"/>
+          <use href="#p-tongue" fill="#e98a9a"/>
+          <use href="#p-smile"/>
+          <path d="M100 97 V102.5"/>
+        </g>
+        <use href="#p-nose" fill="#23251f"/>
+        <ellipse cx="96" cy="86.4" rx="3.4" ry="1.6" fill="#6b6d63"/>
+        <circle cx="83" cy="72" r="5.6" fill="#2a1a0e"/><circle cx="117" cy="72" r="5.6" fill="#2a1a0e"/>
+        <circle cx="85.1" cy="69.9" r="1.9" fill="#ffffff"/><circle cx="119.1" cy="69.9" r="1.9" fill="#ffffff"/>
+        <use href="#p-collar" fill="none" stroke="#3f5a2c" stroke-width="8.5" stroke-linecap="round"/>
+        <circle cx="100" cy="134.5" r="9.4" fill="#3f5a2c" stroke="#23251f" stroke-width="2.6"/>
+        <use href="#p-jtag" fill="none" stroke="#e1e7d6" stroke-width="2.6" stroke-linecap="round"/>
+      </g>
+    </symbol>
+    <symbol id="avatar-head" viewBox="24 18 152 152"><use href="#head" width="200" height="200"/></symbol>
+
+    <!-- Cabeça em traço: uma cor (currentColor) e o fundo do lugar em --lf, para as orelhas não aparecerem através da cabeça -->
+    <g id="head-line-g" transform="rotate(-4 100 90)" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round">
+      <g stroke-width="4.5" style="fill:var(--lf,#ffffff)">
+        <use href="#p-ear-l"/><use href="#p-ear-r"/><use href="#p-folds" fill="none" stroke-width="3"/><use href="#p-head"/>
+      </g>
+      <g fill="none" stroke-width="3">
+        <use href="#p-brows"/><use href="#p-smile"/>
+        <use href="#p-tongue"/>
+        <path d="M100 97 V102.5"/>
+        <path d="M80 92 C79 84 86 80 93 80.5 M107 80.5 C114 80 121 84 120 92" opacity=".9"/>
+      </g>
+      <use href="#p-nose" fill="currentColor" stroke-width="2"/>
+      <circle cx="83" cy="72" r="5" fill="currentColor" stroke="none"/><circle cx="117" cy="72" r="5" fill="currentColor" stroke="none"/>
+      <use href="#p-collar" fill="none" stroke-width="4.5"/>
+      <circle cx="100" cy="135" r="8.6" stroke-width="3" style="fill:var(--lf,#ffffff)"/>
+      <use href="#p-jtag" fill="none" stroke-width="2.6"/>
+    </g>
+    <symbol id="avatar-line" viewBox="24 18 152 152"><use href="#head-line-g"/></symbol>
+
+    <!-- Corpo sentado, em traço, proporcional à cabeça -->
+    <g id="sit-line-g" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M140 176 C158 174 167 158 160 142" fill="none" stroke-width="4.5"/>
+      <g stroke-width="4.5" style="fill:var(--lf,#ffffff)">
+        <path d="M70 166 C58 168 54 180 62 186 H82 Z"/>
+        <path d="M130 166 C142 168 146 180 138 186 H118 Z"/>
+        <path d="M78 118 C70 134 66 156 68 176 C69 183 74 186 80 186 H120 C126 186 131 183 132 176 C134 156 130 134 122 118 Z"/>
+      </g>
+      <g fill="none" stroke-width="3">
+        <path d="M90 140 C89 156 89 170 90 184 M110 140 C111 156 111 170 110 184"/>
+        <path d="M80 186 C80 181 89 180 90 184 M110 184 C111 180 120 181 120 186"/>
+        <path d="M92 126 C90 136 94 146 100 150 C106 146 110 136 108 126"/>
+      </g>
+      <path d="M48 188 H152" fill="none" stroke-width="4.5"/>
+    </g>
+
+    <!-- Arcos para o texto dos selos -->
+    <path id="arc-top" d="M 35 120 A 85 85 0 0 1 205 120"/>
+    <path id="arc-bot" d="M 19 120 A 101 101 0 0 0 221 120"/>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header>
+    <h1>Símbolo da JornadaPet</h1>
+    <p style="font-size:18px">O mascote, um vira-lata caramelo, em três formas: a <b style="color:var(--ink)">cabeça colorida</b> para os avatares, o <b style="color:var(--ink)">selo em traço</b> no estilo das referências e o <b style="color:var(--ink)">logotipo</b> com o nome ao lado. O traço é esboço feito em código; a arte final sai depois da sua aprovação.</p>
+  </header>
+
+  <!-- 1. Cabeça colorida -->
+  <section aria-labelledby="s1">
+    <h2 id="s1">1. Cabeça colorida</h2>
+    <p>É o ícone dos avatares (Telegram, WhatsApp, Instagram). Tem o tom do mascote 3D, as orelhas meio caídas, a língua de fora e a coleira oliva com a plaqueta do J.</p>
+    <div class="cards">
+      <figure class="card" style="margin:0"><div class="stage on-white"><svg role="img" aria-label="Cabeça do mascote sobre branco"><use href="#head"/></svg></div><figcaption><b>Sobre branco</b></figcaption></figure>
+      <figure class="card" style="margin:0"><div class="stage on-salvia" style="border-radius:50%"><svg role="img" aria-label="Cabeça do mascote em círculo sálvia"><use href="#avatar-head"/></svg></div><figcaption><b>Avatar, sálvia</b> (recomendado)</figcaption></figure>
+      <figure class="card" style="margin:0"><div class="stage on-oliva" style="border-radius:50%"><svg role="img" aria-label="Cabeça do mascote em círculo oliva"><use href="#avatar-head"/></svg></div><figcaption><b>Avatar, oliva</b></figcaption></figure>
+      <figure class="card" style="margin:0"><div class="stage on-creme" style="border-radius:50%"><svg role="img" aria-label="Cabeça do mascote em círculo creme"><use href="#avatar-head"/></svg></div><figcaption><b>Avatar, creme</b></figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 2. Selos -->
+  <section aria-labelledby="s2">
+    <h2 id="s2">2. Selo em traço</h2>
+    <p>No estilo das referências "Pet Hospital" e "Good Petshop": o mascote desenhado só com linha, dentro de um selo com o nome em volta. Ele funciona numa cor só, o que serve para carimbo, adesivo, bordado no colete e posts do Instagram.</p>
+    <div class="cards">
+      <figure class="card" style="margin:0"><div class="stage on-white" style="border-radius:50%">
+        <svg viewBox="0 0 240 240" role="img" aria-label="Selo redondo em traço, JornadaPet, do adestrador" style="color:#3f5a2c">
+          <circle cx="120" cy="120" r="113" fill="none" stroke="currentColor" stroke-width="4"/>
+          <circle cx="120" cy="120" r="78" fill="none" stroke="currentColor" stroke-width="2.4"/>
+          <text class="badge-text" font-size="19" text-anchor="middle" fill="currentColor"><textPath href="#arc-top" startOffset="48.5%">JORNADAPET</textPath></text>
+          <text class="badge-sub" font-size="13" text-anchor="middle" fill="currentColor"><textPath href="#arc-bot" startOffset="50%">DO ADESTRADOR</textPath></text>
+          <circle cx="29" cy="128" r="3" fill="currentColor"/><circle cx="211" cy="128" r="3" fill="currentColor"/>
+          <g transform="translate(120 118) scale(0.74) translate(-100 -92)"><use href="#head-line-g"/></g>
+        </svg></div><figcaption><b>Redondo, traço oliva</b></figcaption></figure>
+      <figure class="card" style="margin:0"><div class="stage on-oliva" style="border-radius:50%">
+        <svg viewBox="0 0 240 240" role="img" aria-label="Selo redondo cheio, oliva" style="color:#f6e3c4;--lf:#3f5a2c">
+          <circle cx="120" cy="120" r="104" fill="none" stroke="currentColor" stroke-width="2.4" opacity=".5"/>
+          <circle cx="120" cy="120" r="78" fill="none" stroke="currentColor" stroke-width="2.4"/>
+          <text class="badge-text" font-size="19" text-anchor="middle" fill="currentColor"><textPath href="#arc-top" startOffset="48.5%">JORNADAPET</textPath></text>
+          <text class="badge-sub" font-size="13" text-anchor="middle" fill="currentColor"><textPath href="#arc-bot" startOffset="50%">DO ADESTRADOR</textPath></text>
+          <circle cx="29" cy="128" r="3" fill="currentColor"/><circle cx="211" cy="128" r="3" fill="currentColor"/>
+          <g transform="translate(120 118) scale(0.74) translate(-100 -92)"><use href="#head-line-g"/></g>
+        </svg></div><figcaption><b>Redondo, cheio oliva</b></figcaption></figure>
+      <figure class="card" style="margin:0"><div class="stage" style="background:transparent">
+        <svg viewBox="0 0 180 250" role="img" aria-label="Selo em arco com o mascote sentado em traço" style="color:#23251f;--lf:#f6e3c4">
+          <path d="M16 236 V92 A74 74 0 0 1 164 92 V236 Z" fill="#f6e3c4" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+          <g transform="translate(90 106) scale(0.64) translate(-100 -112)"><use href="#sit-line-g"/><use href="#head-line-g"/></g>
+          <text x="90" y="206" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="800" font-size="26" letter-spacing="-0.8" fill="currentColor">JornadaPet</text>
+          <text x="90" y="224" text-anchor="middle" class="badge-sub" font-size="9.5" fill="#3f5a2c">DO ADESTRADOR</text>
+          <path d="M30 60 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 Z M150 52 l1.6 4 l4 1.6 l-4 1.6 l-1.6 4 l-1.6 -4 l-4 -1.6 l4 -1.6 Z" fill="#3f5a2c"/>
+        </svg></div><figcaption><b>Arco, creme</b> (para post e adesivo)</figcaption></figure>
+      <figure class="card" style="margin:0"><div class="stage on-salvia" style="border-radius:50%"><svg role="img" aria-label="Cabeça em traço oliva em círculo sálvia" style="color:#3f5a2c;--lf:#e1e7d6"><use href="#avatar-line"/></svg></div><figcaption><b>Ícone em traço</b>, alternativa ao colorido</figcaption></figure>
+    </div>
+  </section>
+
+  <!-- 3. Logotipo -->
+  <section aria-labelledby="s3">
+    <h2 id="s3">3. Logotipo</h2>
+    <p>A cabeça ao lado do nome, para o menu e o rodapé da página. Em fundo escuro, a cabeça continua igual; só o nome muda de cor.</p>
+    <div class="apps">
+      <div class="app"><h3>Menu da página</h3>
+        <div class="nav l"><span class="avatar on-salvia" style="width:40px;height:40px"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><span class="wm">JornadaPet</span></div>
+        <div class="nav d"><span class="avatar on-salvia" style="width:40px;height:40px"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><span class="wm">JornadaPet</span></div>
+      </div>
+      <div class="app"><h3>Grande, empilhado</h3>
+        <div style="display:grid;justify-items:center;gap:4px;background:#ffffff;border-radius:12px;padding:20px;border:1px solid #e2e2e6">
+          <svg viewBox="0 0 200 200" style="width:140px;height:140px" role="img" aria-label="Logotipo empilhado"><use href="#head"/></svg>
+          <span style="font-family:var(--display);font-weight:800;font-size:38px;letter-spacing:-0.035em;line-height:1;color:#23251f">JornadaPet</span>
+          <span style="font-weight:600;font-size:13px;color:#3f5a2c">Você cuida do cão. A gente lembra quem falta pagar.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Nos canais -->
+  <section aria-labelledby="s4">
+    <h2 id="s4">4. Nos canais</h2>
+    <div class="apps">
+      <div class="app"><h3>Telegram</h3>
+        <div class="chat"><span class="avatar on-salvia"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>
+        <div class="chat tg-dark"><span class="avatar on-salvia"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><div><b>JornadaPet</b><span>Amanhã: Thor às 9h, Nina às 16h</span></div><time>21:40</time></div>
+      </div>
+      <div class="app"><h3>WhatsApp Business</h3>
+        <div class="chat wa"><span class="avatar on-salvia"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><div><b>JornadaPet</b><span>Oi! Seu convite está pronto.</span></div><time>10:12</time></div>
+        <div class="chat wa"><span class="avatar on-salvia" style="color:#3f5a2c;--lf:#e1e7d6"><svg aria-hidden="true"><use href="#avatar-line"/></svg></span><div><b>JornadaPet</b><span>Versão em traço, para comparar</span></div><time>10:12</time></div>
+      </div>
+      <div class="app"><h3>Instagram</h3>
+        <div class="ig"><span class="ring"><span class="avatar on-salvia"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span></span><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador. Acesso por convite.</small></div></div>
+      </div>
+      <div class="app"><h3>Tamanhos e aba do navegador</h3>
+        <div class="sizes">
+          <figure><span class="avatar on-salvia" style="width:64px;height:64px"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><figcaption>64</figcaption></figure>
+          <figure><span class="avatar on-salvia" style="width:40px;height:40px"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><figcaption>40</figcaption></figure>
+          <figure><span class="avatar on-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><figcaption>32</figcaption></figure>
+          <figure><span class="avatar on-salvia" style="width:24px;height:24px"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><figcaption>24</figcaption></figure>
+          <figure><span class="avatar on-salvia" style="width:16px;height:16px"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span><figcaption>16</figcaption></figure>
+        </div>
+        <div class="tab"><span class="avatar on-salvia" style="width:16px;height:16px"><svg aria-hidden="true"><use href="#avatar-head"/></svg></span>JornadaPet</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="note">
+    <b style="color:var(--ink)">Para decidir</b>
+    <ul>
+      <li>Avatar com a cabeça colorida ou em traço?</li>
+      <li>Fundo do avatar: sálvia, oliva ou creme?</li>
+      <li>Selo: redondo, arco ou os dois (redondo para carimbo e colete, arco para post e adesivo)?</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

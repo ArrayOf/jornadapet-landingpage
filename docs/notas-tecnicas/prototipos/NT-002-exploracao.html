@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logotipo JornadaPet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+/* Prancha de comparação: um bloco por conceito, cada um com o símbolo grande e as aplicações reais lado a lado. */
+:root {
+  --bg: #f4f4f6; --surface: #ffffff; --ink: #23251f; --body: #45473f; --muted: #676a60; --line: #e2e2e6;
+  --accent: #3f5a2c; --tag: #e7e4ec; --hint: #f2e2cf;
+  /* cores fixas da marca: não mudam com o tema */
+  --m-oliva: #3f5a2c; --m-salvia: #e1e7d6; --m-escuro: #151613; --m-claro: #a3c47f;
+  --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --text: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #151613; --surface: #1d1f1a; --ink: #f1f2ec; --body: #cfd1c7; --muted: #a0a395; --line: #2e3128;
+  --accent: #a3c47f; --tag: #2d2a33; --hint: #3a2e20; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #151613; --surface: #1d1f1a; --ink: #f1f2ec; --body: #cfd1c7; --muted: #a0a395; --line: #2e3128;
+  --accent: #a3c47f; --tag: #2d2a33; --hint: #3a2e20; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--body); font: 400 16px/1.6 var(--text); padding-inline: 16px; padding-block: 40px 72px; }
+.wrap { max-width: 1120px; margin: 0 auto; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); color: var(--ink); letter-spacing: -0.025em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.05; }
+h2 { font-size: 28px; line-height: 1.1; }
+h3 { font-size: 14px; font-family: var(--text); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+p { margin: 0; max-width: 62ch; }
+header { display: grid; gap: 14px; }
+.lead { font-size: 18px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); width: fit-content; }
+.pill.rec { background: var(--accent); color: var(--surface); border-color: transparent; }
+
+.concept { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 3vw, 32px); display: grid; gap: 28px; }
+.concept-head { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: baseline; justify-content: space-between; }
+.concept-head .t { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.letter { font-family: var(--display); font-weight: 800; color: var(--accent); font-size: 28px; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 32px; }
+@media (max-width: 820px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.hero-tiles { display: flex; gap: 16px; flex-wrap: wrap; }
+.notes { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.notes dl { margin: 0; display: grid; gap: 10px; }
+.notes dt { font-weight: 600; color: var(--ink); font-size: 14px; }
+.notes dd { margin: 0; }
+
+/* símbolo sobre fundo */
+.tile { display: grid; place-items: center; border-radius: 22%; flex: none; }
+.tile svg { width: 80%; height: 80%; display: block; }
+.tile.round { border-radius: 50%; }
+.tile.round svg { width: 70%; height: 70%; }
+.v-salvia { background: var(--m-salvia); color: var(--m-oliva); --cut: var(--m-salvia); }
+.v-oliva  { background: var(--m-oliva); color: var(--m-salvia); --cut: var(--m-oliva); }
+.v-branco { background: #ffffff; color: #23251f; --cut: #ffffff; box-shadow: inset 0 0 0 1px #e2e2e6; }
+.v-noite  { background: var(--m-escuro); color: var(--m-claro); --cut: var(--m-escuro); }
+.big { width: 148px; height: 148px; }
+
+.apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.app { border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+
+/* lista de conversas (Telegram / WhatsApp) */
+.chat { display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 12px; align-items: center; }
+.chat .tile { width: 48px; height: 48px; }
+.chat b { color: var(--ink); font-size: 15px; display: block; line-height: 1.25; }
+.chat span { font-size: 14px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.chat time { font-size: 12px; color: var(--muted); align-self: start; font-variant-numeric: tabular-nums; }
+.chat.dark { background: #17212b; border-radius: 12px; padding: 10px; }
+.chat.dark b { color: #f5f5f5; } .chat.dark span, .chat.dark time { color: #8b9aa7; }
+
+/* perfil Instagram */
+.ig { display: flex; gap: 14px; align-items: center; }
+.ig .ring { padding: 3px; border-radius: 50%; background: conic-gradient(#feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75); }
+.ig .ring > .tile { width: 72px; height: 72px; box-shadow: 0 0 0 3px var(--surface); }
+.ig b { color: var(--ink); display: block; }
+.ig small { color: var(--muted); font-size: 13px; line-height: 1.4; display: block; }
+
+/* tamanhos */
+.sizes { display: flex; gap: 14px; align-items: end; flex-wrap: wrap; }
+.sizes figure { margin: 0; display: grid; gap: 6px; justify-items: center; }
+.sizes figcaption { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* aba do navegador */
+.tab { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--line); border-radius: 10px 10px 0 0; padding: 8px 12px; width: fit-content; max-width: 100%; font-size: 13px; color: var(--ink); }
+.tab .tile { width: 16px; height: 16px; border-radius: 4px; }
+
+/* menu da página */
+.nav { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; }
+.nav .tile { width: 32px; height: 32px; border-radius: 9px; }
+.nav .wm { font-family: var(--display); font-weight: 700; font-size: 20px; letter-spacing: -0.03em; }
+.nav.l { background: #f4f4f6; } .nav.l .wm { color: #23251f; }
+.nav.d { background: #151613; } .nav.d .wm { color: #f1f2ec; }
+
+/* wordmark D: o J desenhado entra no lugar da letra */
+.wm-stage { display: flex; flex-wrap: wrap; gap: 16px; }
+.wmd { font-family: var(--display); font-weight: 700; letter-spacing: -0.035em; font-size: clamp(40px, 7vw, 72px); line-height: 1; color: #23251f; display: inline-flex; align-items: baseline; }
+.wmd .jl { height: 0.74em; width: auto; aspect-ratio: 36 / 52; margin-right: 0.01em; color: #3f5a2c; align-self: baseline; transform: translateY(0.035em); }
+.wm-stage .wmd { padding: 20px 28px; border-radius: 16px; background: #f4f4f6; border: 1px solid var(--line); }
+.wm-stage .wmd.dark { background: #151613; color: #f1f2ec; }
+.wmd.dark .jl, .wmd.on-dark .jl { color: #a3c47f; }
+.wmd.sm { font-size: 22px; }
+.nav.d .wmd { color: #f1f2ec; }
+/* rodada 5: mascote com o nome embaixo */
+.mascot-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.lockup { display: grid; justify-items: center; gap: 6px; padding: 28px 20px; border-radius: 16px; background: #ffffff; border: 1px solid var(--line); text-align: center; }
+.lockup .dog { width: min(220px, 70%); height: auto; aspect-ratio: 1; }
+.lk-name { font-family: var(--display); font-weight: 800; font-size: clamp(34px, 5vw, 48px); letter-spacing: -0.035em; line-height: 1; color: #23251f; margin-top: -6px; }
+.lk-tag { font-weight: 600; font-size: 14px; color: #3f5a2c; max-width: 30ch; }
+.lockup.dark { background: #151613; border-color: #2e3128; }
+.lockup.dark .lk-name { color: #f1f2ec; } .lockup.dark .lk-tag { color: #a3c47f; }
+/* rodada 3: variações lado a lado */
+.concept.focus { border: 2px solid var(--accent); }
+.variants { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 20px; }
+.variants figure { margin: 0; display: grid; grid-template-columns: auto auto; gap: 10px; justify-content: start; }
+.variants .tile.big { width: 116px; height: 116px; }
+.variants figcaption { grid-column: 1 / -1; font-size: 14px; }
+.variants figcaption b { color: var(--ink); }
+/* mais caminhos: cartões compactos, mesma ordem interna em todos */
+.more { display: grid; gap: 20px; }
+.more-head { display: grid; gap: 8px; }
+.more-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 16px; }
+.mini { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.mini-head { display: flex; gap: 10px; align-items: baseline; }
+.mini .mt { font-family: var(--display); font-size: 20px; text-transform: none; letter-spacing: -0.02em; color: var(--ink); }
+.mini b { color: var(--ink); font-weight: 600; }
+.mini p { font-size: 15px; }
+.mini-row { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
+.mini-row .tile.big { width: 104px; height: 104px; }
+.compare { width: 100%; border-collapse: collapse; font-size: 15px; }
+.compare-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.compare th, .compare td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.compare tr:last-child td { border-bottom: 0; }
+.compare th { color: var(--ink); font-weight: 600; font-size: 14px; }
+.compare td:first-child { color: var(--ink); font-weight: 600; white-space: nowrap; }
+.next { background: var(--hint); border-radius: 16px; padding: 24px; display: grid; gap: 10px; color: var(--ink); }
+.next ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- A · J-guia: J de traço único com barra no topo; o gancho termina na argola do mosquetão -->
+  <symbol id="mark-a" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 13 H44"/>
+      <path d="M38 13 V37 A12.5 12.5 0 0 1 13 37"/>
+      <circle cx="13" cy="30" r="6.5"/>
+    </g>
+  </symbol>
+  <!-- B · Pata-J: pata desenhada à mão com o J vazado na almofada -->
+  <symbol id="mark-b" viewBox="0 0 64 64">
+    <g fill="currentColor">
+      <ellipse cx="14" cy="27.5" rx="5.6" ry="7.2" transform="rotate(-24 14 27.5)"/>
+      <ellipse cx="25.2" cy="15.5" rx="6" ry="7.8" transform="rotate(-8 25.2 15.5)"/>
+      <ellipse cx="38.8" cy="15.5" rx="6" ry="7.8" transform="rotate(8 38.8 15.5)"/>
+      <ellipse cx="50" cy="27.5" rx="5.6" ry="7.2" transform="rotate(24 50 27.5)"/>
+      <path d="M32 30 C40 30 48 39 50.5 46 C52.5 53 47 57.5 41 56.5 C37 55.8 35 54.2 32 54.2 C29 54.2 27 55.8 23 56.5 C17 57.5 11.5 53 13.5 46 C16 39 24 30 32 30 Z"/>
+    </g>
+    <path d="M35.5 36.5 V45 A4.6 4.6 0 0 1 26.3 45" fill="none" style="stroke:var(--cut)" stroke-width="3.6" stroke-linecap="round"/>
+  </symbol>
+  <!-- C · Plaqueta: plaqueta de coleira presa na argola, com o J em destaque -->
+  <symbol id="mark-c" viewBox="0 0 64 64">
+    <circle cx="32" cy="38" r="20" fill="currentColor"/>
+    <circle cx="32" cy="22.5" r="2.4" style="fill:var(--cut)"/>
+    <circle cx="32" cy="14" r="7" fill="none" stroke="currentColor" stroke-width="3.6"/>
+    <g fill="none" style="stroke:var(--cut)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M29 30 H39"/>
+      <path d="M36 30 V42 A6.2 6.2 0 0 1 23.6 42"/>
+    </g>
+  </symbol>
+  <!-- D · o J do nome, no peso da Bricolage, com a argola em caramelo (letra do wordmark) -->
+  <symbol id="j-letter" viewBox="0 0 36 52">
+    <path d="M27 4.5 V34 A11.5 11.5 0 0 1 4 34" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"/>
+    <circle cx="4.5" cy="25.5" r="5" fill="none" stroke="#d17c3a" stroke-width="3.6"/>
+  </symbol>
+  <!-- E · Trajeto: o J como percurso pontilhado; cada ponto é uma sessão, o fim é um check -->
+  <symbol id="mark-e" viewBox="0 0 64 64">
+    <path d="M40 12 V37 A12 12 0 0 1 16 37" fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round" stroke-dasharray="0 7.6"/>
+    <circle cx="40" cy="12" r="5.2" fill="currentColor"/>
+    <circle cx="16" cy="37" r="9" fill="currentColor"/>
+    <path d="M12 37.2 L15 40.2 L20.5 34" fill="none" style="stroke:var(--cut)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <!-- F · Caderno: caderninho de bolso com espiral e elástico, J na capa -->
+  <symbol id="mark-f" viewBox="0 0 64 64">
+    <rect x="14" y="13" width="36" height="43" rx="6" fill="currentColor"/>
+    <g style="fill:var(--cut)" stroke="currentColor" stroke-width="2.6">
+      <rect x="20" y="7.5" width="4.4" height="11" rx="2.2"/>
+      <rect x="29.8" y="7.5" width="4.4" height="11" rx="2.2"/>
+      <rect x="39.6" y="7.5" width="4.4" height="11" rx="2.2"/>
+    </g>
+    <path d="M44.5 19 V56" style="stroke:var(--cut)" stroke-width="2" opacity=".55"/>
+    <path d="M35 26 V39 A6 6 0 0 1 23 39" fill="none" style="stroke:var(--cut)" stroke-width="5" stroke-linecap="round"/>
+  </symbol>
+  <!-- G · j com check: o pingo do j minúsculo vira um check de "pago" -->
+  <symbol id="mark-g" viewBox="0 0 64 64">
+    <path d="M37 28 V45 A9.5 9.5 0 0 1 18 45" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+    <path d="M27 15.5 L32.5 21 L44 9.5" fill="none" stroke="currentColor" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <!-- H · Balão: balão de conversa com o J dentro, a marca mora no chat -->
+  <symbol id="mark-h" viewBox="0 0 64 64">
+    <path d="M22 12 H44 A12 12 0 0 1 56 24 V34 A12 12 0 0 1 44 46 H27 L16 55 V45.4 A12 12 0 0 1 8 34 V24 A12 12 0 0 1 20 12 Z" fill="currentColor"/>
+    <path d="M37 20 V32 A6 6 0 0 1 25 32" fill="none" style="stroke:var(--cut)" stroke-width="5" stroke-linecap="round"/>
+  </symbol>
+  <!-- I · Monograma JP: J e P dividem a mesma haste -->
+  <symbol id="mark-i" viewBox="0 0 64 64">
+    <g fill="none" stroke="currentColor" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 12 V40 A10 10 0 0 1 10 40"/>
+      <path d="M30 12 H40 A9.5 9.5 0 0 1 40 31 H30"/>
+    </g>
+  </symbol>
+  <!-- I + pata: o monograma JP faz o papel da almofada, e os dedos ficam em cima -->
+  <symbol id="jp-core" viewBox="0 0 64 64">
+    <g transform="translate(32 42) scale(0.7) translate(-29.75 -31)" fill="none" stroke="currentColor" stroke-width="8.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 12 V40 A10 10 0 0 1 10 40"/>
+      <path d="M30 12 H40 A9.5 9.5 0 0 1 40 31 H30"/>
+    </g>
+  </symbol>
+  <symbol id="mark-p4" viewBox="0 0 64 64">
+    <use href="#jp-core"/>
+    <g fill="currentColor">
+      <ellipse cx="15.5" cy="20" rx="3.6" ry="4.2" transform="rotate(-22 15.5 20)"/>
+      <ellipse cx="25.5" cy="11.5" rx="4" ry="4.7" transform="rotate(-8 25.5 11.5)"/>
+      <ellipse cx="38.5" cy="11.5" rx="4" ry="4.7" transform="rotate(8 38.5 11.5)"/>
+      <ellipse cx="48.5" cy="20" rx="3.6" ry="4.2" transform="rotate(22 48.5 20)"/>
+    </g>
+  </symbol>
+  <symbol id="mark-p3" viewBox="0 0 64 64">
+    <use href="#jp-core"/>
+    <g fill="currentColor">
+      <ellipse cx="19" cy="16" rx="4" ry="4.7" transform="rotate(-20 19 16)"/>
+      <ellipse cx="32" cy="10.5" rx="4.2" ry="4.9"/>
+      <ellipse cx="45" cy="16" rx="4" ry="4.7" transform="rotate(20 45 16)"/>
+    </g>
+  </symbol>
+  <symbol id="mark-pc" viewBox="0 0 64 64">
+    <use href="#jp-core"/>
+    <g fill="#d17c3a">
+      <ellipse cx="15.5" cy="20" rx="3.6" ry="4.2" transform="rotate(-22 15.5 20)"/>
+      <ellipse cx="25.5" cy="11.5" rx="4" ry="4.7" transform="rotate(-8 25.5 11.5)"/>
+      <ellipse cx="38.5" cy="11.5" rx="4" ry="4.7" transform="rotate(8 38.5 11.5)"/>
+      <ellipse cx="48.5" cy="20" rx="3.6" ry="4.2" transform="rotate(22 48.5 20)"/>
+    </g>
+  </symbol>
+  <!-- Rodada 5 · mascote: vira-lata caramelo sentado ("senta"), coleira oliva com a plaqueta J -->
+  <symbol id="dog-head" viewBox="0 0 200 200">
+    <!-- cabeça redesenhada a partir do mascote 3D: dourado, orelhas meio caídas, língua de fora -->
+    <g stroke="#23251f" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M77 52 C68 34 50 30 38 40 C43 48 50 61 61 73 C68 67 74 60 77 52 Z" fill="#c98642"/>
+      <path d="M123 52 C132 34 150 30 162 40 C157 48 150 61 139 73 C132 67 126 60 123 52 Z" fill="#c98642"/>
+      <path d="M70 62 C70 34 130 34 130 62 V86 C130 106 116 116 100 116 C84 116 70 106 70 86 Z" fill="#e2a35c"/>
+      <path d="M85 81 C78 90 81 106 100 108 C119 106 122 90 115 81 C109 75 91 75 85 81 Z" fill="#f6e3c4"/>
+      <path d="M95 98 C94 112 106 112 105 98" fill="#e98a9a" stroke-width="3.4"/>
+      <path d="M85 94 C91 103 109 103 115 94" fill="none" stroke-width="3.6"/>
+      <path d="M91 85 C91 79 109 79 109 85 C109 91 104 93 100 93 C96 93 91 91 91 85 Z" fill="#23251f"/>
+    </g>
+    <circle cx="85" cy="67" r="5.2" fill="#3a2414"/>
+    <circle cx="115" cy="67" r="5.2" fill="#3a2414"/>
+    <circle cx="86.8" cy="65.2" r="1.7" fill="#ffffff"/>
+    <circle cx="116.8" cy="65.2" r="1.7" fill="#ffffff"/>
+    <path d="M77 113 Q100 126 123 113" fill="none" stroke="#3f5a2c" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="100" cy="127" r="8" fill="#3f5a2c" stroke="#23251f" stroke-width="2.4"/>
+    <path d="M102.6 122.5 V128.5 A2.8 2.8 0 0 1 97 128.5" fill="none" stroke="#e1e7d6" stroke-width="2.2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="dog-full" viewBox="0 0 200 200">
+    <g stroke="#23251f" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M72 176 C48 178 36 160 46 138" fill="none" stroke-width="15"/>
+      <path d="M72 176 C48 178 36 160 46 138" fill="none" stroke="#e2a35c" stroke-width="6"/>
+      <path d="M80 110 C68 130 64 160 68 184 H132 C136 160 132 130 120 110 Z" fill="#e2a35c"/>
+      <path d="M89 122 C86 144 90 164 100 172 C110 164 114 144 111 122 Q100 130 89 122 Z" fill="#f6e3c4"/>
+      <path d="M87 150 V184 M113 150 V184" fill="none"/>
+      <path d="M56 186 H146" fill="none"/>
+    </g>
+    <use href="#dog-head" width="200" height="200"/>
+  </symbol>
+  <symbol id="mark-dog" viewBox="34 26 132 132">
+    <use href="#dog-head" width="200" height="200"/>
+  </symbol>
+  <!-- Rodada 4 · traço fino (line art) -->
+  <!-- L1: JP monolinear + dedos vazados -->
+  <symbol id="mark-l1" viewBox="0 0 64 64">
+    <g transform="translate(32 42) scale(0.7) translate(-29.75 -31)" fill="none" stroke="currentColor" stroke-width="5.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 12 V40 A10 10 0 0 1 10 40"/>
+      <path d="M30 12 H40 A9.5 9.5 0 0 1 40 31 H30"/>
+    </g>
+    <g fill="none" stroke="currentColor" stroke-width="2.4">
+      <ellipse cx="15.5" cy="20" rx="3.4" ry="4" transform="rotate(-22 15.5 20)"/>
+      <ellipse cx="25.5" cy="11.5" rx="3.8" ry="4.5" transform="rotate(-8 25.5 11.5)"/>
+      <ellipse cx="38.5" cy="11.5" rx="3.8" ry="4.5" transform="rotate(8 38.5 11.5)"/>
+      <ellipse cx="48.5" cy="20" rx="3.4" ry="4" transform="rotate(22 48.5 20)"/>
+    </g>
+  </symbol>
+  <!-- L2: dedos sobre um círculo (a almofada vira argola), JP dentro -->
+  <symbol id="mark-l2" viewBox="0 0 64 64">
+    <circle cx="32" cy="40" r="18.5" fill="none" stroke="currentColor" stroke-width="2.8"/>
+    <g transform="translate(32.5 41) scale(0.5) translate(-29.75 -31)" fill="none" stroke="currentColor" stroke-width="6.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 12 V40 A10 10 0 0 1 10 40"/>
+      <path d="M30 12 H40 A9.5 9.5 0 0 1 40 31 H30"/>
+    </g>
+    <g fill="currentColor">
+      <ellipse cx="13.5" cy="17.5" rx="3.3" ry="4" transform="rotate(-24 13.5 17.5)"/>
+      <ellipse cx="24.5" cy="9.5" rx="3.6" ry="4.3" transform="rotate(-8 24.5 9.5)"/>
+      <ellipse cx="39.5" cy="9.5" rx="3.6" ry="4.3" transform="rotate(8 39.5 9.5)"/>
+      <ellipse cx="50.5" cy="17.5" rx="3.3" ry="4" transform="rotate(24 50.5 17.5)"/>
+    </g>
+  </symbol>
+  <!-- L3: JP-cão. A barriga do P vira a cabeça de um cão de perfil (orelha, olho fechado, focinho) -->
+  <symbol id="mark-l3" viewBox="0 0 64 64">
+    <g transform="translate(31 33) scale(0.92) translate(-29.75 -31)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 12 V40 A10 10 0 0 1 10 40" stroke-width="3.6"/>
+      <path d="M30 12 H40 A9.5 9.5 0 0 1 40 31 H30" stroke-width="3.6"/>
+      <path d="M32.5 12.5 C31.8 18 32.6 23.5 36.2 25.6" stroke-width="3"/>
+      <path d="M39.4 19.2 Q41.2 21.2 43 19.2" stroke-width="2.4"/>
+    </g>
+    <ellipse cx="49.6" cy="22.2" rx="2.4" ry="2" fill="currentColor"/>
+  </symbol>
+  <!-- D · símbolo: o mesmo J, centrado para avatar -->
+  <symbol id="mark-d" viewBox="0 0 64 64">
+    <path d="M38 12 V38 A11.5 11.5 0 0 1 15 38" fill="none" stroke="currentColor" stroke-width="8.5" stroke-linecap="round"/>
+    <circle cx="15.5" cy="29.5" r="5" fill="none" stroke="#d17c3a" stroke-width="3.6"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header>
+    <span class="pill">Proposta para conversa · 11/10/2026</span>
+    <h1>Logotipo da JornadaPet</h1>
+    <p class="lead">Nove caminhos para o símbolo (quatro detalhados e cinco em formato compacto), cada um aplicado onde ele vai viver: avatar redondo do bot no Telegram, foto do WhatsApp Business, perfil do Instagram, aba do navegador e menu da página.</p>
+    <p>Todos usam a paleta da página (oliva do colete e sálvia) e o nome em Bricolage Grotesque. As cores do símbolo são fixas nos dois temas. O desenho é de conceito: a versão final ganha ajuste fino de traço e proporção depois da escolha.</p>
+  </header>
+
+  <!-- ===================== Rodada 5: mascote ===================== -->
+  <section class="concept focus" aria-labelledby="cm">
+    <div class="concept-head">
+      <div class="t"><span class="letter">M</span><h2 id="cm">Mascote: o Caramelo, sentado</h2></div>
+      <span class="pill rec">Rodada 5 · mascote escolhido</span>
+    </div>
+    <p>O mascote é o vira-lata caramelo 3D, sentado, porque "senta" é o primeiro comando que todo adestrador ensina. O desenho abaixo é a versão plana dele, com contorno grosso, que vira logo e avatar. A versão 3D fica para a comunicação. A coleira oliva com a plaqueta do J liga o cão ao resto da marca. O nome "Caramelo" é provisório, e este traço é esboço: a versão final sai de um ilustrador.</p>
+    <div class="mascot-row">
+      <div class="lockup">
+        <svg class="dog" viewBox="0 0 200 200" role="img" aria-label="Mascote: vira-lata caramelo sentado, de coleira oliva"><use href="#dog-full"/></svg>
+        <span class="lk-name">JornadaPet</span>
+        <span class="lk-tag">Você cuida do cão. A gente lembra quem falta pagar.</span>
+      </div>
+      <div class="lockup dark" aria-hidden="true">
+        <svg class="dog" viewBox="0 0 200 200"><use href="#dog-full"/></svg>
+        <span class="lk-name">JornadaPet</span>
+        <span class="lk-tag">Você cuida do cão. A gente lembra quem falta pagar.</span>
+      </div>
+    </div>
+    <div class="apps">
+      <div class="app"><h3>Telegram (só a cabeça)</h3>
+        <div class="chat"><div class="tile round v-salvia"><svg aria-hidden="true" style="width:92%;height:92%"><use href="#mark-dog"/></svg></div><div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>
+        <div class="chat dark"><div class="tile round v-salvia"><svg aria-hidden="true" style="width:92%;height:92%"><use href="#mark-dog"/></svg></div><div><b>JornadaPet</b><span>Amanhã: Thor às 9h, Nina às 16h</span></div><time>21:40</time></div>
+      </div>
+      <div class="app"><h3>Instagram e WhatsApp</h3>
+        <div class="ig"><div class="ring"><div class="tile round v-salvia"><svg aria-hidden="true" style="width:92%;height:92%"><use href="#mark-dog"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+        <div class="ig"><div class="ring"><div class="tile round v-oliva"><svg aria-hidden="true" style="width:92%;height:92%"><use href="#mark-dog"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+      </div>
+      <div class="app"><h3>Tamanhos</h3>
+        <div class="sizes">
+          <figure><div class="tile round v-salvia" style="width:56px;height:56px"><svg aria-hidden="true" style="width:92%;height:92%"><use href="#mark-dog"/></svg></div><figcaption>56</figcaption></figure>
+          <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true" style="width:92%;height:92%"><use href="#mark-dog"/></svg></div><figcaption>32</figcaption></figure>
+          <figure><div class="tile round v-salvia" style="width:24px;height:24px"><svg aria-hidden="true" style="width:92%;height:92%"><use href="#mark-dog"/></svg></div><figcaption>24</figcaption></figure>
+          <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true" style="width:96%;height:96%"><use href="#mark-dog"/></svg></div><figcaption>16</figcaption></figure>
+        </div>
+        <p style="font-size:14px">Em 16px o rosto vira uma mancha. Por isso o mascote funciona melhor junto com um símbolo simples (o JP com pata) no favicon.</p>
+      </div>
+      <div class="app"><h3>Como eu usaria</h3>
+        <p style="font-size:15px"><b style="color:var(--ink)">Mascote</b> no Instagram, nos adesivos, na página (no lugar das fotos de banco de imagem) e na imagem de compartilhamento. <b style="color:var(--ink)">Cabeça</b> no avatar do bot e do WhatsApp. <b style="color:var(--ink)">JP com pata</b> no favicon e onde for muito pequeno.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Rodada 4: traço fino ===================== -->
+  <section class="concept focus" aria-labelledby="cl">
+    <div class="concept-head">
+      <div class="t"><span class="letter">L</span><h2 id="cl">JP com pata, em traço fino</h2></div>
+      <span class="pill rec">Rodada 4 · estilo das referências</span>
+    </div>
+    <p>O estilo das referências: linha contínua, desenho em contorno e detalhes mínimos. Aparece também em preto sobre branco, como nas referências, porque uma boa marca de traço precisa funcionar numa cor só (carimbo, adesivo, bordado no colete).</p>
+    <div class="variants">
+      <figure><div class="tile big v-salvia"><svg role="img" aria-label="L1, JP em traço com dedos vazados"><use href="#mark-l1"/></svg></div><div class="tile big v-branco"><svg aria-hidden="true"><use href="#mark-l1"/></svg></div><figcaption><b>L1</b> · JP em traço e dedos vazados. É a rodada 3 em linha.</figcaption></figure>
+      <figure><div class="tile big v-salvia"><svg role="img" aria-label="L2, dedos sobre um círculo com o JP dentro"><use href="#mark-l2"/></svg></div><div class="tile big v-branco"><svg aria-hidden="true"><use href="#mark-l2"/></svg></div><figcaption><b>L2</b> · dedos sobre um círculo, com o JP dentro, como o "dog walking" da referência.</figcaption></figure>
+      <figure><div class="tile big v-salvia"><svg role="img" aria-label="L3, JP em que o P é a cabeça de um cão"><use href="#mark-l3"/></svg></div><div class="tile big v-branco"><svg aria-hidden="true"><use href="#mark-l3"/></svg></div><figcaption><b>L3</b> · JP-cão: a barriga do P vira a cabeça de um cão de perfil, com orelha, olho fechado e focinho.</figcaption></figure>
+    </div>
+    <div class="apps">
+      <div class="app"><h3>Telegram</h3>
+        <div class="chat"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-l1"/></svg></div><div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>
+        <div class="chat dark"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-l2"/></svg></div><div><b>JornadaPet</b><span>Amanhã: Thor às 9h, Nina às 16h</span></div><time>21:40</time></div>
+        <div class="chat dark"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-l3"/></svg></div><div><b>JornadaPet</b><span>Falta receber: R$ 200 da Camila</span></div><time>09:15</time></div>
+      </div>
+      <div class="app"><h3>Instagram e WhatsApp</h3>
+        <div class="ig"><div class="ring"><div class="tile round v-branco"><svg aria-hidden="true"><use href="#mark-l2"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+        <div class="ig"><div class="ring"><div class="tile round v-oliva"><svg aria-hidden="true"><use href="#mark-l3"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+      </div>
+      <div class="app"><h3>Tamanhos (L1, L2, L3)</h3>
+        <div class="sizes">
+          <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-l1"/></svg></div><figcaption>L1 32</figcaption></figure>
+          <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-l1"/></svg></div><figcaption>16</figcaption></figure>
+          <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-l2"/></svg></div><figcaption>L2 32</figcaption></figure>
+          <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-l2"/></svg></div><figcaption>16</figcaption></figure>
+          <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-l3"/></svg></div><figcaption>L3 32</figcaption></figure>
+          <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-l3"/></svg></div><figcaption>16</figcaption></figure>
+        </div>
+        <p style="font-size:14px">Traço fino é bonito grande e fraco pequeno. Na versão final, o avatar e o favicon ganham um traço mais grosso que o do logo da página.</p>
+      </div>
+      <div class="app"><h3>Menu da página</h3>
+        <div class="nav l"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-l2"/></svg></div><span class="wm">JornadaPet</span></div>
+        <div class="nav d"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-l3"/></svg></div><span class="wm">JornadaPet</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== I + pata (rodada 3) ===================== -->
+  <section class="concept focus" aria-labelledby="cp">
+    <div class="concept-head">
+      <div class="t"><span class="letter">I+</span><h2 id="cp">Monograma JP com a pata</h2></div>
+      <span class="pill rec">Rodada 3 · ideia do Thiago</span>
+    </div>
+    <p>O JP faz o papel da almofada da pata, e as bolinhas em cima são os dedos. De perto se lê "JP"; de longe, uma pata. Os dedos são um acessório: se um dia a ArrayOf lançar outra área, o JP sozinho continua de pé.</p>
+    <div class="variants">
+      <figure><div class="tile big v-salvia"><svg role="img" aria-label="JP com quatro dedos"><use href="#mark-p4"/></svg></div><div class="tile big v-oliva"><svg aria-hidden="true"><use href="#mark-p4"/></svg></div><figcaption><b>I+4</b> · quatro dedos, a pata completa</figcaption></figure>
+      <figure><div class="tile big v-salvia"><svg role="img" aria-label="JP com três dedos"><use href="#mark-p3"/></svg></div><div class="tile big v-oliva"><svg aria-hidden="true"><use href="#mark-p3"/></svg></div><figcaption><b>I+3</b> · três dedos, mais leve e simétrico</figcaption></figure>
+      <figure><div class="tile big v-salvia"><svg role="img" aria-label="JP com dedos em caramelo"><use href="#mark-pc"/></svg></div><div class="tile big v-oliva"><svg aria-hidden="true"><use href="#mark-pc"/></svg></div><figcaption><b>I+C</b> · quatro dedos em caramelo, o toque quente</figcaption></figure>
+    </div>
+    <div class="apps">
+      <div class="app"><h3>Telegram</h3>
+        <div class="chat"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-p4"/></svg></div><div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>
+        <div class="chat dark"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-p3"/></svg></div><div><b>JornadaPet</b><span>Amanhã: Thor às 9h, Nina às 16h</span></div><time>21:40</time></div>
+        <div class="chat dark"><div class="tile round v-oliva"><svg aria-hidden="true"><use href="#mark-pc"/></svg></div><div><b>JornadaPet</b><span>Falta receber: R$ 200 da Camila</span></div><time>09:15</time></div>
+      </div>
+      <div class="app"><h3>Instagram e WhatsApp</h3>
+        <div class="ig"><div class="ring"><div class="tile round v-oliva"><svg aria-hidden="true"><use href="#mark-pc"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+        <div class="ig"><div class="ring"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-p4"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+      </div>
+      <div class="app"><h3>Tamanhos (I+4, I+3, I+C)</h3>
+        <div class="sizes">
+          <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-p4"/></svg></div><figcaption>32</figcaption></figure>
+          <figure><div class="tile round v-salvia" style="width:24px;height:24px"><svg aria-hidden="true"><use href="#mark-p4"/></svg></div><figcaption>24</figcaption></figure>
+          <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-p4"/></svg></div><figcaption>16</figcaption></figure>
+          <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-p3"/></svg></div><figcaption>32</figcaption></figure>
+          <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-p3"/></svg></div><figcaption>16</figcaption></figure>
+          <figure><div class="tile round v-oliva" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-pc"/></svg></div><figcaption>32</figcaption></figure>
+          <figure><div class="tile v-oliva" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-pc"/></svg></div><figcaption>16</figcaption></figure>
+        </div>
+        <div class="tab"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-p4"/></svg></div>JornadaPet</div>
+      </div>
+      <div class="app"><h3>Menu da página</h3>
+        <div class="nav l"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-p4"/></svg></div><span class="wm">JornadaPet</span></div>
+        <div class="nav d"><div class="tile v-oliva"><svg aria-hidden="true"><use href="#mark-pc"/></svg></div><span class="wm">JornadaPet</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== A ===================== -->
+  <section class="concept" aria-labelledby="ca">
+    <div class="concept-head">
+      <div class="t"><span class="letter">A</span><h2 id="ca">J-guia</h2></div>
+      <span class="pill">Ofício, sóbrio</span>
+    </div>
+    <div class="grid">
+      <div class="notes">
+        <div class="hero-tiles">
+          <div class="tile big v-salvia"><svg role="img" aria-label="Símbolo A, J-guia"><use href="#mark-a"/></svg></div>
+          <div class="tile big v-oliva"><svg aria-hidden="true"><use href="#mark-a"/></svg></div>
+        </div>
+        <dl>
+          <dt>A ideia</dt><dd>O J da JornadaPet desenhado como a guia na mão do adestrador: o gancho termina na argola do mosquetão. É o refinamento do esboço que já está na página.</dd>
+          <dt>A favor</dt><dd>Fala de trabalho, não de bichinho. É fácil de registrar e não se parece com nenhum petshop.</dd>
+          <dt>Contra</dt><dd>Não diz "pet" à primeira vista. A argola fica pequena demais no favicon de 16px.</dd>
+        </dl>
+      </div>
+      <div class="apps">
+        <div class="app"><h3>Telegram</h3>
+          <div class="chat"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-a"/></svg></div><div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>
+          <div class="chat dark"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-a"/></svg></div><div><b>JornadaPet</b><span>Amanhã: Thor às 9h, Nina às 16h</span></div><time>21:40</time></div>
+        </div>
+        <div class="app"><h3>Instagram e WhatsApp</h3>
+          <div class="ig"><div class="ring"><div class="tile round v-oliva"><svg aria-hidden="true"><use href="#mark-a"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+        </div>
+        <div class="app"><h3>Tamanhos</h3>
+          <div class="sizes">
+            <figure><div class="tile round v-salvia" style="width:56px;height:56px"><svg aria-hidden="true"><use href="#mark-a"/></svg></div><figcaption>56</figcaption></figure>
+            <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-a"/></svg></div><figcaption>32</figcaption></figure>
+            <figure><div class="tile round v-salvia" style="width:24px;height:24px"><svg aria-hidden="true"><use href="#mark-a"/></svg></div><figcaption>24</figcaption></figure>
+            <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-a"/></svg></div><figcaption>16</figcaption></figure>
+          </div>
+          <div class="tab"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-a"/></svg></div>JornadaPet</div>
+        </div>
+        <div class="app"><h3>Menu da página</h3>
+          <div class="nav l"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-a"/></svg></div><span class="wm">JornadaPet</span></div>
+          <div class="nav d"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-a"/></svg></div><span class="wm">JornadaPet</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== B ===================== -->
+  <section class="concept" aria-labelledby="cb">
+    <div class="concept-head">
+      <div class="t"><span class="letter">B</span><h2 id="cb">Pata-J</h2></div>
+      <span class="pill">Pet à primeira vista</span>
+    </div>
+    <div class="grid">
+      <div class="notes">
+        <div class="hero-tiles">
+          <div class="tile big v-salvia"><svg role="img" aria-label="Símbolo B, Pata-J"><use href="#mark-b"/></svg></div>
+          <div class="tile big v-oliva"><svg aria-hidden="true"><use href="#mark-b"/></svg></div>
+        </div>
+        <dl>
+          <dt>A ideia</dt><dd>Vem da referência que vocês mandaram: uma pata desenhada por nós, com o J vazado na almofada no lugar da casinha.</dd>
+          <dt>A favor</dt><dd>Qualquer pessoa entende "pet" na hora, inclusive quem tem pouca intimidade com tecnologia. Lê bem até em 24px.</dd>
+          <dt>Contra</dt><dd>Pata é o símbolo de milhares de petshops. O J some no tamanho pequeno, e sem ele o símbolo vira uma pata comum, mais difícil de registrar. Puxa para o "fofo" que a análise de marca pediu para evitar.</dd>
+        </dl>
+      </div>
+      <div class="apps">
+        <div class="app"><h3>Telegram</h3>
+          <div class="chat"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-b"/></svg></div><div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>
+          <div class="chat dark"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-b"/></svg></div><div><b>JornadaPet</b><span>Amanhã: Thor às 9h, Nina às 16h</span></div><time>21:40</time></div>
+        </div>
+        <div class="app"><h3>Instagram e WhatsApp</h3>
+          <div class="ig"><div class="ring"><div class="tile round v-oliva"><svg aria-hidden="true"><use href="#mark-b"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+        </div>
+        <div class="app"><h3>Tamanhos</h3>
+          <div class="sizes">
+            <figure><div class="tile round v-salvia" style="width:56px;height:56px"><svg aria-hidden="true"><use href="#mark-b"/></svg></div><figcaption>56</figcaption></figure>
+            <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-b"/></svg></div><figcaption>32</figcaption></figure>
+            <figure><div class="tile round v-salvia" style="width:24px;height:24px"><svg aria-hidden="true"><use href="#mark-b"/></svg></div><figcaption>24</figcaption></figure>
+            <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-b"/></svg></div><figcaption>16</figcaption></figure>
+          </div>
+          <div class="tab"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-b"/></svg></div>JornadaPet</div>
+        </div>
+        <div class="app"><h3>Menu da página</h3>
+          <div class="nav l"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-b"/></svg></div><span class="wm">JornadaPet</span></div>
+          <div class="nav d"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-b"/></svg></div><span class="wm">JornadaPet</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C ===================== -->
+  <section class="concept" aria-labelledby="cc">
+    <div class="concept-head">
+      <div class="t"><span class="letter">C</span><h2 id="cc">Plaqueta</h2></div>
+      <span class="pill">Pet, sem pata</span>
+    </div>
+    <div class="grid">
+      <div class="notes">
+        <div class="hero-tiles">
+          <div class="tile big v-salvia"><svg role="img" aria-label="Símbolo C, Plaqueta"><use href="#mark-c"/></svg></div>
+          <div class="tile big v-oliva"><svg aria-hidden="true"><use href="#mark-c"/></svg></div>
+        </div>
+        <dl>
+          <dt>A ideia</dt><dd>A plaqueta de identificação da coleira, presa na argola, com o J grande no meio. A plaqueta guarda o nome e o contato do pet, assim como a JornadaPet guarda a ficha de cada cliente.</dd>
+          <dt>A favor</dt><dd>Diz "pet" sem usar pata. É uma forma redonda, perfeita para avatar de Telegram, WhatsApp e Instagram, e o J continua legível em 16px. É mais fácil de registrar do que uma pata.</dd>
+          <dt>Contra</dt><dd>Prende a marca ao pet, e o discovery prevê outras áreas no futuro (personal trainer, reparos). É menos imediato que a pata, e a argola de cima precisa de ajuste fino para não parecer um "i".</dd>
+        </dl>
+      </div>
+      <div class="apps">
+        <div class="app"><h3>Telegram</h3>
+          <div class="chat"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-c"/></svg></div><div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>
+          <div class="chat dark"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-c"/></svg></div><div><b>JornadaPet</b><span>Amanhã: Thor às 9h, Nina às 16h</span></div><time>21:40</time></div>
+        </div>
+        <div class="app"><h3>Instagram e WhatsApp</h3>
+          <div class="ig"><div class="ring"><div class="tile round v-oliva"><svg aria-hidden="true"><use href="#mark-c"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+        </div>
+        <div class="app"><h3>Tamanhos</h3>
+          <div class="sizes">
+            <figure><div class="tile round v-salvia" style="width:56px;height:56px"><svg aria-hidden="true"><use href="#mark-c"/></svg></div><figcaption>56</figcaption></figure>
+            <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-c"/></svg></div><figcaption>32</figcaption></figure>
+            <figure><div class="tile round v-salvia" style="width:24px;height:24px"><svg aria-hidden="true"><use href="#mark-c"/></svg></div><figcaption>24</figcaption></figure>
+            <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-c"/></svg></div><figcaption>16</figcaption></figure>
+          </div>
+          <div class="tab"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-c"/></svg></div>JornadaPet</div>
+        </div>
+        <div class="app"><h3>Menu da página</h3>
+          <div class="nav l"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-c"/></svg></div><span class="wm">JornadaPet</span></div>
+          <div class="nav d"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-c"/></svg></div><span class="wm">JornadaPet</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== D ===================== -->
+  <section class="concept" aria-labelledby="cd">
+    <div class="concept-head">
+      <div class="t"><span class="letter">D</span><h2 id="cd">O J no nome</h2></div>
+      <span class="pill rec">Recomendado</span>
+    </div>
+    <div class="wm-stage">
+      <span class="wmd" role="img" aria-label="JornadaPet"><svg class="jl" viewBox="0 0 36 52" aria-hidden="true"><use href="#j-letter"/></svg><span aria-hidden="true">ornadaPet</span></span>
+      <span class="wmd dark" aria-hidden="true"><svg class="jl" viewBox="0 0 36 52"><use href="#j-letter"/></svg><span>ornadaPet</span></span>
+    </div>
+    <div class="grid">
+      <div class="notes">
+        <div class="hero-tiles">
+          <div class="tile big v-salvia"><svg role="img" aria-label="Símbolo D, o J da JornadaPet"><use href="#mark-d"/></svg></div>
+          <div class="tile big v-oliva"><svg aria-hidden="true"><use href="#mark-d"/></svg></div>
+        </div>
+        <dl>
+          <dt>A ideia</dt><dd>O mesmo truque das referências (o desenho mora dentro de uma letra do nome), aplicado ao J-guia que vocês já escolheram. O J ganha o peso das letras do nome, e a argola do mosquetão vira o único toque de caramelo. Sozinho, o J é o avatar.</dd>
+          <dt>A favor</dt><dd>O nome inteiro vira a marca, como em "Woof" e "cat". O J grosso aguenta 16px. Não depende de pata, então serve para outras áreas no futuro. Continua o que já está na página e no plano.</dd>
+          <dt>Contra</dt><dd>Sozinho, o J diz "pet" menos que a pata. O nome por extenso faz esse papel na página, no Instagram e na imagem de compartilhamento.</dd>
+        </dl>
+      </div>
+      <div class="apps">
+        <div class="app"><h3>Telegram</h3>
+          <div class="chat"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-d"/></svg></div><div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>
+          <div class="chat dark"><div class="tile round v-salvia"><svg aria-hidden="true"><use href="#mark-d"/></svg></div><div><b>JornadaPet</b><span>Amanhã: Thor às 9h, Nina às 16h</span></div><time>21:40</time></div>
+        </div>
+        <div class="app"><h3>Instagram e WhatsApp</h3>
+          <div class="ig"><div class="ring"><div class="tile round v-oliva"><svg aria-hidden="true"><use href="#mark-d"/></svg></div></div><div><b>jornadapet</b><small>Clientes, agenda e valores a receber do adestrador.</small></div></div>
+        </div>
+        <div class="app"><h3>Tamanhos</h3>
+          <div class="sizes">
+            <figure><div class="tile round v-salvia" style="width:56px;height:56px"><svg aria-hidden="true"><use href="#mark-d"/></svg></div><figcaption>56</figcaption></figure>
+            <figure><div class="tile round v-salvia" style="width:32px;height:32px"><svg aria-hidden="true"><use href="#mark-d"/></svg></div><figcaption>32</figcaption></figure>
+            <figure><div class="tile round v-salvia" style="width:24px;height:24px"><svg aria-hidden="true"><use href="#mark-d"/></svg></div><figcaption>24</figcaption></figure>
+            <figure><div class="tile v-salvia" style="width:16px;height:16px;border-radius:4px"><svg aria-hidden="true"><use href="#mark-d"/></svg></div><figcaption>16</figcaption></figure>
+          </div>
+          <div class="tab"><div class="tile v-salvia"><svg aria-hidden="true"><use href="#mark-d"/></svg></div>JornadaPet</div>
+        </div>
+        <div class="app"><h3>Menu da página</h3>
+          <div class="nav l"><span class="wmd sm"><svg class="jl" viewBox="0 0 36 52" aria-hidden="true"><use href="#j-letter"/></svg><span>ornadaPet</span></span></div>
+          <div class="nav d"><span class="wmd sm on-dark"><svg class="jl" viewBox="0 0 36 52" aria-hidden="true"><use href="#j-letter"/></svg><span>ornadaPet</span></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="more" aria-labelledby="mais">
+    <header class="more-head">
+      <h2 id="mais">Mais cinco caminhos</h2>
+      <p>Cada um parte de uma coisa do dia do adestrador: o percurso das sessões, o caderninho, o "pago", a conversa no chat e as iniciais. Todos aparecem no avatar redondo do Telegram e em 32, 24 e 16px.</p>
+    </header>
+    <div class="more-grid" id="more-grid">
+      <article class="mini" data-mark="e">
+        <div class="mini-head"><span class="letter">E</span><h3 class="mt">Trajeto</h3></div>
+        <p><b>A ideia:</b> o J vira um percurso pontilhado. Cada ponto é uma sessão do dia, e o fim do caminho é um check: dia cumprido, conta em dia.</p>
+        <p><b>A favor:</b> conta a história do produto inteiro, e "jornada" ganha sentido literal. <b>Contra:</b> os pontos se fundem abaixo de 24px.</p>
+      </article>
+      <article class="mini" data-mark="f">
+        <div class="mini-head"><span class="letter">F</span><h3 class="mt">Caderno</h3></div>
+        <p><b>A ideia:</b> o caderninho de bolso com espiral e elástico, que é o que a JornadaPet substitui, com o J na capa.</p>
+        <p><b>A favor:</b> é o território "caderno do adestrador", e qualquer um entende "anotação". <b>Contra:</b> lembra app de notas genérico, e a espiral some em 16px.</p>
+      </article>
+      <article class="mini" data-mark="g">
+        <div class="mini-head"><span class="letter">G</span><h3 class="mt">j com check</h3></div>
+        <p><b>A ideia:</b> o j minúsculo cujo pingo é um check de "pago". Funciona também no nome escrito, "jornadapet", tudo em minúsculas.</p>
+        <p><b>A favor:</b> diz a promessa ("quem já pagou") num traço só, e é muito legível pequeno. <b>Contra:</b> check é comum em apps de tarefa.</p>
+      </article>
+      <article class="mini" data-mark="h">
+        <div class="mini-head"><span class="letter">H</span><h3 class="mt">Balão</h3></div>
+        <p><b>A ideia:</b> um balão de conversa com o J dentro. A JornadaPet mora no chat que o adestrador já usa.</p>
+        <p><b>A favor:</b> explica o "sem instalar outro app". <b>Contra:</b> dentro do Telegram, um balão no avatar é redundante e lembra o próprio WhatsApp.</p>
+      </article>
+      <article class="mini" data-mark="i">
+        <div class="mini-head"><span class="letter">I</span><h3 class="mt">Monograma JP</h3></div>
+        <p><b>A ideia:</b> J e P dividem a mesma haste: a barriga do P em cima, o gancho do J embaixo. As iniciais viram um sinal só, como um carimbo.</p>
+        <p><b>A favor:</b> é próprio, compacto, ótimo no círculo e em 16px, e serve para outras áreas. <b>Contra:</b> não diz "pet", e o nome precisa acompanhar no começo.</p>
+      </article>
+    </div>
+  </section>
+
+  <section style="display:grid;gap:16px" aria-labelledby="cmp">
+    <h2 id="cmp">Lado a lado</h2>
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead><tr><th scope="col">Critério</th><th scope="col">A · J-guia</th><th scope="col">B · Pata-J</th><th scope="col">C · Plaqueta</th><th scope="col">D · O J no nome</th></tr></thead>
+        <tbody>
+          <tr><td>Diz "pet" na hora</td><td>Não</td><td>Sim</td><td>Sim, sem pata</td><td>Pelo nome</td></tr>
+          <tr><td>Diz "ferramenta de trabalho"</td><td>Sim</td><td>Pouco</td><td>Sim</td><td>Sim</td></tr>
+          <tr><td>Avatar redondo</td><td>Bom</td><td>Bom</td><td>Ótimo</td><td>Bom</td></tr>
+          <tr><td>Favicon de 16px</td><td>Argola some</td><td>J some</td><td>J legível</td><td>J legível</td></tr>
+          <tr><td>Se destaca entre petshops</td><td>Muito</td><td>Pouco</td><td>Bastante</td><td>Muito</td></tr>
+          <tr><td>Serve para outras áreas</td><td>Sim</td><td>Não</td><td>Não</td><td>Sim</td></tr>
+          <tr><td>Registro no INPI</td><td>Mais fácil</td><td>Mais difícil</td><td>Intermediário</td><td>Mais fácil</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>
+  // Monta, em cada cartão compacto, os mesmos testes de aplicação (tiles, chat do Telegram, tamanhos).
+  (function () {
+    var t = function (id, cls, style, label) {
+      return '<div class="tile ' + cls + '"' + (style ? ' style="' + style + '"' : '') + '><svg ' +
+        (label ? 'role="img" aria-label="' + label + '"' : 'aria-hidden="true"') + '><use href="#mark-' + id + '"/></svg></div>';
+    };
+    document.querySelectorAll('.mini[data-mark]').forEach(function (card) {
+      var id = card.getAttribute('data-mark');
+      var name = card.querySelector('.mt').textContent;
+      var html =
+        '<div class="mini-row">' + t(id, 'big v-salvia', '', 'Símbolo ' + id.toUpperCase() + ', ' + name) + t(id, 'big v-oliva') + '</div>' +
+        '<div class="chat dark">' + t(id, 'round v-salvia') + '<div><b>JornadaPet</b><span>Marina pagou R$ 100 do pacote</span></div><time>16:02</time></div>' +
+        '<div class="sizes">' +
+          '<figure>' + t(id, 'round v-salvia', 'width:32px;height:32px') + '<figcaption>32</figcaption></figure>' +
+          '<figure>' + t(id, 'round v-salvia', 'width:24px;height:24px') + '<figcaption>24</figcaption></figure>' +
+          '<figure>' + t(id, 'v-salvia', 'width:16px;height:16px;border-radius:4px') + '<figcaption>16</figcaption></figure>' +
+          '<div class="nav l" style="padding:8px 10px">' + t(id, 'v-salvia') + '<span class="wm" style="font-size:17px">JornadaPet</span></div>' +
+        '</div>';
+      card.querySelector('.mini-head').insertAdjacentHTML('afterend', html);
+    });
+  })();
+  </script>
+
+  <section class="next" aria-labelledby="nx">
+    <h2 id="nx">Depois da escolha</h2>
+    <ul>
+      <li>Ajuste fino do símbolo escolhido: traço, proporção e versão própria para 16px.</li>
+      <li>Wordmark "JornadaPet" com as letras ajustadas, e lockups horizontal e empilhado.</li>
+      <li>Arquivos para cada canal: avatar do bot (512px), WhatsApp e Instagram (1080px), favicon, ícone da tela inicial e imagem de compartilhamento.</li>
+      <li>Versões claro, escuro e uma cor, e uma seção "Marca" no DESIGN.md.</li>
+    </ul>
+  </section>
+</div>
+
+</body>
+</html>

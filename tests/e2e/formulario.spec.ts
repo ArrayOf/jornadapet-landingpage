@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const SERVICO = 'https://api.web3forms.com/submit';
+const SERVICO = '**/api/convite';
 
 async function preencher(page: Page) {
   await page.getByLabel('Seu nome').fill('  Camila Duarte ');
@@ -28,7 +28,8 @@ test('envio com sucesso: corpo certo, agradece pelo primeiro nome e repete o Wha
   await expect(page.getByRole('heading', { name: 'Recebemos, Camila!' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Recebemos, Camila!' })).toBeFocused();
   await expect(page.getByText('(19) 99876-1234')).toBeVisible();
-  expect(corpo).toMatchObject({ access_key: 'chave-de-teste', nome: 'Camila Duarte', whatsapp: '(19) 99876-1234', perfil: 'Adestramento', cidade: 'Campinas, SP', utm_source: 'instagram', ref: 'marcos' });
+  expect(corpo).not.toHaveProperty('access_key');
+  expect(corpo).toMatchObject({ nome: 'Camila Duarte', whatsapp: '(19) 99876-1234', perfil: 'Adestramento', cidade: 'Campinas, SP', utm_source: 'instagram', ref: 'marcos' });
 });
 
 test('erro do serviço mantém os dados e permite tentar de novo', async ({ page }) => {
@@ -65,7 +66,8 @@ test('envia sem JS e chega ao obrigado', async ({ browser }) => {
   await page.route(SERVICO, async (r) => {
     const dados = new URLSearchParams(r.request().postData() ?? '');
     expect(dados.get('nome')).toBe('Camila Duarte');
-    await r.fulfill({ status: 303, headers: { location: dados.get('redirect') ?? '' } });
+    expect(dados.get('access_key')).toBeNull();
+    await r.fulfill({ status: 303, headers: { location: '/obrigado' } });
   });
   await page.goto('/#participe');
   await page.getByLabel('Seu nome').fill('Camila Duarte');
@@ -110,4 +112,17 @@ test('sem JS, número sem DDD não é enviado', async ({ browser }) => {
   expect(await page.getByLabel('WhatsApp', { exact: true }).evaluate((i: HTMLInputElement) => i.validity.valid)).toBe(false);
   expect(enviou).toBe(false);
   await ctx.close();
+});
+
+test('o formulário envia para o nosso endpoint, não para serviço externo', async ({ page }) => {
+  await page.goto('/#participe');
+  await expect(page.locator('#participe form')).toHaveAttribute('action', '/api/convite');
+});
+
+test('sem JS, falha no envio leva a uma página que explica e volta ao formulário', async ({ page }) => {
+  const r = await page.goto('/nao-enviado');
+  expect(r?.status()).toBe(200);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Não conseguimos enviar seu pedido');
+  await expect(page.getByRole('link', { name: 'Tentar de novo' })).toHaveAttribute('href', '/#participe');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
 });

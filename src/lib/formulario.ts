@@ -4,19 +4,14 @@ import { mascararWhatsapp } from './whatsapp';
 
 export const TEXTO_DO_ACEITE = 'Aceito ser contatado(a) pela JornadaPet sobre o teste. Meus dados não serão compartilhados.';
 
-export interface Config { chave: string; urlObrigado: string }
-
-export function montarEnvio(dados: Dados, origem: Origem, config: Config): Record<string, string> {
+/** Corpo do POST para /api/convite. O texto do aceite é gravado pelo servidor, não vem daqui. */
+export function montarEnvio(dados: Dados, origem: Origem): Record<string, string> {
   return {
-    access_key: config.chave,
-    subject: 'Novo pedido de convite: JornadaPet',
-    from_name: 'Landing JornadaPet',
     nome: dados.nome.trim(),
     whatsapp: mascararWhatsapp(dados.whatsapp),
     perfil: dados.perfil,
     cidade: dados.cidade.trim(),
     aceite: 'sim',
-    aceite_texto: TEXTO_DO_ACEITE,
     pagina: '/',
     ...origem,
   };

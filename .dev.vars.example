@@ -1,0 +1,4 @@
+# Variáveis do Worker para `wrangler dev` (copie para .dev.vars, que o git ignora).
+# Em produção ficam no Cloudflare: Settings > Variables and Secrets (SUPABASE_SECRET_KEY como Secret).
+SUPABASE_URL=https://stmjxrciznwdbemgoiyk.supabase.co
+SUPABASE_SECRET_KEY=

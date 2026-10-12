@@ -18,7 +18,7 @@ export interface Formulario {
 
 const vazio = (): Dados => ({ nome: '', whatsapp: '', perfil: '', cidade: '', aceite: false });
 
-export function formulario(endpoint: string, chave: string, urlObrigado: string): Formulario & ThisType<Formulario & Magia> {
+export function formulario(endpoint: string): Formulario & ThisType<Formulario & Magia> {
   return {
     f: vazio(), isca: false, err: {}, status: 'idle', origem: {}, primeiroNome: '', whatsEnviado: '',
     init() { this.origem = guardarOrigem(sessao(), window.location.search); },
@@ -31,7 +31,7 @@ export function formulario(endpoint: string, chave: string, urlObrigado: string)
       const campo = primeiroCampoComErro(this.err);
       if (campo) { document.getElementById(ID_DO_CAMPO[campo])?.focus(); return; }
       this.status = 'enviando';
-      const resultado = await enviar(montarEnvio(this.f, this.origem, { chave, urlObrigado }), endpoint);
+      const resultado = await enviar(montarEnvio(this.f, this.origem), endpoint);
       if (resultado === 'ok') {
         this.primeiroNome = this.f.nome.trim().split(/\s+/)[0] ?? '';
         this.whatsEnviado = mascararWhatsapp(this.f.whatsapp);

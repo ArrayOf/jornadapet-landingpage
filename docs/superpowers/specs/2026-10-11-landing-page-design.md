@@ -45,9 +45,10 @@ está validado. A página não pode prometer nada além disso.
 6. **O formulário funciona sem JS** (`<form method="post" action=…>` para o serviço externo, com
    redirecionamento para `/obrigado`). Com JS, o envio é por `fetch` e o resultado aparece na
    própria página, como no protótipo.
-7. **Serviço do formulário padrão: Web3Forms**, atrás de um módulo único (`src/lib/formulario.ts`)
-   para poder trocar. **A confirmar pelos sócios** antes de publicar (os dados passam pelo
-   fornecedor — ver §10).
+7. **Formulário grava no Supabase pelo nosso Worker** (decidido em 12/10/2026, substitui o
+   Web3Forms). O formulário envia para `/api/convite` no mesmo domínio; o Worker do Cloudflare
+   (`src/worker/convite.ts`) valida de novo, grava em `public.convites` com a chave secreta e
+   responde JSON (com JS) ou redireciona para `/obrigado` ou `/nao-enviado` (sem JS). Ver NT-001 §15.
 8. **Hospedagem padrão: Cloudflare Pages**, publicando `dist/`. **A confirmar** junto com o domínio
    (`jornadapet.com.br`, não confirmado).
 9. **Não entram:** preço, mascote/ilustração 3D (só referência de cor, NT-001 §11), blog, páginas
@@ -172,7 +173,7 @@ apontar custo de pintura.
 
 ## 10. Pendências dos sócios (bloqueiam a publicação, não a implementação)
 
-1. **Serviço do formulário** (Web3Forms por padrão) e o e-mail que recebe as inscrições.
+1. **Formulário:** criar a tabela `convites` no Supabase e cadastrar `SUPABASE_URL` e `SUPABASE_SECRET_KEY` no Cloudflare (NT-001 §15).
 2. **Texto da política de privacidade** (`/privacidade`) — quem é o controlador (ArrayOf), o que é
    coletado, para quê, por quanto tempo, com quem é compartilhado (o serviço do formulário), como
    pedir remoção.

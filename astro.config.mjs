@@ -13,7 +13,7 @@ export default defineConfig({
   integrations: [
     alpinejs({ entrypoint: '/src/scripts/alpine' }),
     icon({ include: { ph: ['*'] } }),
-    sitemap({ filter: (page) => !page.includes('/obrigado') && !page.includes('/404') }),
+    sitemap({ filter: (page) => !page.includes('/obrigado') && !page.includes('/nao-enviado') && !page.includes('/404') }),
   ],
   vite: { plugins: [tailwindcss()] },
 });

@@ -1,21 +1,16 @@
 import { describe, expect, it, vi } from 'vitest';
-import { enviar, montarEnvio, TEXTO_DO_ACEITE } from '../../src/lib/formulario';
+import { enviar, montarEnvio } from '../../src/lib/formulario';
 
 const dados = { nome: '  Camila Duarte ', whatsapp: '+55 19 99876-1234', perfil: 'Adestramento', cidade: ' Campinas, SP ', aceite: true };
-const config = { chave: 'chave-x', urlObrigado: 'https://jornadapet.com.br/obrigado' };
 
 describe('montarEnvio', () => {
-  it('normaliza e inclui chave, aceite e origem', () => {
-    expect(montarEnvio(dados, { utm_source: 'instagram' }, config)).toEqual({
-      access_key: 'chave-x',
-      subject: 'Novo pedido de convite: JornadaPet',
-      from_name: 'Landing JornadaPet',
+  it('normaliza e inclui aceite, página e origem, sem chave de serviço externo', () => {
+    expect(montarEnvio(dados, { utm_source: 'instagram' })).toEqual({
       nome: 'Camila Duarte',
       whatsapp: '(19) 99876-1234',
       perfil: 'Adestramento',
       cidade: 'Campinas, SP',
       aceite: 'sim',
-      aceite_texto: TEXTO_DO_ACEITE,
       pagina: '/',
       utm_source: 'instagram',
     });

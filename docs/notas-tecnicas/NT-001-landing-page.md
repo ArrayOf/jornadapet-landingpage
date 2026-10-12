@@ -663,3 +663,27 @@ plaqueta do J. Ele **substitui o J-guia** desta nota (§10.4 e §10.8). O que mu
   link.
 - **Peso:** os SVGs vetorizados têm cerca de 170 KB cada e não vão inline. A página usa o PNG
   reduzido pelo Astro. Uma arte final por ilustrador (NT-002 §9.2) deve trazer um SVG leve.
+
+## 15. Formulário no Supabase (12/10/2026)
+
+Decisão do Thiago: os pedidos de convite ficam num banco nosso, não num serviço de e-mail de
+terceiros. Substitui o Web3Forms (§6.1 e spec §2.7).
+
+- **Fluxo:** o formulário envia para `/api/convite`, no mesmo domínio. Só `/api/*` passa pelo
+  Worker (`run_worker_first`); o resto é servido direto dos arquivos do `dist/`.
+- **Worker** (`src/worker/convite.ts`): só aceita POST; limita o corpo a 10 KB; a isca
+  `botcheck` finge sucesso sem gravar; valida de novo com as mesmas regras do navegador
+  (`src/lib/validacao.ts`); grava com a chave secreta. O texto do aceite gravado é o do servidor,
+  nunca o que vem no envio.
+- **Respostas:** com JS, JSON `{ success }` (400 com os erros, 502 se o Supabase falhar). Sem JS,
+  303 para `/obrigado` ou para `/nao-enviado`.
+- **Tabela `public.convites`:** nome, WhatsApp só com dígitos, perfil (um dos 6), cidade, texto e
+  data do aceite (prova de consentimento, LGPD), página e origem (UTM e `ref`, até 100 caracteres).
+  O próprio banco recusa WhatsApp inválido e perfil fora da lista. RLS ligado e nenhum acesso para
+  `anon` e `authenticated`: a chave pública não grava nem lê.
+- **Configuração:** `SUPABASE_URL` (texto) e `SUPABASE_SECRET_KEY` (secret) em Settings →
+  Variables and Secrets do Worker `jornadapet`. Localmente, `.dev.vars` (ver `.dev.vars.example`).
+- **Testes:** `tests/unit/convite.test.ts` cobre o Worker (Supabase simulado); os e2e simulam
+  `/api/convite`. Conferido também com `wrangler dev` e um Supabase falso.
+- **Fora deste passo:** aviso a cada pedido (Telegram ou e-mail).
+

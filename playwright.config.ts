@@ -14,6 +14,6 @@ export default defineConfig({
     url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
-    env: { PUBLIC_FORM_ACCESS_KEY: 'chave-de-teste', PUBLIC_INDEXAR: 'false', PUBLIC_SITE_URL: 'http://localhost:4321' },
+    env: { PUBLIC_INDEXAR: 'false', PUBLIC_SITE_URL: 'http://localhost:4321' },
   },
 });

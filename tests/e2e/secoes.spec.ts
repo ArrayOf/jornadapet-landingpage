@@ -29,3 +29,11 @@ test('sem títulos de nível 3 dentro dos exemplos de interface', async ({ page 
   await page.goto('/');
   expect(await page.locator('#como-funciona h3, .previa h3').count()).toBe(0);
 });
+
+test('selo redondo aparece no Sobre com pelo menos 96px (NT-002 §7), um por tema', async ({ page }) => {
+  await page.goto('/#sobre');
+  const selo = page.locator('#sobre').getByRole('img', { name: /JornadaPet, do adestrador/ });
+  await expect(selo).toHaveCount(1);
+  const caixa = await selo.boundingBox();
+  expect(caixa!.width).toBeGreaterThanOrEqual(96);
+});

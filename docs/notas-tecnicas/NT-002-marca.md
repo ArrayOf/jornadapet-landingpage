@@ -119,9 +119,10 @@ DESIGN.md.
 | Instagram, foto de perfil | `png/avatar-instagram-1080.png` | 1080×1080 |
 | Instagram, posts e destaques | `png/selo-redondo-1080.png`, `png/selo-redondo-oliva-1080.png`, `png/selo-arco-810x1080.png` | 1080 e 810×1080 |
 | Página, favicon | `svg/cabeca-colorida.svg`, `png/favicon-32.png`, `png/favicon-16.png` | SVG, 32, 16 |
-| Página, ícone iOS | `png/apple-touch-icon-180.png` | 180×180 |
-| Página, manifest | `png/icon-192.png`, `png/icon-512.png` | 192, 512 |
-| Página, imagem de compartilhamento | `png/og-1200x630.png` | 1200×630 |
+| Página, ícone iOS | selo redondo sobre o fundo da página (`public/apple-touch-icon.png`) | 180×180 |
+| Página, manifest | selo redondo, 80% da área (zona segura) (`public/icon-192.png`, `public/icon-512.png`) | 192, 512 |
+| Página, imagem de compartilhamento | `og-1200x630.png` com o selo no lugar da cabeça (`public/og.png`) | 1200×630 |
+| Página, seção Sobre | `png/selo-redondo-1080.png` e `selo-redondo-oliva-1080.png` (tema escuro), a 128px | 128 |
 | Página, menu e rodapé | `svg/logotipo-horizontal.svg`, `svg/logotipo-horizontal-escuro.svg` | vetor |
 
 - Os avatares e ícones são **quadrados com fundo sálvia opaco**. Telegram, WhatsApp, Instagram,

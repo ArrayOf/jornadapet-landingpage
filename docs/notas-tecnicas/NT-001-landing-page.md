@@ -650,8 +650,11 @@ A marca final está na [NT-002](NT-002-marca.md): um vira-lata caramelo de colei
 plaqueta do J. Ele **substitui o J-guia** desta nota (§10.4 e §10.8). O que mudou:
 
 - **Página:** o símbolo do menu, do rodapé, do avatar do bot (hero) e do celular de exemplo é a
-  cabeça do mascote. Os favicons de 16 e 32 px, o apple-touch-icon, os ícones de 192 e 512 px e a
-  imagem de compartilhamento são os PNGs da NT-002.
+  cabeça do mascote, assim como os favicons de 16 e 32 px. Nos tamanhos grandes entra o **selo
+  redondo** (decisão do Thiago em 2026-10-12): apple-touch-icon, ícones de 192 e 512 px sobre o
+  fundo da página, a imagem de compartilhamento (selo no lugar da cabeça) e um selo de 128px no
+  Sobre, com o traço creme no tema escuro. Abaixo de 96px o selo não se lê, por isso não vai no
+  favicon nem no menu (NT-002 §7).
 - **Paleta:** o token `caramelo` passou de `#d17c3a` para `#dba05a`. Entraram `orelha` `#c7853f`,
   `creme` `#f6e3c4` e `lingua` `#e98a9a` como cores de ilustração, nunca em texto. O oliva segue
   como única cor de ação.

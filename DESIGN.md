@@ -310,8 +310,10 @@ cartões e superfícies, **pílula** para selos, chips de opção e estados. Bor
 O **símbolo** é a cabeça do mascote da [NT-002](docs/notas-tecnicas/NT-002-marca.md): um
 vira-lata caramelo de coleira oliva com a plaqueta do J, sobre sálvia. Na página, quadrado de 12px
 de raio (menu, rodapé) ou círculo (avatar do bot). Vem de `NT-002-assets/png/icon-512.png`,
-reduzido pelo Astro; o SVG vetorizado (cerca de 170 KB) não vai inline na página. Favicons,
-ícones e imagem de compartilhamento são os PNGs da NT-002. O "J-guia" da NT-001 foi descartado.
+reduzido pelo Astro; o SVG vetorizado (cerca de 170 KB) não vai inline na página. Favicons de
+16 e 32px também são a cabeça. O **selo redondo** (traço oliva; creme no tema escuro) vai só de 96px
+para cima: ícone iOS, ícones do manifest, imagem de compartilhamento e o selo de 128px no Sobre. O
+"J-guia" da NT-001 foi descartado.
 
 ## Components
 

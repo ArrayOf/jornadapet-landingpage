@@ -1,0 +1,1 @@
+{ "name": "JornadaPet", "short_name": "JornadaPet", "icons": [{ "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }], "theme_color": "#3f5a2c", "background_color": "#f4f4f6", "display": "browser", "lang": "pt-BR" }

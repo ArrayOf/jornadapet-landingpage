@@ -11,8 +11,12 @@ import EmEstudo from '../components/EmEstudo.astro';
 import Sobre from '../components/Sobre.astro';
 import Participe from '../components/Participe.astro';
 import Duvidas from '../components/Duvidas.astro';
+import { organizacao, paginaDePerguntas, siteWeb } from '../lib/jsonld';
+import { PERGUNTAS } from '../data/conteudo';
+const site = Astro.site ?? new URL('https://jornadapet.com.br');
+const jsonLd = [organizacao(site), siteWeb(site), paginaDePerguntas(PERGUNTAS)];
 ---
-<Base title="JornadaPet: agenda e clientes para adestradores de cães" description="Organize tutores, pets, sessões e valores a receber do seu trabalho de adestramento no Telegram, sem instalar outro app. Acesso por convite.">
+<Base title="JornadaPet: agenda e clientes para adestradores de cães" description="Organize tutores, pets, sessões e valores a receber do seu trabalho de adestramento no Telegram, sem instalar outro app. Acesso por convite." jsonLd={jsonLd}>
   <div x-data="pagina" :class="{ 'overflow-hidden': menu }">
     <BarraCelular />
     <Nav />

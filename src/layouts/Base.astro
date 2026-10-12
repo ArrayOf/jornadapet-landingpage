@@ -3,10 +3,11 @@ import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/instrument-sans';
 import '../styles/global.css';
 
-interface Props { title: string; description: string; noindex?: boolean }
-const { title, description, noindex = false } = Astro.props;
+interface Props { title: string; description: string; noindex?: boolean; jsonLd?: object[] }
+const { title, description, noindex = false, jsonLd = [] } = Astro.props;
 const indexar = import.meta.env.PUBLIC_INDEXAR === 'true' && !noindex;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const imagemOg = new URL('/og.png', Astro.site);
 ---
 <!doctype html>
 <html lang="pt-BR" class="no-js">
@@ -19,6 +20,20 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     {!indexar && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#f4f4f6" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#151613" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="JornadaPet" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="JornadaPet: clientes, agenda e valores a receber do adestrador" />
+    <meta property="og:description" content="Tutores, pets, sessões e valores a receber do adestrador autônomo, organizados no Telegram. Acesso por convite." />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imagemOg} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {jsonLd.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
     <script is:inline>
       (function () {
         var h = document.documentElement;

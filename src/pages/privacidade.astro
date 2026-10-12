@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Rodape from '../components/Rodape.astro';
+import { CONTATO_EMAIL } from '../data/conteudo';
+
+/** Troque para false quando os sócios entregarem o texto final (spec §10.2). */
+const PENDENTE = true;
+if (PENDENTE && import.meta.env.PUBLIC_INDEXAR === 'true') {
+  throw new Error('Política de privacidade pendente: preencha src/pages/privacidade.astro antes de publicar (spec §10.2).');
+}
+const secoes = [
+  { titulo: 'Quem cuida dos seus dados', texto: 'A ArrayOf, empresa responsável pela JornadaPet, é a controladora dos dados enviados por esta página.' },
+  { titulo: 'O que coletamos', texto: 'Nome, WhatsApp, área de atuação, cidade e estado, o aceite de contato e, quando houver, a origem da visita (parâmetros utm e ref do link).' },
+  { titulo: 'Para que usamos', texto: 'Para falar com você sobre o teste da JornadaPet e enviar o seu convite. Nada além disso.' },
+  { titulo: 'Com quem compartilhamos', texto: 'O envio passa pelo serviço de formulários que usamos para receber os pedidos. Não vendemos nem cedemos seus dados.' },
+  { titulo: 'Por quanto tempo guardamos', texto: '[Preencher pelos sócios: prazo de guarda dos pedidos de convite.]' },
+  { titulo: 'Seus direitos', texto: `Você pode pedir acesso, correção ou remoção dos seus dados escrevendo para ${CONTATO_EMAIL}.` },
+];
+---
+<Base title="Política de privacidade: JornadaPet" description="Como a JornadaPet trata os dados enviados pelo formulário de convite.">
+  <div x-data="pagina">
+    <Nav />
+    <main id="conteudo" class="mx-auto max-w-2xl px-4 py-20 sm:px-6">
+      <h1 class="text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">Política de privacidade</h1>
+      {PENDENTE && <p class="mt-4 r-ctl bg-butter p-3 text-[14px] text-ink">Rascunho em revisão. Esta versão ainda não é a final.</p>}
+      {secoes.map((s) => (
+        <section class="mt-10">
+          <h2 class="text-[20px] font-semibold">{s.titulo}</h2>
+          <p class="mt-2 text-[16px] leading-relaxed">{s.texto}</p>
+        </section>
+      ))}
+    </main>
+    <Rodape />
+  </div>
+</Base>

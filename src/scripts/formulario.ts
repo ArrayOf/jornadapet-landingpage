@@ -6,6 +6,9 @@ import { enviar, montarEnvio } from '../lib/formulario';
 
 const ID_DO_CAMPO: Record<Campo, string> = { nome: 'f-nome', whatsapp: 'f-whats', perfil: 'f-perfil-0', cidade: 'f-cidade', aceite: 'f-aceite' };
 
+interface Turnstile { reset(): void }
+const turnstile = (): Turnstile | undefined => (window as unknown as { turnstile?: Turnstile }).turnstile;
+
 function sessao(): Storage | null {
   try { return window.sessionStorage; } catch { return null; }
 }
@@ -31,7 +34,10 @@ export function formulario(endpoint: string): Formulario & ThisType<Formulario &
       const campo = primeiroCampoComErro(this.err);
       if (campo) { document.getElementById(ID_DO_CAMPO[campo])?.focus(); return; }
       this.status = 'enviando';
-      const resultado = await enviar(montarEnvio(this.f, this.origem), endpoint);
+      const token = this.$el.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]')?.value ?? '';
+      const resultado = await enviar({ ...montarEnvio(this.f, this.origem), 'cf-turnstile-response': token }, endpoint);
+      // O token do Turnstile vale para um envio só.
+      turnstile()?.reset();
       if (resultado === 'ok') {
         this.primeiroNome = this.f.nome.trim().split(/\s+/)[0] ?? '';
         this.whatsEnviado = mascararWhatsapp(this.f.whatsapp);

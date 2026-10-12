@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('dúvidas abrem sem JS e a primeira já vem aberta', async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });

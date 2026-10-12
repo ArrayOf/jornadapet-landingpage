@@ -688,3 +688,28 @@ terceiros. Substitui o Web3Forms (§6.1 e spec §2.7).
   `/api/convite`. Conferido também com `wrangler dev` e um Supabase falso.
 - **Fora deste passo:** aviso a cada pedido (Telegram ou e-mail).
 
+## 16. Proteção contra robôs (12/10/2026)
+
+Decisão do Thiago: quatro camadas, e envio só com JavaScript (o Turnstile depende dele).
+
+1. **Cloudflare Turnstile.** Widget no formulário, em modo `interaction-only` (só aparece se
+   precisar de um clique). O Worker confere o token em `siteverify` com a chave secreta e o IP; sem
+   token ou recusado, 403 com `codigo: "turnstile"`. O token vale para um envio: o navegador chama
+   `turnstile.reset()` depois de cada tentativa.
+2. **Limite por IP:** binding `LIMITE_CONVITE` (`ratelimits` no `wrangler.jsonc`), 5 pedidos por
+   minuto por IP; acima disso, 429.
+3. **Origem:** o Worker só aceita POST com `Origin` igual ao do próprio site; sem ela, 403.
+4. **Duplicado:** índice único `(whatsapp, dia)` no banco (`supabase/002_convites_um_por_dia.sql`);
+   o conflito (409) volta como sucesso para quem envia, sem segunda linha.
+
+A isca `botcheck` continua. **Sem JavaScript**, o formulário é escondido (`html.no-js`) e aparece
+um aviso para ativar o JavaScript ou escrever para o e-mail de contato. Isso substitui o envio sem
+JS da spec §2.6. Um POST sem JS que chegue mesmo assim vai para `/nao-enviado`.
+
+- **Configuração:** `PUBLIC_TURNSTILE_SITE_KEY` (build; pública) e `TURNSTILE_SECRET_KEY` (Secret
+  do Worker). Fora de produção, a página usa a chave de teste do Cloudflare; com
+  `PUBLIC_INDEXAR=true` e sem chave, o build falha.
+- **Testes:** `tests/unit/convite.test.ts` (20 casos, inclusive as quatro camadas),
+  `tests/unit/turnstile.test.ts`; nos e2e, `tests/e2e/fixtures.ts` troca o script do Turnstile por um
+  falso para não depender da rede.
+

@@ -2,3 +2,5 @@
 # Em produção ficam no Cloudflare: Settings > Variables and Secrets (SUPABASE_SECRET_KEY como Secret).
 SUPABASE_URL=https://stmjxrciznwdbemgoiyk.supabase.co
 SUPABASE_SECRET_KEY=
+# Chave secreta de teste do Turnstile (sempre aceita); em produção, a do widget real como Secret.
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA

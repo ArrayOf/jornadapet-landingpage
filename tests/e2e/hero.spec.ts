@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('hero com o texto da spec, CTA e linha de apoio', async ({ page }) => {
   await page.goto('/');

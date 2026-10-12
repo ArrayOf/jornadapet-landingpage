@@ -2,117 +2,193 @@ import { describe, expect, it, vi } from 'vitest';
 import { tratarConvite, type Ambiente } from '../../src/worker/convite';
 import { TEXTO_DO_ACEITE } from '../../src/lib/formulario';
 
-const env: Ambiente = { SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_SECRET_KEY: 'sb_secret_abc' };
-const valido = { nome: '  Camila Duarte ', whatsapp: '(19) 99876-1234', perfil: 'Adestramento', cidade: ' Campinas, SP ', aceite: 'sim', pagina: '/', utm_source: 'instagram', ref: 'marcos' };
+const SITE = 'https://site.test';
+const VERIFICA = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+const SUPABASE = 'https://proj.supabase.co/rest/v1/convites';
 
-const json = (corpo: unknown) => new Request('https://site/api/convite', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(corpo) });
-const form = (corpo: Record<string, string>) => new Request('https://site/api/convite', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(corpo).toString() });
-const supabaseOk = () => vi.fn(async () => new Response(null, { status: 201 }));
+const liberado = { limit: vi.fn(async () => ({ success: true })) };
+const env: Ambiente = { SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_SECRET_KEY: 'sb_secret_abc', TURNSTILE_SECRET_KEY: 'ts_secret', LIMITE_CONVITE: liberado };
+const valido = { nome: '  Camila Duarte ', whatsapp: '(19) 99876-1234', perfil: 'Adestramento', cidade: ' Campinas, SP ', aceite: 'sim', pagina: '/', utm_source: 'instagram', ref: 'marcos', 'cf-turnstile-response': 'token-ok' };
 
-describe('tratarConvite', () => {
+const CAB = { 'Content-Type': 'application/json', Accept: 'application/json', Origin: SITE, 'CF-Connecting-IP': '203.0.113.7' };
+const json = (corpo: unknown, cab: Record<string, string> = CAB) => new Request(`${SITE}/api/convite`, { method: 'POST', headers: cab, body: JSON.stringify(corpo) });
+
+/** Simula o Turnstile e o Supabase. */
+function servicos({ turnstile = true, supabase = 201, corpoSupabase = '' } = {}) {
+  return vi.fn(async (url: string, _init?: RequestInit) => {
+    if (url === VERIFICA) return Response.json({ success: turnstile });
+    if (url === SUPABASE) return new Response(corpoSupabase || null, { status: supabase });
+    throw new Error(`URL inesperada: ${url}`);
+  });
+}
+type Chamada = [string, RequestInit];
+const chamadas = (f: ReturnType<typeof servicos>, url: string) => (f.mock.calls as unknown as Chamada[]).filter(([u]) => u === url);
+const linhaGravada = (f: ReturnType<typeof servicos>) => JSON.parse(chamadas(f, SUPABASE)[0][1].body as string);
+const tratar = (req: Request, f: ReturnType<typeof servicos>, e: Ambiente = env) => tratarConvite(req, e, f as unknown as typeof fetch);
+
+describe('tratarConvite: gravação', () => {
   it('grava a linha normalizada no Supabase e responde success: true', async () => {
-    const f = supabaseOk();
-    const r = await tratarConvite(json(valido), env, f as unknown as typeof fetch);
+    const f = servicos();
+    const r = await tratar(json(valido), f);
     expect(r.status).toBe(200);
     expect(await r.json()).toEqual({ success: true });
-    const [url, init] = f.mock.calls[0] as unknown as [string, RequestInit];
-    expect(url).toBe('https://proj.supabase.co/rest/v1/convites');
+    const [, init] = chamadas(f, SUPABASE)[0];
     expect(init.method).toBe('POST');
     expect(init.headers).toMatchObject({ apikey: 'sb_secret_abc', Prefer: 'return=minimal', 'Content-Type': 'application/json' });
-    expect(JSON.parse(init.body as string)).toEqual({
+    expect(linhaGravada(f)).toEqual({
       nome: 'Camila Duarte', whatsapp: '19998761234', perfil: 'Adestramento', cidade: 'Campinas, SP',
       aceite_texto: TEXTO_DO_ACEITE, pagina: '/', utm_source: 'instagram', ref: 'marcos',
     });
   });
 
   it('o texto do aceite gravado é o do servidor, não o que vier no envio', async () => {
-    const f = supabaseOk();
-    await tratarConvite(json({ ...valido, aceite_texto: 'qualquer coisa' }), env, f as unknown as typeof fetch);
-    expect(JSON.parse((f.mock.calls[0] as unknown as [string, RequestInit])[1].body as string).aceite_texto).toBe(TEXTO_DO_ACEITE);
+    const f = servicos();
+    await tratar(json({ ...valido, aceite_texto: 'qualquer coisa' }), f);
+    expect(linhaGravada(f).aceite_texto).toBe(TEXTO_DO_ACEITE);
   });
 
   it('chave service_role antiga (JWT) vai também no Authorization', async () => {
-    const f = supabaseOk();
-    await tratarConvite(json(valido), { ...env, SUPABASE_SECRET_KEY: 'eyJhbGciOi.x.y' }, f as unknown as typeof fetch);
-    expect((f.mock.calls[0] as unknown as [string, RequestInit])[1].headers).toMatchObject({ apikey: 'eyJhbGciOi.x.y', Authorization: 'Bearer eyJhbGciOi.x.y' });
+    const f = servicos();
+    await tratar(json(valido), f, { ...env, SUPABASE_SECRET_KEY: 'eyJhbGciOi.x.y' });
+    expect(chamadas(f, SUPABASE)[0][1].headers).toMatchObject({ apikey: 'eyJhbGciOi.x.y', Authorization: 'Bearer eyJhbGciOi.x.y' });
   });
 
-  it('sem JS (formulário comum) grava e redireciona para /obrigado', async () => {
-    const f = supabaseOk();
-    const r = await tratarConvite(form(valido), env, f as unknown as typeof fetch);
-    expect(r.status).toBe(303);
-    expect(r.headers.get('Location')).toBe('/obrigado');
-    expect(f).toHaveBeenCalledOnce();
+  it('origem é cortada em 100 caracteres e chaves desconhecidas são ignoradas', async () => {
+    const f = servicos();
+    await tratar(json({ ...valido, utm_campaign: 'x'.repeat(300), id: 99, criado_em: '2000-01-01', dia: '2000-01-01' }), f);
+    const linha = linhaGravada(f);
+    expect(linha.utm_campaign).toHaveLength(100);
+    for (const k of ['id', 'criado_em', 'dia', 'cf-turnstile-response']) expect(linha).not.toHaveProperty(k);
   });
 
-  it('dados inválidos: 400 com os erros e nada gravado', async () => {
-    const f = supabaseOk();
-    const r = await tratarConvite(json({ ...valido, whatsapp: '98765-4321', perfil: 'Astronauta' }), env, f as unknown as typeof fetch);
-    expect(r.status).toBe(400);
-    const corpo = (await r.json()) as { success: boolean; erros: Record<string, string> };
-    expect(corpo.success).toBe(false);
-    expect(Object.keys(corpo.erros).sort()).toEqual(['perfil', 'whatsapp']);
+  it('mesmo WhatsApp no mesmo dia (conflito no banco): responde sucesso sem erro', async () => {
+    const f = servicos({ supabase: 409, corpoSupabase: '{"code":"23505","message":"duplicate key"}' });
+    const r = await tratar(json(valido), f);
+    expect(r.status).toBe(200);
+    expect(await r.json()).toEqual({ success: true });
+  });
+});
+
+describe('tratarConvite: proteção contra robôs', () => {
+  it('sem Origin: 403 e nada verificado nem gravado', async () => {
+    const f = servicos();
+    const { Origin: _sem, ...semOrigem } = CAB;
+    const r = await tratar(json(valido, semOrigem), f);
+    expect(r.status).toBe(403);
     expect(f).not.toHaveBeenCalled();
   });
 
-  it('sem aceite não grava', async () => {
-    const f = supabaseOk();
-    const { aceite: _sem, ...semAceite } = valido;
-    expect((await tratarConvite(json(semAceite), env, f as unknown as typeof fetch)).status).toBe(400);
+  it('Origin de outro site: 403', async () => {
+    const f = servicos();
+    expect((await tratar(json(valido, { ...CAB, Origin: 'https://malicioso.example' }), f)).status).toBe(403);
+    expect(f).not.toHaveBeenCalled();
+  });
+
+  it('acima do limite por IP: 429, limite contado pelo IP e nada gravado', async () => {
+    const f = servicos();
+    const estourado = { limit: vi.fn(async () => ({ success: false })) };
+    const r = await tratar(json(valido), f, { ...env, LIMITE_CONVITE: estourado });
+    expect(r.status).toBe(429);
+    expect(estourado.limit).toHaveBeenCalledWith({ key: '203.0.113.7' });
+    expect(f).not.toHaveBeenCalled();
+  });
+
+  it('Turnstile verificado com a chave secreta, o token e o IP', async () => {
+    const f = servicos();
+    await tratar(json(valido), f);
+    const [, init] = chamadas(f, VERIFICA)[0];
+    const corpo = init.body as FormData;
+    expect(corpo.get('secret')).toBe('ts_secret');
+    expect(corpo.get('response')).toBe('token-ok');
+    expect(corpo.get('remoteip')).toBe('203.0.113.7');
+  });
+
+  it('Turnstile recusado: 403 com código turnstile e nada gravado', async () => {
+    const f = servicos({ turnstile: false });
+    const r = await tratar(json(valido), f);
+    expect(r.status).toBe(403);
+    expect(await r.json()).toEqual({ success: false, codigo: 'turnstile' });
+    expect(chamadas(f, SUPABASE)).toHaveLength(0);
+  });
+
+  it('sem token do Turnstile: 403 sem nem consultar o Cloudflare', async () => {
+    const f = servicos();
+    const { 'cf-turnstile-response': _sem, ...semToken } = valido;
+    expect((await tratar(json(semToken), f)).status).toBe(403);
     expect(f).not.toHaveBeenCalled();
   });
 
   it('isca preenchida: finge sucesso e não grava', async () => {
-    const f = supabaseOk();
-    const r = await tratarConvite(json({ ...valido, botcheck: 'on' }), env, f as unknown as typeof fetch);
+    const f = servicos();
+    const r = await tratar(json({ ...valido, botcheck: 'on' }), f);
     expect(await r.json()).toEqual({ success: true });
-    expect(f).not.toHaveBeenCalled();
+    expect(chamadas(f, SUPABASE)).toHaveLength(0);
   });
 
-  it('origem é cortada em 100 caracteres e chaves desconhecidas são ignoradas', async () => {
-    const f = supabaseOk();
-    await tratarConvite(json({ ...valido, utm_campaign: 'x'.repeat(300), id: 99, criado_em: '2000-01-01' }), env, f as unknown as typeof fetch);
-    const linha = JSON.parse((f.mock.calls[0] as unknown as [string, RequestInit])[1].body as string);
-    expect(linha.utm_campaign).toHaveLength(100);
-    expect(linha).not.toHaveProperty('id');
-    expect(linha).not.toHaveProperty('criado_em');
+  it('envio de formulário comum (sem JS) não tem token: vai para /nao-enviado', async () => {
+    const f = servicos();
+    const { 'cf-turnstile-response': _sem, ...semToken } = valido;
+    const req = new Request(`${SITE}/api/convite`, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', Origin: SITE }, body: new URLSearchParams(semToken).toString() });
+    const r = await tratar(req, f);
+    expect(r.status).toBe(303);
+    expect(r.headers.get('Location')).toBe('/nao-enviado');
+    expect(chamadas(f, SUPABASE)).toHaveLength(0);
+  });
+});
+
+describe('tratarConvite: entradas inválidas e falhas', () => {
+  it('dados inválidos: 400 com os erros e nada gravado', async () => {
+    const f = servicos();
+    const r = await tratar(json({ ...valido, whatsapp: '98765-4321', perfil: 'Astronauta' }), f);
+    expect(r.status).toBe(400);
+    const corpo = (await r.json()) as { success: boolean; erros: Record<string, string> };
+    expect(corpo.success).toBe(false);
+    expect(Object.keys(corpo.erros).sort()).toEqual(['perfil', 'whatsapp']);
+    expect(chamadas(f, SUPABASE)).toHaveLength(0);
   });
 
-  it('Supabase falhando: 502 success false (JSON) ou página de falha (sem JS)', async () => {
-    const falha = vi.fn(async () => new Response('{"code":"42501","message":"permission denied for table convites"}', { status: 401 }));
-    const r1 = await tratarConvite(json(valido), env, falha as unknown as typeof fetch);
-    expect(r1.status).toBe(502);
+  it('sem aceite não grava', async () => {
+    const f = servicos();
+    const { aceite: _sem, ...semAceite } = valido;
+    expect((await tratar(json(semAceite), f)).status).toBe(400);
+    expect(chamadas(f, SUPABASE)).toHaveLength(0);
+  });
+
+  it('Supabase falhando: 502 com só o código do erro', async () => {
+    const f = servicos({ supabase: 401, corpoSupabase: '{"code":"42501","message":"permission denied for table convites"}' });
+    const r = await tratar(json(valido), f);
+    expect(r.status).toBe(502);
     // Só o código do Supabase, para diagnóstico; nunca a mensagem nem a chave.
-    expect(await r1.json()).toEqual({ success: false, codigo: '401/42501' });
-    const r2 = await tratarConvite(form(valido), env, falha as unknown as typeof fetch);
-    expect(r2.status).toBe(303);
-    expect(r2.headers.get('Location')).toBe('/nao-enviado');
+    expect(await r.json()).toEqual({ success: false, codigo: '401/42501' });
   });
 
   it('rede caindo também é erro, não exceção', async () => {
-    const caiu = vi.fn(async () => { throw new TypeError('fetch failed'); });
+    const caiu = vi.fn(async (url: string) => {
+      if (url === VERIFICA) return Response.json({ success: true });
+      throw new TypeError('fetch failed');
+    });
     expect((await tratarConvite(json(valido), env, caiu as unknown as typeof fetch)).status).toBe(502);
   });
 
-  it('sem configuração do Supabase: 500 e nada gravado', async () => {
-    const f = supabaseOk();
-    const r = await tratarConvite(json(valido), { SUPABASE_URL: '', SUPABASE_SECRET_KEY: '' }, f as unknown as typeof fetch);
-    expect(r.status).toBe(500);
-    expect(f).not.toHaveBeenCalled();
+  it('sem configuração (Supabase ou Turnstile): 500 e nada gravado', async () => {
+    for (const faltando of [{ SUPABASE_URL: '' }, { SUPABASE_SECRET_KEY: '' }, { TURNSTILE_SECRET_KEY: '' }]) {
+      const f = servicos();
+      expect((await tratar(json(valido), f, { ...env, ...faltando })).status).toBe(500);
+      expect(chamadas(f, SUPABASE)).toHaveLength(0);
+    }
   });
 
   it('só aceita POST', async () => {
-    const r = await tratarConvite(new Request('https://site/api/convite'), env, supabaseOk() as unknown as typeof fetch);
+    const r = await tratar(new Request(`${SITE}/api/convite`), servicos());
     expect(r.status).toBe(405);
     expect(r.headers.get('Allow')).toBe('POST');
   });
 
   it('corpo inválido ou grande demais: 400/413 sem gravar', async () => {
-    const f = supabaseOk();
-    const quebrado = new Request('https://site/api/convite', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{nao é json' });
-    expect((await tratarConvite(quebrado, env, f as unknown as typeof fetch)).status).toBe(400);
-    const grande = json({ ...valido, nome: 'a'.repeat(20_000) });
-    expect((await tratarConvite(grande, env, f as unknown as typeof fetch)).status).toBe(413);
-    expect(f).not.toHaveBeenCalled();
+    const f = servicos();
+    const quebrado = new Request(`${SITE}/api/convite`, { method: 'POST', headers: CAB, body: '{nao é json' });
+    expect((await tratar(quebrado, f)).status).toBe(400);
+    expect((await tratar(json({ ...valido, nome: 'a'.repeat(20_000) }), f)).status).toBe(413);
+    expect(chamadas(f, SUPABASE)).toHaveLength(0);
   });
 });

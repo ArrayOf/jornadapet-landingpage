@@ -4,9 +4,11 @@ import { PERFIS } from '../lib/validacao';
 import { CHAVES_DE_ORIGEM } from '../lib/utm';
 import { TEXTO_DO_ACEITE } from '../lib/formulario';
 import { CONTATO_EMAIL } from '../data/conteudo';
+import { chaveDoSiteTurnstile } from '../lib/turnstile';
 
 // Rota do nosso Worker (src/worker/convite.ts), que grava no Supabase.
 const endpoint = '/api/convite';
+const chaveTurnstile = chaveDoSiteTurnstile(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY, import.meta.env.PUBLIC_INDEXAR === 'true');
 const beneficios = [
   { icone: 'ph:chats-circle', titulo: 'Uma conversa sobre o seu dia a dia', texto: 'No horário que for melhor para você.' },
   { icone: 'ph:key', titulo: 'Convite para usar antes de todo mundo', texto: 'Sem custo enquanto estivermos testando.' },
@@ -36,6 +38,10 @@ const beneficios = [
         <button type="button" class="mt-6 text-[14px] font-medium text-ink underline decoration-line decoration-2 hover:decoration-accent" @click="recomecar()">Enviar outro contato</button>
       </div>
 
+      <div class="aviso-sem-js min-h-[200px] flex-col items-start justify-center gap-3">
+        <p class="text-[18px] font-semibold text-ink">Para pedir seu convite, ative o JavaScript no navegador.</p>
+        <p class="text-[16px] leading-relaxed">Ou escreva para <span class="select-all font-medium text-ink">{CONTATO_EMAIL}</span> com seu nome, WhatsApp e cidade.</p>
+      </div>
       <form method="post" action={endpoint} x-show="status !== 'ok'" :novalidate="true" @submit.prevent="enviarFormulario()" class="space-y-5">
         <input type="hidden" name="pagina" value="/" />
         {CHAVES_DE_ORIGEM.map((k) => <input type="hidden" name={k} :value={`origem.${k} ?? ''`} />)}
@@ -76,6 +82,10 @@ const beneficios = [
           </label>
           <p id="e-aceite" aria-live="polite" class="text-[14px] text-danger" x-text="err.aceite ?? ''"></p>
         </div>
+
+        {/* Turnstile (anti-robô do Cloudflare): só aparece se precisar de uma interação. */}
+        <div class="cf-turnstile" data-sitekey={chaveTurnstile} data-appearance="interaction-only" data-size="flexible" data-theme="auto" data-language="pt-br"></div>
+        <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
         <div x-cloak x-show="status === 'erro'" role="alert" class="flex gap-3 r-ctl border border-danger/40 bg-danger/10 p-3 text-[14px] text-ink">
           <Icon name="ph:warning-circle" class="mt-0.5 size-5 shrink-0 text-danger" aria-hidden="true" />

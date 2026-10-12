@@ -3,8 +3,18 @@ import { CHAVES_DE_ORIGEM } from '../lib/utm';
 import { validar, type Dados } from '../lib/validacao';
 import { digitosWhatsapp } from '../lib/whatsapp';
 
-/** Configuração do Worker (Settings → Variables and Secrets no Cloudflare). */
-export interface Ambiente { SUPABASE_URL: string; SUPABASE_SECRET_KEY: string }
+/** Binding de limite de envios do Cloudflare (ratelimits no wrangler.jsonc). */
+export interface Limitador { limit(opcoes: { key: string }): Promise<{ success: boolean }> }
+
+/** Configuração do Worker (vars no wrangler.jsonc; segredos em Settings → Variables and Secrets). */
+export interface Ambiente {
+  SUPABASE_URL: string;
+  SUPABASE_SECRET_KEY: string;
+  TURNSTILE_SECRET_KEY: string;
+  LIMITE_CONVITE?: Limitador;
+}
+
+const VERIFICA_TURNSTILE = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
 const LIMITE_DO_CORPO = 10_000;
 
@@ -26,12 +36,38 @@ async function lerCorpo(req: Request): Promise<Record<string, unknown> | null> {
 
 const texto = (v: unknown) => (typeof v === 'string' ? v : '');
 
+/** Só aceita envio vindo da nossa própria página (o navegador sempre manda Origin num POST). */
+function mesmaOrigem(req: Request): boolean {
+  const origem = req.headers.get('Origin');
+  return !!origem && origem === new URL(req.url).origin;
+}
+
+async function turnstileOk(token: string, env: Ambiente, ip: string, fetchFn: typeof fetch): Promise<boolean> {
+  const corpo = new FormData();
+  corpo.append('secret', env.TURNSTILE_SECRET_KEY);
+  corpo.append('response', token);
+  if (ip) corpo.append('remoteip', ip);
+  try {
+    const r = await fetchFn(VERIFICA_TURNSTILE, { method: 'POST', body: corpo });
+    const j: unknown = await r.json().catch(() => null);
+    return typeof j === 'object' && j !== null && (j as { success?: unknown }).success === true;
+  } catch (e) {
+    console.error('convite: falha ao verificar o Turnstile', e);
+    return false;
+  }
+}
+
 /** POST /api/convite: valida de novo no servidor e grava em public.convites no Supabase. */
 export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof fetch = fetch): Promise<Response> {
   if (req.method !== 'POST') return new Response(null, { status: 405, headers: { Allow: 'POST' } });
   // Envio por fetch (JS) pede JSON; o formulário comum (sem JS) espera redirecionamento.
   const querJson = (req.headers.get('Accept') ?? '').includes('application/json') || (req.headers.get('Content-Type') ?? '').includes('application/json');
   const falha = (status: number, extra: object = {}) => (querJson ? json({ success: false, ...extra }, status) : redirecionar('/nao-enviado'));
+
+  // Camadas contra robôs, da mais barata para a mais cara: origem, limite por IP, isca, Turnstile.
+  if (!mesmaOrigem(req)) return falha(403);
+  const ip = req.headers.get('CF-Connecting-IP') ?? '';
+  if (env.LIMITE_CONVITE && !(await env.LIMITE_CONVITE.limit({ key: ip || 'sem-ip' })).success) return falha(429);
 
   if (Number(req.headers.get('Content-Length') ?? 0) > LIMITE_DO_CORPO) return falha(413);
   const bruto = await lerCorpo(req);
@@ -48,7 +84,10 @@ export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof
   const erros = validar(dados);
   if (Object.keys(erros).length > 0) return falha(400, { erros });
 
-  if (!env.SUPABASE_URL || !env.SUPABASE_SECRET_KEY) return falha(500);
+  if (!env.SUPABASE_URL || !env.SUPABASE_SECRET_KEY || !env.TURNSTILE_SECRET_KEY) return falha(500);
+
+  const token = texto(bruto['cf-turnstile-response']);
+  if (!token || !(await turnstileOk(token, env, ip, fetchFn))) return falha(403, { codigo: 'turnstile' });
 
   const linha: Record<string, string> = {
     nome: dados.nome.trim(),
@@ -70,6 +109,8 @@ export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof
 
   try {
     const r = await fetchFn(`${env.SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/convites`, { method: 'POST', headers: cabecalhos, body: JSON.stringify(linha) });
+    // Mesmo WhatsApp no mesmo dia: o índice único do banco recusa; para quem envia, deu certo.
+    if (r.status === 409) return querJson ? json({ success: true }) : redirecionar('/obrigado');
     if (!r.ok) {
       const detalhe = await r.text().catch(() => '');
       console.error('convite: Supabase respondeu', r.status, detalhe);

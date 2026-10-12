@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('head com título, descrição, canonical, Open Graph e JSON-LD', async ({ page }) => {
   await page.goto('/');

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('carrega em pt-BR, com fontes e sem erro no console', async ({ page }) => {
   const erros: string[] = [];

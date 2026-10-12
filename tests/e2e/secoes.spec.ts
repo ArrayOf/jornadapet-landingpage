@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('seções com conteúdo visível sem JS', async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });

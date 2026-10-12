@@ -1,4 +1,5 @@
-import { expect, test, type Page } from '@playwright/test';
+import type { Page } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 const SERVICO = '**/api/convite';
 
@@ -29,6 +30,7 @@ test('envio com sucesso: corpo certo, agradece pelo primeiro nome e repete o Wha
   await expect(page.getByRole('heading', { name: 'Recebemos, Camila!' })).toBeFocused();
   await expect(page.getByText('(19) 99876-1234')).toBeVisible();
   expect(corpo).not.toHaveProperty('access_key');
+  expect(corpo['cf-turnstile-response']).toBe('token-de-teste');
   expect(corpo).toMatchObject({ nome: 'Camila Duarte', whatsapp: '(19) 99876-1234', perfil: 'Adestramento', cidade: 'Campinas, SP', utm_source: 'instagram', ref: 'marcos' });
 });
 
@@ -60,27 +62,6 @@ test('cartão do Para quem marca o perfil no formulário', async ({ page }) => {
   await expect(page.locator('input[name="perfil"][value="Creche ou hotel"]')).toBeChecked();
 });
 
-test('envia sem JS e chega ao obrigado', async ({ browser }) => {
-  const ctx = await browser.newContext({ javaScriptEnabled: false });
-  const page = await ctx.newPage();
-  await page.route(SERVICO, async (r) => {
-    const dados = new URLSearchParams(r.request().postData() ?? '');
-    expect(dados.get('nome')).toBe('Camila Duarte');
-    expect(dados.get('access_key')).toBeNull();
-    await r.fulfill({ status: 303, headers: { location: '/obrigado' } });
-  });
-  await page.goto('/#participe');
-  await page.getByLabel('Seu nome').fill('Camila Duarte');
-  await page.getByLabel('WhatsApp', { exact: true }).fill('(19) 99876-1234');
-  await page.locator('input[name="perfil"][value="Adestramento"]').check({ force: true });
-  await page.getByLabel('Cidade e estado').fill('Campinas, SP');
-  await page.getByLabel(/Aceito ser contatado/).check();
-  await page.getByRole('button', { name: 'Pedir meu convite' }).click();
-  await expect(page).toHaveURL(/\/obrigado$/);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Recebemos seu pedido!');
-  await ctx.close();
-});
-
 test('barra fixa some quando o formulário está na tela', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'barra só no celular');
   await page.goto('/');
@@ -97,23 +78,6 @@ test('link da política no aceite abre em nova aba (não perde o que foi digitad
   await expect(link).toHaveAttribute('rel', /noopener/);
 });
 
-test('sem JS, número sem DDD não é enviado', async ({ browser }) => {
-  const ctx = await browser.newContext({ javaScriptEnabled: false });
-  const page = await ctx.newPage();
-  let enviou = false;
-  await page.route(SERVICO, async (r) => { enviou = true; await r.fulfill({ status: 303, headers: { location: '/obrigado' } }); });
-  await page.goto('/#participe');
-  await page.getByLabel('Seu nome').fill('Camila Duarte');
-  await page.getByLabel('WhatsApp', { exact: true }).fill('98765-4321');
-  await page.locator('input[name="perfil"][value="Adestramento"]').check({ force: true });
-  await page.getByLabel('Cidade e estado').fill('Campinas, SP');
-  await page.getByLabel(/Aceito ser contatado/).check();
-  await page.getByRole('button', { name: 'Pedir meu convite' }).click();
-  expect(await page.getByLabel('WhatsApp', { exact: true }).evaluate((i: HTMLInputElement) => i.validity.valid)).toBe(false);
-  expect(enviou).toBe(false);
-  await ctx.close();
-});
-
 test('o formulário envia para o nosso endpoint, não para serviço externo', async ({ page }) => {
   await page.goto('/#participe');
   await expect(page.locator('#participe form')).toHaveAttribute('action', '/api/convite');
@@ -125,4 +89,23 @@ test('sem JS, falha no envio leva a uma página que explica e volta ao formulár
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Não conseguimos enviar seu pedido');
   await expect(page.getByRole('link', { name: 'Tentar de novo' })).toHaveAttribute('href', '/#participe');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+});
+
+test('sem JS, o formulário some e aparece o aviso com o e-mail', async ({ browser }) => {
+  const ctx = await browser.newContext({ javaScriptEnabled: false });
+  const page = await ctx.newPage();
+  await page.goto('/#participe');
+  await expect(page.locator('#participe form')).toBeHidden();
+  await expect(page.locator('#participe')).toContainText('Para pedir seu convite, ative o JavaScript');
+  await expect(page.locator('#participe')).toContainText('contato@jornadapet.com.br');
+  await ctx.close();
+});
+
+test('erro no envio renova o Turnstile para a próxima tentativa', async ({ page }) => {
+  await page.route(SERVICO, (r) => r.fulfill({ status: 403, json: { success: false, codigo: 'turnstile' } }));
+  await page.goto('/#participe');
+  await preencher(page);
+  await page.getByRole('button', { name: 'Pedir meu convite' }).click();
+  await expect(page.getByRole('alert')).toContainText('Não conseguimos enviar agora');
+  expect(await page.evaluate(() => (window as unknown as { turnstile: { resets: number } }).turnstile.resets)).toBe(1);
 });

@@ -49,6 +49,8 @@ está validado. A página não pode prometer nada além disso.
    Web3Forms). O formulário envia para `/api/convite` no mesmo domínio; o Worker do Cloudflare
    (`src/worker/convite.ts`) valida de novo, grava em `public.convites` com a chave secreta e
    responde JSON (com JS) ou redireciona para `/obrigado` ou `/nao-enviado` (sem JS). Ver NT-001 §15.
+   **Atualização (12/10/2026):** com o Turnstile, o envio passa a exigir JavaScript; sem JS a página
+   mostra um aviso com o e-mail de contato (NT-001 §16).
 8. **Hospedagem padrão: Cloudflare Pages**, publicando `dist/`. **A confirmar** junto com o domínio
    (`jornadapet.com.br`, não confirmado).
 9. **Não entram:** preço, mascote/ilustração 3D (só referência de cor, NT-001 §11), blog, páginas

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('passos aparecem sem JS', async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });

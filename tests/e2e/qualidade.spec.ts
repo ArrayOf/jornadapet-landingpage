@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 for (const tema of ['light', 'dark'] as const) {
   test(`sem violações de acessibilidade (${tema})`, async ({ page }) => {

@@ -616,3 +616,46 @@ adestrador são diferentes.
   invisíveis esperando o scroll (o risco da §10.8 deixou de existir).
 - **Protótipos publicados** como Artifact (links no topo desta nota).
 - **Spec e plano** escritos (links no topo).
+
+## 13. Implementação (12/10/2026)
+
+Branch `feat/landing-page`, executada pelo [plano](../superpowers/plans/2026-10-11-landing-page.md)
+em 12 tarefas com TDD. Astro 7.3.5, Tailwind 4.3.3, Alpine 3.17.4.
+
+- **Testes:** Vitest com 55 testes (WhatsApp, validação, origem UTM, envio, conteúdo, JSON-LD) e
+  Playwright com 74 testes em desktop e celular. Mais 6 pulados de propósito, por regra de
+  plataforma: troca automática só no desktop, barra fixa só no celular. Incluem envio sem JS até
+  `/obrigado`, axe WCAG 2.2 AA nos dois temas, nenhum travessão, reduzir movimento e
+  transparência, e 375 px sem rolagem horizontal.
+- **Lighthouse (celular):**
+  - Acessibilidade 100 e Boas práticas 100.
+  - SEO 69, só por causa do `noindex` proposital fora de produção.
+  - Trace em 4G lenta com CPU 4×: **LCP 1,77 s** e **CLS 0,00**.
+- **Desvios da spec e do plano:** na seção "Desvios da execução" do plano. O principal é a marca
+  (§14).
+- **Trava de publicação:** o build com `PUBLIC_INDEXAR=true` falha enquanto a política de
+  privacidade estiver pendente (`src/pages/privacidade.astro`, `PENDENTE`).
+- **Continua com os sócios (spec §10):**
+  - serviço do formulário e chave;
+  - texto da política;
+  - domínio e hospedagem;
+  - WhatsApp da empresa;
+  - as duas frases que prometem algo;
+  - fotos próprias;
+  - INPI e os @.
+
+## 14. Marca: mascote da NT-002
+
+A marca final está na [NT-002](NT-002-marca.md): um vira-lata caramelo de coleira oliva com a
+plaqueta do J. Ele **substitui o J-guia** desta nota (§10.4 e §10.8). O que mudou:
+
+- **Página:** o símbolo do menu, do rodapé, do avatar do bot (hero) e do celular de exemplo é a
+  cabeça do mascote. Os favicons de 16 e 32 px, o apple-touch-icon, os ícones de 192 e 512 px e a
+  imagem de compartilhamento são os PNGs da NT-002.
+- **Paleta:** o token `caramelo` passou de `#d17c3a` para `#dba05a`. Entraram `orelha` `#c7853f`,
+  `creme` `#f6e3c4` e `lingua` `#e98a9a` como cores de ilustração, nunca em texto. O oliva segue
+  como única cor de ação.
+- **Protótipo v2:** os quatro símbolos e o favicon foram trocados, e o v2 foi republicado no mesmo
+  link.
+- **Peso:** os SVGs vetorizados têm cerca de 170 KB cada e não vão inline. A página usa o PNG
+  reduzido pelo Astro. Uma arte final por ilustrador (NT-002 §9.2) deve trazer um SVG leve.

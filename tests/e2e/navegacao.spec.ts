@@ -35,8 +35,11 @@ test('rodapé tem endosso da ArrayOf, e-mail visível e link para a política', 
   await expect(rodape.getByRole('link', { name: 'Política de privacidade' })).toHaveAttribute('href', '/privacidade');
 });
 
-test('o símbolo é SVG próprio, sem fonte de ícones', async ({ page }) => {
+test('o símbolo é a cabeça do mascote (NT-002), sem fonte de ícones', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('header svg[data-simbolo]')).toHaveCount(1);
-  expect(await page.locator('link[href*="phosphor"], .ph').count()).toBe(0);
+  const simbolo = page.locator('header img[data-simbolo]');
+  await expect(simbolo).toHaveCount(1);
+  await expect(simbolo).toHaveAttribute('alt', '');
+  expect(await simbolo.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+  expect(await page.locator('link[href*="phosphor"], .ph, svg[data-simbolo]').count()).toBe(0);
 });

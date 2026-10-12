@@ -8,7 +8,7 @@ link compartilhável: <https://claude.ai/artifact/BrtZ8agaS62DGrbHwVaiem>
 (v1, histórico: <https://claude.ai/artifact/VRU8PiqxEZoqFk3Nm43s7C>)
 **Nota técnica:** [`NT-001`](../../notas-tecnicas/NT-001-landing-page.md) — §0 (o que mudou com a
 versão 1 do produto), §8–§9 (revisões de SEO, UX, marketing e design), §10 (branding), §11 (paleta)
-**Design system:** [`DESIGN.md`](../../../DESIGN.md)
+**Design system:** [`DESIGN.md`](../../../DESIGN.md) · **Marca:** [`NT-002`](../../notas-tecnicas/NT-002-marca.md) (mascote; substitui o J-guia)
 **Produto:** [ArrayOf/jornada-pet](https://github.com/ArrayOf/jornada-pet), em especial
 `planejamento/versao-1/` e `discovery/`
 
@@ -135,7 +135,7 @@ landing_page/
   tutores, pets, sessões e valores a receber do seu trabalho de adestramento no Telegram, sem
   instalar outro app. Acesso por convite."
 - `lang="pt-BR"`, canonical absoluto a partir de `site`, `og:*` (`og:locale=pt_BR`, imagem
-  1200×630: fundo neutro, símbolo, título e a nota "Marina pagou R$ 100", tudo centralizado),
+  1200×630: a `og-1200x630.png` da [NT-002](../../notas-tecnicas/NT-002-marca.md)),
   `twitter:card=summary_large_image`.
 - JSON-LD: `Organization` (JornadaPet, `parentOrganization` ArrayOf `https://arrayof.com.br`,
   `founder`: Mario Guedes e Thiago Filadelfo como `Person` com `sameAs` do LinkedIn, `email`) e

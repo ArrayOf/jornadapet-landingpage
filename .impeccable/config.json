@@ -1,0 +1,137 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-color",
+        "value": "#f6e3c4",
+        "createdAt": "2026-10-12T01:52:26.819Z",
+        "reason": "Cores do mascote definidas na NT-002 (marca); o DESIGN.md será atualizado pela sessão da landing"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#dba05a",
+        "createdAt": "2026-10-12T01:52:26.925Z",
+        "reason": "Cores do mascote definidas na NT-002 (marca); o DESIGN.md será atualizado pela sessão da landing"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#c7853f",
+        "createdAt": "2026-10-12T01:52:27.042Z",
+        "reason": "Cores do mascote definidas na NT-002 (marca); o DESIGN.md será atualizado pela sessão da landing"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#e98a9a",
+        "createdAt": "2026-10-12T01:52:27.148Z",
+        "reason": "Cores do mascote definidas na NT-002 (marca); o DESIGN.md será atualizado pela sessão da landing"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#17212b",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:27.253Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#707579",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:27.364Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#8b9aa7",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:27.475Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#f5f5f5",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:27.588Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#25a35a",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:27.689Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#feda75",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:27.798Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#fa7e1e",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:27.947Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#d62976",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:28.049Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#962fbf",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:28.158Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#4f5bd5",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:28.268Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#dcdbe3",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-002-marca.html"
+        ],
+        "createdAt": "2026-10-12T01:52:28.372Z",
+        "reason": "Cores de imitação das interfaces de Telegram, WhatsApp e Instagram e do fundo da foto 3D na folha da marca (NT-002)"
+      },
+      {
+        "rule": "overused-font",
+        "value": "instrument sans",
+        "createdAt": "2026-10-12T13:36:28.983Z",
+        "reason": "Instrument Sans é a fonte de texto definida no DESIGN.md do projeto (typography.body)"
+      }
+    ]
+  }
+}

@@ -6,7 +6,7 @@ export function organizacao(site: URL): object {
     '@type': 'Organization',
     name: 'JornadaPet',
     url: new URL('/', site).toString(),
-    logo: new URL('/favicon.svg', site).toString(),
+    logo: new URL('/icon-512.png', site).toString(),
     email: CONTATO_EMAIL,
     parentOrganization: { '@type': 'Organization', name: 'ArrayOf', url: 'https://arrayof.com.br' },
     founder: SOCIOS.map((s) => ({ '@type': 'Person', name: s.nome, sameAs: s.linkedin })),

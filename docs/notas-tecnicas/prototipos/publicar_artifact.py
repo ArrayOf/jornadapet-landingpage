@@ -66,6 +66,11 @@ for folder, src, title in (('v2', 'NT-001-landing-page-v2.html', 'Landing Jornad
     html = adapt(src, title)
     open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(html)
     shutil.copytree(os.path.join(PROTO, 'NT-001-assets'), os.path.join(d, 'NT-001-assets'))
+    marca = sorted(set(re.findall(r'NT-002-assets/png/([\w.-]+)', html)))
+    if marca:
+        os.makedirs(os.path.join(d, 'NT-002-assets', 'png'))
+        for f in marca:
+            shutil.copy(os.path.join(PROTO, 'NT-002-assets', 'png', f), os.path.join(d, 'NT-002-assets', 'png', f))
     for f in ('regular.min.css', 'fill.min.css', 'Phosphor.woff2', 'Phosphor-Fill.woff2'):
         shutil.copy(os.path.join(PH, f), os.path.join(d, 'phosphor', f))
     used = set(re.findall(r'NT-001-assets/([\w.-]+)', html)) | set(re.findall(r"'NT-001-assets/'\+t\.img\+'\.jpg'", html) and ['passeador.jpg', 'creche.jpg', 'banho-tosa.jpg', 'veterinario.jpg'])

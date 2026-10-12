@@ -18,6 +18,7 @@ describe('JSON-LD', () => {
     expect(o.parentOrganization).toEqual({ '@type': 'Organization', name: 'ArrayOf', url: 'https://arrayof.com.br' });
     expect(o.founder.map((p: any) => p.sameAs)).toEqual(['https://www.linkedin.com/in/jmarioguedes/', 'https://www.linkedin.com/in/trfiladelfo/']);
     expect(o.email).toBe('contato@jornadapet.com.br');
+    expect(o.logo).toBe('https://jornadapet.com.br/icon-512.png');
   });
   it('site em pt-BR', () => { expect(siteWeb(site)).toMatchObject({ '@type': 'WebSite', inLanguage: 'pt-BR', url: 'https://jornadapet.com.br/' }); });
   it('perguntas com o mesmo texto da página', () => {

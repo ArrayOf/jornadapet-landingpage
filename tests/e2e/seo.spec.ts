@@ -5,7 +5,10 @@ test('head com título, descrição, canonical, Open Graph e JSON-LD', async ({ 
   await expect(page).toHaveTitle('JornadaPet: agenda e clientes para adestradores de cães');
   await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute('content', 'pt_BR');
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /\/og\.png$/);
-  await expect(page.locator('link[rel="icon"]')).toHaveAttribute('href', '/favicon.svg');
+  await expect(page.locator('link[rel="icon"][sizes="32x32"]')).toHaveAttribute('href', '/favicon-32.png');
+  for (const arquivo of ['/favicon-32.png', '/favicon-16.png', '/apple-touch-icon.png', '/icon-192.png', '/icon-512.png', '/og.png']) {
+    expect((await page.request.get(arquivo)).status(), arquivo).toBe(200);
+  }
   const tipos = await page.locator('script[type="application/ld+json"]').evaluateAll((s) => s.map((x) => JSON.parse(x.textContent ?? '{}')['@type']));
   expect(tipos).toEqual(expect.arrayContaining(['Organization', 'WebSite', 'FAQPage']));
 });

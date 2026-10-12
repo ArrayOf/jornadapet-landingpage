@@ -27,7 +27,9 @@
   --f-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
   --f-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
   --bg: #f4f4f6; --surface: #ffffff; --ink: #23251f; --body: #45473f; --mute: #676a60; --line: #e2e2e6;
-  --accent: #3f5a2c; --accent-ink: #ffffff; --danger: #b42318; --caramelo: #d17c3a;
+  --accent: #3f5a2c; --accent-ink: #ffffff; --danger: #b42318;
+  /* Cores de ilustração do mascote (NT-002): nunca em texto. */
+  --caramelo: #dba05a; --orelha: #c7853f; --creme: #f6e3c4; --lingua: #e98a9a;
   --mint: #e1e7d6; --butter: #f2e2cf; --peach: #efdcd2; --sky: #e0e0ea; --lilac: #e7e4ec;
   --blob-1: #ecd2b2; --blob-2: #cdd6bd; --blob-3: #dcdce6; --blob-op: .9;
   --glass: rgba(255,255,255,.58); --glass-edge: rgba(255,255,255,.85); --glass-hi: rgba(255,255,255,.9);
@@ -37,7 +39,7 @@
 }
 .dark {
   --bg: #151613; --surface: #1d1f1a; --ink: #f1f2ec; --body: #cfd1c7; --mute: #a0a395; --line: #2e3128;
-  --accent: #a3c47f; --accent-ink: #17200f; --danger: #ff8a80; --caramelo: #e09a5f;
+  --accent: #a3c47f; --accent-ink: #17200f; --danger: #ff8a80;
   --mint: #283222; --butter: #3a2e20; --peach: #3a2823; --sky: #282a33; --lilac: #2d2a33;
   --blob-1: #5c3f22; --blob-2: #34452a; --blob-3: #2c2d3a; --blob-op: .55;
   --glass: rgba(32,32,36,.55); --glass-edge: rgba(255,255,255,.10); --glass-hi: rgba(255,255,255,.08);

@@ -5,7 +5,10 @@ colors:
   # Tema claro (paleta E: oliva do uniforme + caramelo do vira-lata, sobre o cinza do estúdio)
   oliva: "#3f5a2c"
   on-oliva: "#ffffff"
-  caramelo: "#d17c3a"
+  caramelo: "#dba05a"
+  orelha: "#c7853f"
+  creme: "#f6e3c4"
+  lingua: "#e98a9a"
   estudio: "#f4f4f6"
   superficie: "#ffffff"
   tinta: "#23251f"
@@ -30,7 +33,6 @@ colors:
   escuro-linha: "#2e3128"
   escuro-oliva: "#a3c47f"
   escuro-on-oliva: "#17200f"
-  escuro-caramelo: "#e09a5f"
   escuro-salvia: "#283222"
   escuro-lavanda: "#282a33"
   escuro-a-receber: "#3a2e20"
@@ -154,7 +156,6 @@ components:
     rounded: "{rounded.pilula}"
   simbolo:
     backgroundColor: "{colors.salvia-clientes}"
-    textColor: "{colors.oliva}"
     rounded: "{rounded.controle}"
     size: "32px"
 ---
@@ -203,9 +204,10 @@ vira-lata caramelo, sobre o cinza-lavanda neutro de um estúdio.
   convite"), links em hover, ícones de destaque, estado "Concluído", chip de opção marcado, traço
   do símbolo, foco do teclado. Texto sobre ele: branco (7,7:1); no escuro, `#17200f` (8,6:1).
 
-### Secondary
-- **Caramelo do vira-lata** (`#d17c3a`; escuro `#e09a5f`): fica para ilustração e destaques de
-  dinheiro. **Nunca** em texto ou botão: sobre o fundo dá 2,8:1.
+### Secondary: cores de ilustração do mascote (NT-002)
+- **Caramelo** (`#dba05a`): pelo do mascote; destaques de dinheiro. **Nunca** em texto ou botão.
+- **Orelha** (`#c7853f`), **Creme** (`#f6e3c4`), **Língua** (`#e98a9a`): só dentro da ilustração.
+- As mesmas nos dois temas: a marca não muda de cor no escuro.
 
 ### Tertiary: estados com significado
 - **Sálvia, clientes** (`#e1e7d6`): ficha do pet "Ativo", fundo do símbolo, passo "Cadastre".
@@ -230,7 +232,7 @@ botão, link ou estado ativo.
 **A Regra da Cor que Ensina.** Cada pastel tem um significado e só aparece com ele. O que não é
 área do produto (perfis, benefícios, selos genéricos) fica neutro: superfície com linha de 1px.
 
-**A Regra do Caramelo Mudo.** Caramelo nunca carrega texto. Ele é cor de ilustração e de fundo de
+**A Regra do Caramelo Mudo.** Caramelo (e orelha, creme, língua) nunca carrega texto. Ele é cor de ilustração e de fundo de
 "a receber", com texto em tinta por cima (11,6:1).
 
 ## Typography
@@ -305,9 +307,11 @@ Três raios e nenhum outro: **12px** para controles (botões, campos, itens de l
 cartões e superfícies, **pílula** para selos, chips de opção e estados. Bordas de 1px na cor
 "linha". O celular de exemplo usa 44px/36px como exceção figurativa.
 
-O **símbolo "J-guia"** é um J de traço único (stroke 3,2, pontas arredondadas) cujo gancho termina
-numa argola de mosquetão: traço oliva sobre sálvia, em quadrado de 12px de raio (ou círculo no
-avatar do bot). Cores fixas nos dois temas. É esboço; a versão final vem de designer.
+O **símbolo** é a cabeça do mascote da [NT-002](docs/notas-tecnicas/NT-002-marca.md): um
+vira-lata caramelo de coleira oliva com a plaqueta do J, sobre sálvia. Na página, quadrado de 12px
+de raio (menu, rodapé) ou círculo (avatar do bot). Vem de `NT-002-assets/png/icon-512.png`,
+reduzido pelo Astro; o SVG vetorizado (cerca de 170 KB) não vai inline na página. Favicons,
+ícones e imagem de compartilhamento são os PNGs da NT-002. O "J-guia" da NT-001 foi descartado.
 
 ## Components
 
@@ -367,7 +371,7 @@ resposta com o botão "Abrir JornadaPet". Mostra só o que a versão 1 faz.
 ### Don't:
 - **Don't** use caramelo em texto ou botão.
 - **Don't** use azul como cor da marca (some dentro do Telegram).
-- **Don't** use a pata de biblioteca de ícones como símbolo.
+- **Don't** use a pata de biblioteca de ícones nem o antigo J-guia como símbolo; o símbolo é o mascote da NT-002.
 - **Don't** use travessão em texto visível.
 - **Don't** prometa preço, cobrança automática, IA ou resumo para o tutor como coisa pronta.
 - **Don't** use emoji como ícone; ícones são Phosphor, em peso regular (preenchido só para estado).

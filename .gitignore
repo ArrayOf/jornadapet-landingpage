@@ -12,3 +12,4 @@ docs/notas-tecnicas/prototipos/.artifact-build/
 test-results/
 playwright-report/
 !.env.example
+.impeccable/hook.cache.json

@@ -38,6 +38,23 @@
 
 ---
 
+## Desvios da execução (12/10/2026)
+
+Registrados no ledger da execução como `Ruling:`; os principais:
+
+- **Marca (fora do plano):** a NT-002 trocou o símbolo "J-guia" pelo mascote caramelo. O
+  `Simbolo.astro` passou a usar a cabeça do mascote (`src/assets/marca/cabeca.png`, otimizada pelo
+  Astro); `public/favicon.svg`, `scripts/gerar-og.mjs` e `tests/og/og.html` saíram, e entraram os
+  PNGs da NT-002 (`favicon-16/32`, `apple-touch-icon`, `icon-192/512`, `og.png`). Token
+  `caramelo` → `#dba05a` e tokens de ilustração `orelha`, `creme`, `lingua`.
+- **Passo a passo:** foco das setas síncrono (não em `$nextTick`) e `x-cloak` condicional por
+  spread (o Astro gravava `x-cloak="false"`).
+- **Reduzir movimento:** `html.rm` também zera transições, não só animações.
+- **Tipos:** `src/types/alpine-plugins.d.ts` para os plugins do Alpine; `playwright-core` fixado
+  em 1.63.0 para o `@axe-core/playwright`.
+- **Testes ajustados** (seletores ambíguos, valores do Alpine, medição do axe com movimento
+  reduzido): ver o ledger.
+
 ## Estrutura de arquivos
 
 | Arquivo | Ação | Responsabilidade |

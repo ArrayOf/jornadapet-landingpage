@@ -11,8 +11,7 @@
     "preview": "astro preview --port 4321",
     "check": "astro check",
     "test": "vitest run",
-    "test:e2e": "playwright test",
-    "og": "node scripts/gerar-og.mjs"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@alpinejs/focus": "3.17.4",

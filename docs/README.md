@@ -52,7 +52,7 @@ direções descartadas e o motivo de cada uma.
 ┌─────┬──────────────────────────────────────┬───────────┬──────┬───────┬──────────────────────┐
 │  #  │                Frente                │ Protótipo │ Spec │ Plano │        Estado        │
 ├─────┼──────────────────────────────────────┼───────────┼──────┼───────┼──────────────────────┤
-│ 1   │ Landing page (9 seções + formulário) │ ✅        │ ✅   │ ✅    │ spec em revisão      │
+│ 1   │ Landing page (9 seções + formulário) │ ✅        │ ✅   │ ✅    │ implementada (branch)│
 └─────┴──────────────────────────────────────┴───────────┴──────┴───────┴──────────────────────┘
 ```
 
@@ -69,3 +69,37 @@ Estado anterior (histórico): aguardando a aprovação do protótipo. Depois vem
 - fotos próprias no lugar das do placedog.net;
 - nomes dos sócios;
 - quatro frases que prometem algo e precisam de confirmação.
+
+---
+
+## Marca — 2026-10-11
+
+[`NT-002`](notas-tecnicas/NT-002-marca.md) ·
+folha da marca [`NT-002-marca.html`](notas-tecnicas/prototipos/NT-002-marca.html) ·
+arquivos em [`NT-002-assets/`](notas-tecnicas/prototipos/NT-002-assets/) ·
+histórico: [exploração](notas-tecnicas/prototipos/NT-002-exploracao.html) e
+[esboço](notas-tecnicas/prototipos/NT-002-esboco.html)
+
+A marca é um **mascote**: um vira-lata caramelo sentado, de coleira oliva, com o J da JornadaPet
+na plaqueta. Ele substitui o símbolo "J-guia" da NT-001. A escolha saiu de cinco rodadas de
+desenhos: J-guia, pata, plaqueta, monograma JP, traço fino e, por fim, o mascote.
+
+A arte de referência foi gerada por IA a partir do esboço e depois limpa e vetorizada com as cores
+exatas da paleta. A pasta `NT-002-assets/` tem os SVGs, os PNGs prontos para cada canal (Telegram,
+WhatsApp, Instagram, favicon, ícones e imagem de compartilhamento) e as ferramentas que
+reproduzem tudo.
+
+```text
+┌─────┬──────────────────────────────────────┬───────────┬──────┬───────┬──────────────────────┐
+│  #  │                Frente                │ Protótipo │ Spec │ Plano │        Estado        │
+├─────┼──────────────────────────────────────┼───────────┼──────┼───────┼──────────────────────┤
+│ 2   │ Marca (mascote, selos, arquivos)     │ ✅        │ —    │ —     │ arte de referência   │
+└─────┴──────────────────────────────────────┴───────────┴──────┴───────┴──────────────────────┘
+```
+
+Pendências na §9 da nota. As principais:
+
+- a origem e os direitos das imagens;
+- a arte final por ilustrador;
+- a checagem no INPI e dos @;
+- levar a marca ao DESIGN.md, ao protótipo e ao plano da landing.

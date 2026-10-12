@@ -4,6 +4,7 @@ import Nav from '../components/Nav.astro';
 import Rodape from '../components/Rodape.astro';
 import BarraCelular from '../components/BarraCelular.astro';
 import Hero from '../components/Hero.astro';
+import ComoFunciona from '../components/ComoFunciona.astro';
 ---
 <Base title="JornadaPet: agenda e clientes para adestradores de cães" description="Organize tutores, pets, sessões e valores a receber do seu trabalho de adestramento no Telegram, sem instalar outro app. Acesso por convite.">
   <div x-data="pagina" :class="{ 'overflow-hidden': menu }">
@@ -11,6 +12,7 @@ import Hero from '../components/Hero.astro';
     <Nav />
     <main id="conteudo">
       <Hero />
+      <ComoFunciona />
     </main>
     <Rodape />
   </div>

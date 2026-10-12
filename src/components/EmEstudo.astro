@@ -1,0 +1,26 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<section class="relative overflow-hidden py-16 sm:py-20" aria-labelledby="breve-titulo">
+  <div class="blob b1 -top-20 left-[8%] size-80"></div>
+  <div class="blob b3 -bottom-24 right-[12%] size-80"></div>
+  <div class="relative mx-auto grid max-w-6xl items-center gap-8 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
+    <div>
+      <span class="inline-flex items-center gap-2 rounded-full bg-lilac px-3 py-1 text-[14px] font-medium text-ink"><Icon name="ph:hourglass-medium" class="size-4" aria-hidden="true" /> Em estudo, sem data</span>
+      <h2 id="breve-titulo" class="mt-4 text-[clamp(1.8rem,3.4vw,2.6rem)] font-bold leading-[1.08]">O que estamos estudando.</h2>
+      <p class="mt-3 max-w-[40ch] text-[18px] leading-relaxed">Primeiro, o básico bem feito. Estas ideias vieram das conversas com profissionais e ainda não têm data.</p>
+    </div>
+    <div class="grid gap-3 sm:grid-cols-2">
+      <div class="glass r-card p-5">
+        <div class="flex items-center gap-2 text-[14px] font-semibold text-ink"><Icon name="ph:microphone" class="size-4 text-accent" aria-hidden="true" /> Pedir por áudio</div>
+        <p class="mt-3 text-[18px] font-medium leading-snug text-ink">“Cancela a sessão de hoje do Thor.”</p>
+        <p class="mt-2 text-[14px] leading-relaxed">A ideia é que você mande um áudio ou uma mensagem e a JornadaPet entenda e registre. Quando faltar informação, ela pergunta.</p>
+      </div>
+      <div class="glass r-card p-5">
+        <div class="flex items-center gap-2 text-[14px] font-semibold text-ink"><Icon name="ph:note" class="size-4 text-accent" aria-hidden="true" /> Resumo para o tutor</div>
+        <p class="mt-3 text-[18px] font-medium leading-snug text-ink">A evolução do pet, sessão a sessão.</p>
+        <p class="mt-2 text-[14px] leading-relaxed">Um resumo que você revisa antes de enviar, para o tutor acompanhar o trabalho.</p>
+      </div>
+    </div>
+  </div>
+</section>

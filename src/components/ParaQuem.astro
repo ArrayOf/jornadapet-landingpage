@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import adestrador from '../assets/adestrador.jpg';
+import { PERFIS_DA_PAGINA } from '../data/conteudo';
+---
+<section id="para-quem" class="scroll-mt-20 bg-surface py-20 sm:py-24">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <h2 class="max-w-[20ch] text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">Feito primeiro para adestradores.</h2>
+    <p class="mt-4 max-w-[54ch] text-[18px] leading-relaxed">Estamos começando com quem atende sozinho uma carteira de clientes recorrentes. Passeador, creche ou banho e tosa? Fale com a gente também.</p>
+    <div class="mt-12 grid auto-rows-[minmax(120px,auto)] gap-3 sm:auto-rows-[minmax(200px,auto)] sm:grid-cols-2 lg:grid-cols-4" x-data x-intersect.once="$el.querySelectorAll('[data-reveal]').forEach((e) => e.classList.add('in'))">
+      <article data-reveal style="--i:0" class="bento-tile group relative overflow-hidden r-card sm:col-span-2 lg:row-span-2">
+        <Image src={adestrador} widths={[480, 720, 900]} sizes="(min-width: 1024px) 560px, 100vw" alt="Bull terrier saltando em um campo aberto" class="absolute inset-0 size-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+        <div class="relative flex h-full min-h-[320px] flex-col justify-end p-6 text-white">
+          <span class="mb-3 w-max rounded-full bg-[#e1e7d6] px-3 py-1 text-[12px] font-semibold text-[#2c3f1f]">Agora</span>
+          <h3 class="text-[28px] font-bold text-white">Adestradores</h3>
+          <p class="mt-1 max-w-[38ch] text-[16px] text-white/90">Autônomos com carteira recorrente. É com vocês que estamos construindo agora.</p>
+        </div>
+      </article>
+      {PERFIS_DA_PAGINA.map((p, i) => (
+        <a href="#participe" data-perfil={p.perfil} @click={`$dispatch('perfil', $el.dataset.perfil)`} data-reveal style={`--i:${i + 1}`} class="bento-tile flex overflow-hidden r-card border border-line bg-bg">
+          <div class="flex flex-1 flex-col justify-between p-5">
+            <h3 class="text-[20px] font-semibold leading-tight">{p.titulo}</h3>
+            <span class="flex items-center gap-1.5 text-[14px] font-medium text-ink/80">Quero conversar <Icon name="ph:arrow-right" class="size-4" aria-hidden="true" /></span>
+          </div>
+          <Image src={p.imagem} width={300} height={300} alt="" class="w-[42%] object-cover" />
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

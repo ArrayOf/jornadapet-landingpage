@@ -1,0 +1,60 @@
+---
+import { Icon } from 'astro-icon/components';
+import Simbolo from './Simbolo.astro';
+const esquerda = [
+  { icone: 'ph:telegram-logo', titulo: 'Dentro do Telegram', texto: 'Abre pelo nosso bot. Não tem outro aplicativo para baixar.' },
+  { icone: 'ph:devices', titulo: 'No celular e no computador', texto: 'Use os dois ao mesmo tempo, com os mesmos dados.' },
+];
+const direita = [
+  { icone: 'ph:warning-diamond', titulo: 'Aviso de horário cruzado', texto: 'Se duas sessões se sobrepõem, você vê antes e decide se mantém.' },
+  { icone: 'ph:lock-simple', titulo: 'Seus clientes, só seus', texto: 'Cada profissional vê apenas a própria carteira.' },
+];
+---
+<section class="previa relative overflow-hidden py-20 sm:py-28">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div class="mx-auto max-w-[40ch] text-center">
+      <h2 class="text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">O seu dia, aberto no Telegram.</h2>
+      <p class="mt-4 text-[18px] leading-relaxed">Agenda, clientes e valores a receber no mesmo lugar onde você já conversa.</p>
+    </div>
+    <div class="mt-14 grid items-center gap-10 lg:grid-cols-[1fr_auto_1fr] lg:gap-12">
+      <ul class="order-2 flex flex-col gap-5 lg:order-1 lg:items-end lg:text-right" x-data x-intersect.once="$el.querySelectorAll('[data-reveal]').forEach((e) => e.classList.add('in'))">
+        {esquerda.map((d, i) => (
+          <li data-reveal style={`--i:${i}`} class="max-w-[30ch]"><Icon name={d.icone} class="mb-2 size-6 text-accent lg:ml-auto" aria-hidden="true" /><span class="display text-[18px] font-semibold text-ink">{d.titulo}</span><p class="mt-1 text-[16px] leading-relaxed">{d.texto}</p></li>
+        ))}
+      </ul>
+      <div class="relative order-1 mx-auto lg:order-2" role="img" aria-label="Exemplo da JornadaPet no Telegram: agenda do dia com três sessões e R$ 1.240 a receber">
+        <div class="blob b3 -left-16 top-10 size-72"></div>
+        <div class="blob b2 -right-16 bottom-0 size-72"></div>
+        <div class="relative w-[300px] rounded-[44px] border border-line bg-ink p-2.5 shadow-[0_30px_60px_-30px_rgba(24,24,27,.5)] dark:bg-[#2a2a2e]" aria-hidden="true">
+          <div class="flex h-[580px] flex-col overflow-hidden rounded-[36px] bg-surface">
+            <div class="flex items-center gap-3 border-b border-line px-4 pt-6 pb-3">
+              <Icon name="ph:x" class="size-4 text-mute" />
+              <div class="flex flex-1 items-center gap-2"><Simbolo tamanho="sm" forma="circulo" /><span class="text-[14px] font-semibold text-ink">JornadaPet</span></div>
+              <Icon name="ph:dots-three-vertical" class="size-4 text-mute" />
+            </div>
+            <div class="flex-1 space-y-4 overflow-hidden p-4 text-[14px] text-body">
+              <div><div class="text-[12px] text-mute">Bom dia, Camila</div><div class="display text-[20px] font-bold text-ink">Hoje você tem 3 sessões</div></div>
+              <div class="flex items-center justify-between r-ctl bg-butter p-3"><div class="text-[14px] text-ink/80">Falta receber</div><div class="text-[20px] font-bold tabular-nums text-ink">R$ 1.240</div></div>
+              <ol class="space-y-2">
+                <li class="flex items-center gap-3 r-ctl border border-line p-2.5"><span class="w-11 font-semibold text-ink">08:00</span><span class="flex-1 text-ink">Mel</span><span class="flex items-center gap-1 text-[12px] text-accent"><Icon name="ph:check-circle-fill" class="size-3.5" /> Feito</span></li>
+                <li class="flex items-center gap-3 r-ctl border border-line p-2.5"><span class="w-11 font-semibold text-ink">10:30</span><span class="flex-1 text-ink">Pipoca</span><span class="rounded-full bg-peach px-2 py-0.5 text-[12px] text-ink">Falta</span></li>
+                <li class="flex items-center gap-3 r-ctl bg-sky p-2.5"><span class="w-11 font-semibold text-ink">16:00</span><span class="flex-1 font-medium text-ink">Thor</span><span class="text-[12px] text-ink/70">em 2h</span></li>
+              </ol>
+              <div class="flex items-center justify-center gap-2 r-ctl border border-dashed border-line py-2.5 font-medium text-ink"><Icon name="ph:plus" class="size-4" /> Agendar sessão</div>
+            </div>
+            <div class="grid grid-cols-3 border-t border-line text-center text-[12px]">
+              <span class="py-3 font-semibold text-accent"><Icon name="ph:calendar-blank-fill" class="mx-auto block size-5" />Agenda</span>
+              <span class="py-3 text-mute"><Icon name="ph:users" class="mx-auto block size-5" />Clientes</span>
+              <span class="py-3 text-mute"><Icon name="ph:wallet" class="mx-auto block size-5" />Financeiro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="order-3 flex flex-col gap-5" x-data x-intersect.once="$el.querySelectorAll('[data-reveal]').forEach((e) => e.classList.add('in'))">
+        {direita.map((d, i) => (
+          <li data-reveal style={`--i:${i + 2}`} class="max-w-[30ch]"><Icon name={d.icone} class="mb-2 size-6 text-accent" aria-hidden="true" /><span class="display text-[18px] font-semibold text-ink">{d.titulo}</span><p class="mt-1 text-[16px] leading-relaxed">{d.texto}</p></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

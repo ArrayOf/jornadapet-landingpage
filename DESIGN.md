@@ -55,6 +55,11 @@ typography:
     fontSize: "20px"
     fontWeight: 600
     lineHeight: 1.25
+  title-lg:
+    fontFamily: "Bricolage Grotesque, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "28px"
+    fontWeight: 700
+    lineHeight: 1.15
   lead:
     fontFamily: "Instrument Sans, ui-sans-serif, system-ui, sans-serif"
     fontSize: "18px"
@@ -241,6 +246,7 @@ batidas.
 - **Display** (700, `clamp(2.3rem, 4.4vw, 3.6rem)`, 1.04, `-0.025em`): só o título do hero. No
   máximo 3 linhas no desktop.
 - **Headline** (700, `clamp(2rem, 4vw, 3rem)`, 1.05): títulos de seção. Uma frase curta.
+- **Title large** (700, 28px): título do destaque "Adestradores" no Para quem e do sucesso do formulário.
 - **Title** (600, 20px): títulos de cartões e de exemplos.
 - **Lead** (400, 18px, 1.625, máx. 46-54ch): subtítulos de seção e do hero.
 - **Body** (400, 16px, 1.625, máx. 60ch): texto corrido, respostas do FAQ.

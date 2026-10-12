@@ -3,10 +3,12 @@ import intersect from '@alpinejs/intersect';
 import focus from '@alpinejs/focus';
 import { pagina } from './pagina';
 import { stepper } from './stepper';
+import { formulario } from './formulario';
 
 export default (Alpine: Alpine) => {
   Alpine.plugin(intersect);
   Alpine.plugin(focus);
   Alpine.data('pagina', pagina);
   Alpine.data('stepper', stepper);
+  Alpine.data('formulario', formulario);
 };

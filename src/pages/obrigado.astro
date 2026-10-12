@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Rodape from '../components/Rodape.astro';
+---
+<Base title="Pedido recebido: JornadaPet" description="Recebemos seu pedido de convite para a JornadaPet." noindex>
+  <div x-data="pagina">
+    <Nav />
+    <main id="conteudo" class="mx-auto max-w-2xl px-4 py-24 sm:px-6">
+      <h1 class="text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">Recebemos seu pedido!</h1>
+      <p class="mt-4 text-[18px] leading-relaxed">A gente chama você no WhatsApp nos próximos dias para conversar e enviar o seu convite.</p>
+      <a href="/" class="cta r-ctl mt-8 inline-flex items-center gap-2 px-5 py-3.5 text-[16px] font-semibold">Voltar para a página inicial</a>
+    </main>
+    <Rodape />
+  </div>
+</Base>

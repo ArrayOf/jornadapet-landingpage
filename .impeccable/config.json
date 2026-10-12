@@ -131,6 +131,42 @@
         "value": "instrument sans",
         "createdAt": "2026-10-12T13:36:28.983Z",
         "reason": "Instrument Sans é a fonte de texto definida no DESIGN.md do projeto (typography.body)"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgba(24,24,27,.45)",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-001-landing-page.html"
+        ],
+        "createdAt": "2026-10-12T13:48:06.088Z",
+        "reason": "Claude (landing): protótipo v1 é histórico e congelado na NT-001; não deve ser reescrito"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "3px",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-001-landing-page.html"
+        ],
+        "createdAt": "2026-10-12T13:48:06.205Z",
+        "reason": "Claude (landing): protótipo v1 é histórico e congelado na NT-001; não deve ser reescrito"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-001-landing-page.html"
+        ],
+        "createdAt": "2026-10-12T13:48:06.298Z",
+        "reason": "Claude (landing): protótipo v1 é histórico e congelado na NT-001; não deve ser reescrito"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "docs/notas-tecnicas/prototipos/NT-001-landing-page-v2.html"
+        ],
+        "createdAt": "2026-10-12T13:48:06.395Z",
+        "reason": "Claude (landing): escala 12/14/16/18/20/28 + clamp é a do DESIGN.md, consolidada na NT-001 §11 após o próprio hook apontar a anterior"
       }
     ]
   }

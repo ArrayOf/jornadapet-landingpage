@@ -43,3 +43,15 @@ test('o símbolo é a cabeça do mascote (NT-002), sem fonte de ícones', async 
   expect(await simbolo.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
   expect(await page.locator('link[href*="phosphor"], .ph, svg[data-simbolo]').count()).toBe(0);
 });
+
+test('fora da página inicial, "Quero testar" leva ao formulário da página inicial', async ({ page, isMobile }) => {
+  await page.goto('/privacidade');
+  if (isMobile) {
+    await page.getByRole('button', { name: 'Abrir menu' }).click();
+    await page.locator('#menu-mobile').getByRole('link', { name: 'Quero testar' }).click();
+  } else {
+    await page.locator('header').getByRole('link', { name: 'Quero testar' }).click();
+  }
+  await expect(page).toHaveURL(/\/#participe$/);
+  await expect(page.locator('#participe form')).toBeVisible();
+});

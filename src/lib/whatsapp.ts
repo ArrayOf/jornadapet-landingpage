@@ -2,7 +2,7 @@
 export function digitosWhatsapp(entrada: string): string {
   let d = entrada.replace(/\D/g, '');
   if (d.length > 11 && d.startsWith('55')) d = d.slice(2);
-  if (d.length > 11 && d.startsWith('0')) d = d.slice(1);
+  if (d.startsWith('0')) d = d.slice(1);
   return d.slice(0, 11);
 }
 
@@ -14,7 +14,7 @@ export function mascararWhatsapp(entrada: string): string {
   return d;
 }
 
-/** DDD + 8 ou 9 dígitos. */
+/** DDD válido (dois dígitos de 1 a 9) + celular de 9 dígitos começando em 9 ou fixo de 8 começando em 2 a 5. */
 export function whatsappValido(entrada: string): boolean {
-  return /^\d{10,11}$/.test(digitosWhatsapp(entrada));
+  return /^[1-9][1-9](9\d{8}|[2-5]\d{7})$/.test(digitosWhatsapp(entrada));
 }

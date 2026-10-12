@@ -36,7 +36,8 @@ export function formulario(endpoint: string, chave: string, urlObrigado: string)
         this.primeiroNome = this.f.nome.trim().split(/\s+/)[0] ?? '';
         this.whatsEnviado = mascararWhatsapp(this.f.whatsapp);
         this.status = 'ok';
-        this.$nextTick(() => this.$refs.sucesso?.focus());
+        // x-show só exibe o bloco depois do tick; o foco espera o próximo quadro.
+        this.$nextTick(() => requestAnimationFrame(() => this.$refs.sucesso?.focus()));
       } else {
         this.status = 'erro';
       }

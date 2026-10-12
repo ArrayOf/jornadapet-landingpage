@@ -26,6 +26,7 @@ test('envio com sucesso: corpo certo, agradece pelo primeiro nome e repete o Wha
   await preencher(page);
   await page.getByRole('button', { name: 'Pedir meu convite' }).click();
   await expect(page.getByRole('heading', { name: 'Recebemos, Camila!' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Recebemos, Camila!' })).toBeFocused();
   await expect(page.getByText('(19) 99876-1234')).toBeVisible();
   expect(corpo).toMatchObject({ access_key: 'chave-de-teste', nome: 'Camila Duarte', whatsapp: '(19) 99876-1234', perfil: 'Adestramento', cidade: 'Campinas, SP', utm_source: 'instagram', ref: 'marcos' });
 });
@@ -85,4 +86,28 @@ test('barra fixa some quando o formulário está na tela', async ({ page, isMobi
   await expect(page.locator('.cta', { hasText: 'Quero testar' }).last()).toBeVisible();
   await page.locator('#participe form').scrollIntoViewIfNeeded();
   await expect(page.locator('[x-show*="formVisivel"] .cta')).toBeHidden();
+});
+
+test('link da política no aceite abre em nova aba (não perde o que foi digitado)', async ({ page }) => {
+  await page.goto('/#participe');
+  const link = page.locator('#participe form').getByRole('link', { name: /Política de privacidade/ });
+  await expect(link).toHaveAttribute('target', '_blank');
+  await expect(link).toHaveAttribute('rel', /noopener/);
+});
+
+test('sem JS, número sem DDD não é enviado', async ({ browser }) => {
+  const ctx = await browser.newContext({ javaScriptEnabled: false });
+  const page = await ctx.newPage();
+  let enviou = false;
+  await page.route(SERVICO, async (r) => { enviou = true; await r.fulfill({ status: 303, headers: { location: '/obrigado' } }); });
+  await page.goto('/#participe');
+  await page.getByLabel('Seu nome').fill('Camila Duarte');
+  await page.getByLabel('WhatsApp', { exact: true }).fill('98765-4321');
+  await page.locator('input[name="perfil"][value="Adestramento"]').check({ force: true });
+  await page.getByLabel('Cidade e estado').fill('Campinas, SP');
+  await page.getByLabel(/Aceito ser contatado/).check();
+  await page.getByRole('button', { name: 'Pedir meu convite' }).click();
+  expect(await page.getByLabel('WhatsApp', { exact: true }).evaluate((i: HTMLInputElement) => i.validity.valid)).toBe(false);
+  expect(enviou).toBe(false);
+  await ctx.close();
 });

@@ -9,6 +9,7 @@ describe('digitosWhatsapp', () => {
     ['011 98765-4321', '11987654321'],
     ['(11)98765 4321', '11987654321'],
     ['(11) 3456-7890', '1134567890'],
+    ['011 3456-7890', '1134567890'],
     ['11 98765-43219999', '11987654321'],
     ['', ''],
   ])('%s → %s', (entrada, esperado) => { expect(digitosWhatsapp(entrada)).toBe(esperado); });
@@ -35,5 +36,5 @@ describe('whatsappValido', () => {
   it.each(['(11) 98765-4321', '+55 11 98765-4321', '011 98765-4321', '(11) 3456-7890'])('aceita %s', (v) => {
     expect(whatsappValido(v)).toBe(true);
   });
-  it.each(['98765-4321', '(11) 9876', '', 'abc'])('recusa %s', (v) => { expect(whatsappValido(v)).toBe(false); });
+  it.each(['98765-4321', '(11) 9876', '', 'abc', '(11) 9876-5432', '(00) 00000-0000', '(10) 98765-4321', '(11) 1234-5678', '(11) 88765-4321'])('recusa %s', (v) => { expect(whatsappValido(v)).toBe(false); });
 });

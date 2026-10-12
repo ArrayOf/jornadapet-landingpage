@@ -1,4 +1,5 @@
 ---
+import { chaveDoFormulario } from '../lib/config';
 import { Icon } from 'astro-icon/components';
 import { PERFIS } from '../lib/validacao';
 import { CHAVES_DE_ORIGEM } from '../lib/utm';
@@ -6,7 +7,7 @@ import { TEXTO_DO_ACEITE } from '../lib/formulario';
 import { CONTATO_EMAIL } from '../data/conteudo';
 
 const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? 'https://api.web3forms.com/submit';
-const chave = import.meta.env.PUBLIC_FORM_ACCESS_KEY ?? '';
+const chave = chaveDoFormulario(import.meta.env.PUBLIC_FORM_ACCESS_KEY, import.meta.env.PUBLIC_INDEXAR === 'true');
 const urlObrigado = new URL('/obrigado', Astro.site).toString();
 const args = JSON.stringify([endpoint, chave, urlObrigado]).slice(1, -1);
 const beneficios = [
@@ -31,9 +32,9 @@ const beneficios = [
     </div>
 
     <div class="glass r-card p-5 sm:p-8" x-data={`formulario(${args})`} @perfil.window="f.perfil = $event.detail">
-      <div x-cloak x-show="status === 'ok'" x-ref="sucesso" tabindex="-1" role="status" class="flex min-h-[420px] flex-col items-start justify-center">
+      <div x-cloak x-show="status === 'ok'" role="status" class="flex min-h-[420px] flex-col items-start justify-center">
         <span class="grid size-14 place-items-center rounded-full bg-mint text-accent"><Icon name="ph:check-circle-fill" class="size-8" aria-hidden="true" /></span>
-        <h3 class="mt-5 break-words text-[28px] font-bold">Recebemos, <span x-text="primeiroNome"></span>!</h3>
+        <h3 x-ref="sucesso" tabindex="-1" class="mt-5 break-words text-[28px] font-bold focus:outline-none">Recebemos, <span x-text="primeiroNome"></span>!</h3>
         <p class="mt-2 max-w-[38ch] text-[16px] leading-relaxed">Vamos chamar você no WhatsApp <span class="font-semibold text-ink" x-text="whatsEnviado"></span> nos próximos dias.</p>
         <button type="button" class="mt-6 text-[14px] font-medium text-ink underline decoration-line decoration-2 hover:decoration-accent" @click="recomecar()">Enviar outro contato</button>
       </div>
@@ -54,7 +55,7 @@ const beneficios = [
         </div>
         <div class="space-y-2">
           <label for="f-whats" class="block text-[14px] font-semibold text-ink">WhatsApp</label>
-          <input id="f-whats" name="whatsapp" type="tel" required pattern="[\d\s\(\)\+\-]{10,20}" inputmode="tel" autocomplete="tel-national" placeholder="(11) 98765-4321" x-model="f.whatsapp" @input="mascarar()" @blur="tocar('whatsapp')" :aria-invalid="(!!err.whatsapp).toString()" aria-describedby="h-whats e-whats" class="field r-ctl w-full px-4 py-3 text-[16px]" />
+          <input id="f-whats" name="whatsapp" type="tel" required pattern="[\s\(\)\+\-]*(?:\d[\s\(\)\+\-]*){10,13}" inputmode="tel" autocomplete="tel-national" placeholder="(11) 98765-4321" x-model="f.whatsapp" @input="mascarar()" @blur="tocar('whatsapp')" :aria-invalid="(!!err.whatsapp).toString()" aria-describedby="h-whats e-whats" class="field r-ctl w-full px-4 py-3 text-[16px]" />
           <p id="h-whats" class="text-[14px] text-mute">Usamos só para falar com você sobre o teste.</p>
           <p id="e-whats" aria-live="polite" class="text-[14px] text-danger" x-text="err.whatsapp ?? ''"></p>
         </div>
@@ -79,7 +80,7 @@ const beneficios = [
         <div class="space-y-2">
           <label class="flex min-h-11 items-start gap-3 text-[14px] leading-snug">
             <input type="checkbox" id="f-aceite" name="aceite" value="sim" required x-model="f.aceite" @change="tocar('aceite')" :aria-invalid="(!!err.aceite).toString()" aria-describedby="e-aceite" class="mt-0.5 size-5 shrink-0 accent-[var(--accent)]" />
-            <span>{TEXTO_DO_ACEITE} <a href="/privacidade" class="font-medium text-ink underline">Política de privacidade</a></span>
+            <span>{TEXTO_DO_ACEITE} <a href="/privacidade" target="_blank" rel="noopener" class="font-medium text-ink underline">Política de privacidade<span class="sr-only"> (abre em nova aba)</span></a></span>
           </label>
           <p id="e-aceite" aria-live="polite" class="text-[14px] text-danger" x-text="err.aceite ?? ''"></p>
         </div>

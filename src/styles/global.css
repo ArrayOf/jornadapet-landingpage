@@ -112,6 +112,7 @@ html.js:not(.rm) [data-reveal].in { transform: none; }
 .stage-card[data-on="false"] { opacity: 0; transform: translateY(14px) scale(.98); filter: blur(6px); pointer-events: none; }
 html.rm .stage-card { transition: none; filter: none !important; }
 html.no-js .palco { min-height: 0; }
+html.no-js .palco > p[x-cloak] { display: block !important; }
 html.no-js .stage-card { position: relative; inset: auto; opacity: 1 !important; transform: none !important; filter: none !important; pointer-events: auto !important; margin-top: 1rem; }
 .step-progress { transform-origin: left; transform: scaleX(0); }
 html:not(.rm) .step-progress.run { animation: encher var(--dur, 6s) linear forwards; }

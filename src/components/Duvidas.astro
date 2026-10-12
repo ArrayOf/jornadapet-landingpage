@@ -1,0 +1,23 @@
+---
+import { Icon } from 'astro-icon/components';
+import { PERGUNTAS } from '../data/conteudo';
+---
+<section id="perguntas" class="scroll-mt-20 bg-surface py-20 sm:py-28">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <h2 class="text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.05]">Dúvidas comuns.</h2>
+      <p class="mt-4 max-w-[36ch] text-[18px] leading-relaxed">Ficou outra dúvida? Peça seu convite e pergunte na conversa pelo WhatsApp.</p>
+    </div>
+    <div class="divide-y divide-line border-y border-line">
+      {PERGUNTAS.map((q, i) => (
+        <details name="duvidas" open={i === 0}>
+          <summary class="flex w-full cursor-pointer items-center justify-between gap-6 py-5 text-left text-[18px] font-semibold text-ink hover:text-accent">
+            <span>{q.pergunta}</span>
+            <Icon name="ph:plus" class="mais size-5 shrink-0 transition-[rotate] duration-300" aria-hidden="true" />
+          </summary>
+          <p class="max-w-[60ch] pb-6 text-[16px] leading-relaxed">{q.resposta}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

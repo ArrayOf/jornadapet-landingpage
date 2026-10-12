@@ -10,6 +10,7 @@ import ParaQuem from '../components/ParaQuem.astro';
 import EmEstudo from '../components/EmEstudo.astro';
 import Sobre from '../components/Sobre.astro';
 import Participe from '../components/Participe.astro';
+import Duvidas from '../components/Duvidas.astro';
 ---
 <Base title="JornadaPet: agenda e clientes para adestradores de cães" description="Organize tutores, pets, sessões e valores a receber do seu trabalho de adestramento no Telegram, sem instalar outro app. Acesso por convite.">
   <div x-data="pagina" :class="{ 'overflow-hidden': menu }">
@@ -23,6 +24,7 @@ import Participe from '../components/Participe.astro';
       <EmEstudo />
       <Sobre />
       <Participe />
+      <Duvidas />
     </main>
     <Rodape />
   </div>

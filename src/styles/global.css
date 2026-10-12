@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-display: var(--f-display);
+  --font-sans: var(--f-sans);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-mute: var(--mute);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-caramelo: var(--caramelo);
+  --color-mint: var(--mint);
+  --color-butter: var(--butter);
+  --color-peach: var(--peach);
+  --color-sky: var(--sky);
+  --color-lilac: var(--lilac);
+  --color-danger: var(--danger);
+}
+
+/* Paleta E (DESIGN.md). mint = clientes, sky = agenda, butter = a receber, peach = falta, lilac = em estudo. */
+:root {
+  --f-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --f-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --bg: #f4f4f6; --surface: #ffffff; --ink: #23251f; --body: #45473f; --mute: #676a60; --line: #e2e2e6;
+  --accent: #3f5a2c; --accent-ink: #ffffff; --danger: #b42318; --caramelo: #d17c3a;
+  --mint: #e1e7d6; --butter: #f2e2cf; --peach: #efdcd2; --sky: #e0e0ea; --lilac: #e7e4ec;
+  --blob-1: #ecd2b2; --blob-2: #cdd6bd; --blob-3: #dcdce6; --blob-op: .9;
+  --glass: rgba(255,255,255,.58); --glass-edge: rgba(255,255,255,.85); --glass-hi: rgba(255,255,255,.9);
+  --shadow: 0 18px 40px -22px rgba(64,48,32,.35);
+  --cta: #3f5a2c; --cta-ink: #ffffff;
+  color-scheme: light;
+}
+.dark {
+  --bg: #151613; --surface: #1d1f1a; --ink: #f1f2ec; --body: #cfd1c7; --mute: #a0a395; --line: #2e3128;
+  --accent: #a3c47f; --accent-ink: #17200f; --danger: #ff8a80; --caramelo: #e09a5f;
+  --mint: #283222; --butter: #3a2e20; --peach: #3a2823; --sky: #282a33; --lilac: #2d2a33;
+  --blob-1: #5c3f22; --blob-2: #34452a; --blob-3: #2c2d3a; --blob-op: .55;
+  --glass: rgba(32,32,36,.55); --glass-edge: rgba(255,255,255,.10); --glass-hi: rgba(255,255,255,.08);
+  --shadow: 0 18px 40px -22px rgba(0,0,0,.7);
+  --cta: #a3c47f; --cta-ink: #17200f;
+  color-scheme: dark;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; scroll-padding-top: 5rem; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; scrollbar-color: var(--line) transparent; }
+  html.rm { scroll-behavior: auto; }
+  a, button, label, input, select, summary { touch-action: manipulation; }
+  body { background: var(--bg); color: var(--body); font-family: var(--f-sans); }
+  h1, h2, h3, .display { font-family: var(--f-display); color: var(--ink); text-wrap: balance; letter-spacing: -0.025em; }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--mint); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  input, select, textarea { caret-color: var(--accent); }
+  a { text-underline-offset: 3px; }
+}
+
+.r-card { border-radius: 16px; }
+.r-ctl { border-radius: 12px; }
+
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 var(--glass-hi), var(--shadow);
+}
+.solid .glass { background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none; border-color: var(--line); }
+
+.blob { position: absolute; border-radius: 9999px; filter: blur(48px); opacity: var(--blob-op); pointer-events: none; will-change: transform; }
+.blob.b1 { background: var(--blob-1); } .blob.b2 { background: var(--blob-2); } .blob.b3 { background: var(--blob-3); }
+
+.cta { background: var(--cta); color: var(--cta-ink); transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s cubic-bezier(.16,1,.3,1); }
+.cta:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -12px color-mix(in oklab, var(--cta) 70%, transparent); }
+.cta:active { transform: translateY(0) scale(.98); }
+.cta .seta { transition: transform .25s cubic-bezier(.16,1,.3,1); }
+.cta:hover .seta { transform: translateX(3px); }
+
+/* Motion: conteúdo nunca começa invisível; hero e revelação só deslizam (spec §5). */
+@keyframes subir { from { transform: translateY(14px); } to { transform: none; } }
+@keyframes pousar { from { opacity: 0; transform: translateY(16px) rotate(var(--r,0deg)) scale(.97); } to { opacity: 1; transform: rotate(var(--r,0deg)); } }
+@keyframes flutuar { 0%,100% { transform: rotate(var(--r,0deg)) translateY(0); } 50% { transform: rotate(var(--r,0deg)) translateY(-5px); } }
+@keyframes derivar { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-28px,22px) scale(1.12); } }
+@keyframes encher { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.note { transform: rotate(var(--r,0deg)); }
+html:not(.rm) .hero-in > * { animation: subir .8s cubic-bezier(.16,1,.3,1) both; }
+html:not(.rm) .hero-in > *:nth-child(2) { animation-delay: .07s; }
+html:not(.rm) .hero-in > *:nth-child(3) { animation-delay: .14s; }
+html:not(.rm) .hero-in > *:nth-child(4) { animation-delay: .21s; }
+html:not(.rm) .hero-photo { animation: subir 1s cubic-bezier(.16,1,.3,1) .1s both; }
+html:not(.rm) .note { animation: pousar .8s cubic-bezier(.16,1,.3,1) both, flutuar 7s ease-in-out infinite; }
+html:not(.rm) .note.n1 { animation-delay: .45s, 1.25s; }
+html:not(.rm) .note.n2 { animation-delay: .65s, 1.6s; }
+html:not(.rm) .blob { animation: derivar 16s ease-in-out infinite; }
+html:not(.rm) .blob.b2 { animation-duration: 19s; animation-direction: reverse; }
+html:not(.rm) .blob.b3 { animation-duration: 23s; }
+
+html.js:not(.rm) [data-reveal] { transform: translateY(18px); transition: transform .8s cubic-bezier(.16,1,.3,1); transition-delay: calc(var(--i, 0) * 90ms); }
+html.js:not(.rm) [data-reveal].in { transform: none; }
+
+/* Passo a passo. Sem JS, os três painéis aparecem empilhados. */
+.stage-card { transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1), filter .55s cubic-bezier(.16,1,.3,1); }
+.stage-card[data-on="false"] { opacity: 0; transform: translateY(14px) scale(.98); filter: blur(6px); pointer-events: none; }
+html.rm .stage-card { transition: none; filter: none !important; }
+html.no-js .palco { min-height: 0; }
+html.no-js .stage-card { position: relative; inset: auto; opacity: 1 !important; transform: none !important; filter: none !important; pointer-events: auto !important; margin-top: 1rem; }
+.step-progress { transform-origin: left; transform: scaleX(0); }
+html:not(.rm) .step-progress.run { animation: encher var(--dur, 6s) linear forwards; }
+html.rm .step-progress.run { transform: scaleX(1); }
+.paused .step-progress.run { animation-play-state: paused; }
+
+.bento-tile img { transition: transform .9s cubic-bezier(.16,1,.3,1); }
+html:not(.rm) .bento-tile:hover img { transform: scale(1.04); }
+
+.field { background: var(--surface); border: 1px solid var(--line); color: var(--ink); transition: border-color .2s, box-shadow .2s; }
+.field::placeholder { color: var(--mute); }
+.field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 22%, transparent); }
+.field[aria-invalid="true"] { border-color: var(--danger); }
+.chip-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.chip-opt span { border: 1px solid var(--line); background: var(--surface); color: var(--body); transition: background .2s, color .2s, border-color .2s; }
+.chip-opt input:checked + span { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.chip-opt input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+details[open] > summary .mais { rotate: 45deg; }
+summary { list-style: none; } summary::-webkit-details-marker { display: none; }
+
+[x-cloak] { display: none !important; }

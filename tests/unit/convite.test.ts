@@ -237,6 +237,15 @@ describe('tratarConvite: aviso no Telegram', () => {
     }
   });
 
+  it('espaços ou quebra de linha colados no token e no chat são ignorados', async () => {
+    const f = servicos();
+    const d = depois();
+    await tratarConvite(json(valido), { ...env, TELEGRAM_BOT_TOKEN: ' tg-token\n', TELEGRAM_CHAT_ID: ' -100123 ' }, f as unknown as typeof fetch, d.aguardar);
+    await d.terminar();
+    const [, init] = chamadas(f, TELEGRAM)[0];
+    expect(JSON.parse(init.body as string).chat_id).toBe('-100123');
+  });
+
   it('sem token ou chat configurado, só grava (aviso é opcional)', async () => {
     const f = servicos();
     const d = depois();

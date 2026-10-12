@@ -77,12 +77,12 @@ function textoDoAviso(linha: Record<string, string>): string {
   ].join('\n');
 }
 
-async function avisarNoTelegram(linha: Record<string, string>, env: Ambiente, fetchFn: typeof fetch): Promise<void> {
+async function avisarNoTelegram(linha: Record<string, string>, token: string, chat: string, fetchFn: typeof fetch): Promise<void> {
   try {
-    const r = await fetchFn(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    const r = await fetchFn(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT_ID, text: textoDoAviso(linha), disable_web_page_preview: true }),
+      body: JSON.stringify({ chat_id: chat, text: textoDoAviso(linha), disable_web_page_preview: true }),
     });
     if (!r.ok) console.error('convite: Telegram respondeu', r.status, await r.text().catch(() => ''));
   } catch (e) {
@@ -157,6 +157,9 @@ export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof
     return falha(502);
   }
   // O aviso roda depois da resposta: quem envia não espera o Telegram, e uma falha dele não desfaz o pedido.
-  if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) aguardar(avisarNoTelegram(linha, env, fetchFn));
+  // trim: espaço ou quebra de linha colados no painel fazem o Telegram recusar.
+  const tokenTelegram = env.TELEGRAM_BOT_TOKEN?.trim();
+  const chatTelegram = env.TELEGRAM_CHAT_ID?.trim();
+  if (tokenTelegram && chatTelegram) aguardar(avisarNoTelegram(linha, tokenTelegram, chatTelegram, fetchFn));
   return querJson ? json({ success: true }) : redirecionar('/obrigado');
 }

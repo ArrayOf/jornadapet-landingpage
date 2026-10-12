@@ -1,7 +1,7 @@
 import { TEXTO_DO_ACEITE } from '../lib/formulario';
 import { CHAVES_DE_ORIGEM } from '../lib/utm';
 import { validar, type Dados } from '../lib/validacao';
-import { digitosWhatsapp } from '../lib/whatsapp';
+import { digitosWhatsapp, mascararWhatsapp } from '../lib/whatsapp';
 
 /** Binding de limite de envios do Cloudflare (ratelimits no wrangler.jsonc). */
 export interface Limitador { limit(opcoes: { key: string }): Promise<{ success: boolean }> }
@@ -12,7 +12,13 @@ export interface Ambiente {
   SUPABASE_SECRET_KEY: string;
   TURNSTILE_SECRET_KEY: string;
   LIMITE_CONVITE?: Limitador;
+  /** Aviso de cada pedido num grupo do Telegram (opcional: sem os dois, só grava). */
+  TELEGRAM_BOT_TOKEN?: string;
+  TELEGRAM_CHAT_ID?: string;
 }
+
+/** Deixa uma tarefa rodando depois da resposta (ctx.waitUntil no Worker). */
+export type Aguardar = (tarefa: Promise<unknown>) => void;
 
 const VERIFICA_TURNSTILE = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 
@@ -57,8 +63,35 @@ async function turnstileOk(token: string, env: Ambiente, ip: string, fetchFn: ty
   }
 }
 
+function textoDoAviso(linha: Record<string, string>): string {
+  const origem = CHAVES_DE_ORIGEM.filter((k) => linha[k]).map((k) => `${k}: ${linha[k]}`);
+  return [
+    'Novo pedido de convite',
+    '',
+    `Nome: ${linha.nome}`,
+    `WhatsApp: ${mascararWhatsapp(linha.whatsapp)}`,
+    `Conversar: https://wa.me/55${linha.whatsapp}`,
+    `Perfil: ${linha.perfil}`,
+    `Cidade: ${linha.cidade}`,
+    ...(origem.length ? ['', 'Origem', ...origem] : []),
+  ].join('\n');
+}
+
+async function avisarNoTelegram(linha: Record<string, string>, env: Ambiente, fetchFn: typeof fetch): Promise<void> {
+  try {
+    const r = await fetchFn(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: env.TELEGRAM_CHAT_ID, text: textoDoAviso(linha), disable_web_page_preview: true }),
+    });
+    if (!r.ok) console.error('convite: Telegram respondeu', r.status, await r.text().catch(() => ''));
+  } catch (e) {
+    console.error('convite: falha de rede com o Telegram', e);
+  }
+}
+
 /** POST /api/convite: valida de novo no servidor e grava em public.convites no Supabase. */
-export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof fetch = fetch): Promise<Response> {
+export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof fetch = fetch, aguardar: Aguardar = () => {}): Promise<Response> {
   if (req.method !== 'POST') return new Response(null, { status: 405, headers: { Allow: 'POST' } });
   // Envio por fetch (JS) pede JSON; o formulário comum (sem JS) espera redirecionamento.
   const querJson = (req.headers.get('Accept') ?? '').includes('application/json') || (req.headers.get('Content-Type') ?? '').includes('application/json');
@@ -123,5 +156,7 @@ export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof
     console.error('convite: falha de rede com o Supabase', e);
     return falha(502);
   }
+  // O aviso roda depois da resposta: quem envia não espera o Telegram, e uma falha dele não desfaz o pedido.
+  if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) aguardar(avisarNoTelegram(linha, env, fetchFn));
   return querJson ? json({ success: true }) : redirecionar('/obrigado');
 }

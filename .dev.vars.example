@@ -4,3 +4,6 @@ SUPABASE_URL=https://stmjxrciznwdbemgoiyk.supabase.co
 SUPABASE_SECRET_KEY=
 # Chave secreta de teste do Turnstile (sempre aceita); em produção, a do widget real como Secret.
 TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
+# Aviso de novo pedido no Telegram (opcional; em produção, os dois como Secret).
+TELEGRAM_BOT_TOKEN=
+TELEGRAM_CHAT_ID=

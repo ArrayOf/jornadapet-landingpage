@@ -713,3 +713,29 @@ JS da spec §2.6. Um POST sem JS que chegue mesmo assim vai para `/nao-enviado`.
   `tests/unit/turnstile.test.ts`; nos e2e, `tests/e2e/fixtures.ts` troca o script do Turnstile por um
   falso para não depender da rede.
 
+## 17. Política de privacidade (12/10/2026)
+
+Texto final em `/privacidade` (`PENDENTE = false`), com as respostas do Thiago: controladora
+ArrayOf, CNPJ 35.998.763/0001-58; canal pelo e-mail de contato; guarda de 12 meses; Supabase em
+São Paulo. Cita os três operadores (Cloudflare, Supabase, Telegram), as bases legais (consentimento
+para o contato, legítimo interesse para a proteção contra robôs), a transferência internacional
+(Cloudflare e Telegram), o `sessionStorage` da origem, os direitos do art. 18, o prazo de resposta
+de 15 dias e a ANPD.
+
+O aceite passou a ser "Aceito ser contatado(a) pela JornadaPet pelo WhatsApp sobre o teste. Li a
+Política de privacidade." e deixou de prometer "não compartilhar", o que não era verdade com
+operadores. Esse texto é o que o servidor grava em `aceite_texto`.
+
+**Recomendação:** revisão do texto por um advogado antes de divulgar em escala.
+
+## 18. Aviso de novo pedido no Telegram (12/10/2026)
+
+Depois de gravar um pedido novo, o Worker manda uma mensagem para um grupo dos sócios pelo Bot API
+(`sendMessage`): nome, WhatsApp com link `wa.me`, perfil, cidade e origem. Roda em `ctx.waitUntil`,
+depois da resposta: quem envia não espera o Telegram, e uma falha dele só vai para o log. Duplicado
+do dia, isca e falha no Supabase não avisam.
+
+- **Configuração (opcional):** `TELEGRAM_BOT_TOKEN` e `TELEGRAM_CHAT_ID`, os dois como **Secret**
+  do Worker (Secret não é apagado no deploy). Sem eles, o Worker só grava.
+- **Testes:** quatro casos em `tests/unit/convite.test.ts`.
+

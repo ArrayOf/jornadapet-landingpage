@@ -5,6 +5,7 @@ import { TEXTO_DO_ACEITE } from '../../src/lib/formulario';
 const SITE = 'https://site.test';
 const VERIFICA = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const SUPABASE = 'https://proj.supabase.co/rest/v1/convites';
+const TELEGRAM = 'https://api.telegram.org/bottg-token/sendMessage';
 
 const liberado = { limit: vi.fn(async () => ({ success: true })) };
 const env: Ambiente = { SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_SECRET_KEY: 'sb_secret_abc', TURNSTILE_SECRET_KEY: 'ts_secret', LIMITE_CONVITE: liberado };
@@ -14,10 +15,11 @@ const CAB = { 'Content-Type': 'application/json', Accept: 'application/json', Or
 const json = (corpo: unknown, cab: Record<string, string> = CAB) => new Request(`${SITE}/api/convite`, { method: 'POST', headers: cab, body: JSON.stringify(corpo) });
 
 /** Simula o Turnstile e o Supabase. */
-function servicos({ turnstile = true, supabase = 201, corpoSupabase = '' } = {}) {
+function servicos({ turnstile = true, supabase = 201, corpoSupabase = '', telegram = 200 } = {}) {
   return vi.fn(async (url: string, _init?: RequestInit) => {
     if (url === VERIFICA) return Response.json({ success: turnstile });
     if (url === SUPABASE) return new Response(corpoSupabase || null, { status: supabase });
+    if (url === TELEGRAM) return Response.json({ ok: telegram === 200 }, { status: telegram });
     throw new Error(`URL inesperada: ${url}`);
   });
 }
@@ -190,5 +192,57 @@ describe('tratarConvite: entradas inválidas e falhas', () => {
     expect((await tratar(quebrado, f)).status).toBe(400);
     expect((await tratar(json({ ...valido, nome: 'a'.repeat(20_000) }), f)).status).toBe(413);
     expect(chamadas(f, SUPABASE)).toHaveLength(0);
+  });
+});
+
+describe('tratarConvite: aviso no Telegram', () => {
+  const comTelegram: Ambiente = { ...env, TELEGRAM_BOT_TOKEN: 'tg-token', TELEGRAM_CHAT_ID: '-100123' };
+  /** Coleta o que o Worker deixaria rodando depois da resposta (ctx.waitUntil). */
+  function depois() {
+    const pendentes: Promise<unknown>[] = [];
+    return { aguardar: (p: Promise<unknown>) => { pendentes.push(p); }, terminar: () => Promise.all(pendentes) };
+  }
+
+  it('pedido gravado: avisa o grupo com os dados e o link do WhatsApp, sem atrasar a resposta', async () => {
+    const f = servicos();
+    const d = depois();
+    const r = await tratarConvite(json(valido), comTelegram, f as unknown as typeof fetch, d.aguardar);
+    expect(await r.json()).toEqual({ success: true });
+    await d.terminar();
+    const [, init] = chamadas(f, TELEGRAM)[0];
+    const corpo = JSON.parse(init.body as string) as { chat_id: string; text: string; disable_web_page_preview: boolean };
+    expect(corpo.chat_id).toBe('-100123');
+    expect(corpo.disable_web_page_preview).toBe(true);
+    for (const trecho of ['Novo pedido de convite', 'Camila Duarte', '(19) 99876-1234', 'https://wa.me/5519998761234', 'Adestramento', 'Campinas, SP', 'utm_source: instagram', 'ref: marcos']) {
+      expect(corpo.text).toContain(trecho);
+    }
+    expect(corpo.text).not.toContain('—');
+  });
+
+  it('Telegram falhando não muda a resposta para quem enviou', async () => {
+    const f = servicos({ telegram: 500 });
+    const d = depois();
+    const r = await tratarConvite(json(valido), comTelegram, f as unknown as typeof fetch, d.aguardar);
+    expect(await r.json()).toEqual({ success: true });
+    await expect(d.terminar()).resolves.toBeDefined();
+  });
+
+  it('duplicado do dia, isca e falha no Supabase não avisam', async () => {
+    for (const [corpo, opcoes] of [[valido, { supabase: 409 }], [{ ...valido, botcheck: 'on' }, {}], [valido, { supabase: 500 }]] as const) {
+      const f = servicos(opcoes);
+      const d = depois();
+      await tratarConvite(json(corpo), comTelegram, f as unknown as typeof fetch, d.aguardar);
+      await d.terminar();
+      expect(chamadas(f, TELEGRAM)).toHaveLength(0);
+    }
+  });
+
+  it('sem token ou chat configurado, só grava (aviso é opcional)', async () => {
+    const f = servicos();
+    const d = depois();
+    expect((await tratarConvite(json(valido), env, f as unknown as typeof fetch, d.aguardar)).status).toBe(200);
+    await d.terminar();
+    expect(chamadas(f, TELEGRAM)).toHaveLength(0);
+    expect(chamadas(f, SUPABASE)).toHaveLength(1);
   });
 });

@@ -1,4 +1,4 @@
-import { CONTATO_EMAIL, SOCIOS } from '../data/conteudo';
+import { SOCIOS } from '../data/conteudo';
 
 export function organizacao(site: URL): object {
   return {
@@ -7,7 +7,7 @@ export function organizacao(site: URL): object {
     name: 'JornadaPet',
     url: new URL('/', site).toString(),
     logo: new URL('/icon-512.png', site).toString(),
-    email: CONTATO_EMAIL,
+    // Sem e-mail até haver domínio próprio: contato@jornadapet.com.br é domínio de terceiro (spec 13/10 §5).
     parentOrganization: { '@type': 'Organization', name: 'ArrayOf', url: 'https://arrayof.com.br' },
     founder: SOCIOS.map((s) => ({ '@type': 'Person', name: s.nome, sameAs: s.linkedin })),
   };

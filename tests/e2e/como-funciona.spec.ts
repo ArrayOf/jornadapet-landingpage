@@ -5,7 +5,7 @@ test('passos aparecem sem JS', async ({ browser }) => {
   const page = await ctx.newPage();
   await page.goto('/');
   const sec = page.locator('#como-funciona');
-  for (const t of ['Tutores e pets com WhatsApp', 'Sessões por dia ou semana', 'Registre o valor combinado', 'Terça, 14 de outubro', 'Pacote de outubro, Thor']) {
+  for (const t of ['Tutores e pets com WhatsApp', 'Veja o dia ou a semana', 'Registre o valor combinado', 'Terça, 14 de outubro', 'Pacote de outubro, Thor']) {
     await expect(sec.getByText(t, { exact: false }).filter({ visible: true }).first()).toBeVisible();
   }
   await ctx.close();

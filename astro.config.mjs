@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import tailwindcss from '@tailwindcss/vite';
 
-const site = process.env.PUBLIC_SITE_URL ?? 'https://jornadapet.com.br';
+const site = process.env.PUBLIC_SITE_URL ?? 'https://jornadapet.arrayof.workers.dev';
 
 export default defineConfig({
   site,

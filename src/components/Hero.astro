@@ -8,12 +8,12 @@ import thorHero from '../assets/thor-hero.jpg';
   <div class="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-8 pb-16 sm:px-6 md:pt-14 lg:grid-cols-[1.25fr_1fr] lg:gap-12 lg:pb-24">
     <div class="hero-in flex flex-col items-start gap-5">
       <span class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-[14px] font-medium text-ink">
-        <Icon name="ph:hammer" class="size-4" aria-hidden="true" /> Em construção, ouvindo adestradores
+        <Icon name="ph:seal-check" class="size-4" aria-hidden="true" /> Em teste com adestradores
       </span>
-      <h1 class="text-[clamp(2.3rem,4.4vw,3.6rem)] font-bold leading-[1.04]">Adestrador: saiba quem já pagou e quem ainda falta.</h1>
-      <p class="max-w-[46ch] text-[18px] leading-relaxed">Clientes, sessões e valores a receber organizados no Telegram. Sem caderno, sem planilha, sem instalar outro app.</p>
+      <h1 class="text-[clamp(2rem,3.6vw,2.75rem)] font-bold leading-[1.04] text-balance">Adestrador: seus clientes, sua agenda e quem ainda falta pagar, num lugar só.</h1>
+      <p class="max-w-[46ch] text-[18px] leading-relaxed">Tudo organizado no Telegram, no celular e no computador. Sem caderno, sem planilha, sem instalar outro app.</p>
       <div class="flex flex-wrap items-center gap-4 pt-1" x-intersect:enter="heroCta = true" x-intersect:leave="heroCta = false">
-        <a href="#participe" class="cta r-ctl inline-flex items-center gap-2 px-5 py-3.5 text-[16px] font-semibold">Quero testar <Icon name="ph:arrow-right" class="seta size-4" aria-hidden="true" /></a>
+        <a href="#participe" class="cta r-ctl inline-flex items-center gap-2 px-5 py-3.5 text-[16px] font-semibold">Quero meu convite <Icon name="ph:arrow-right" class="seta size-4" aria-hidden="true" /></a>
         <a href="#como-funciona" class="text-[16px] font-medium text-ink underline decoration-line decoration-2 hover:decoration-accent">Ver como funciona</a>
       </div>
       <p class="flex items-center gap-2 text-[14px] text-mute"><Icon name="ph:envelope-simple-open" class="size-4 text-accent" aria-hidden="true" /> Acesso por convite. A gente chama você no WhatsApp.</p>
@@ -25,13 +25,13 @@ import thorHero from '../assets/thor-hero.jpg';
       <div class="blob b3 -bottom-6 left-0 size-60"></div>
       <figure class="hero-photo relative ml-auto w-[78%] overflow-hidden r-card" style="aspect-ratio: 5/6">
         <Picture src={thorHero} formats={['avif', 'webp']} widths={[320, 480, 640, 800]} sizes="(min-width: 1024px) 410px, 78vw"
-          alt="Border collie correndo atrás de uma bolinha de tênis durante o treino" class="size-full object-cover" loading="eager" fetchpriority="high" />
+          alt="Border collie correndo atrás de uma bolinha de tênis durante o adestramento" class="size-full object-cover" loading="eager" fetchpriority="high" />
       </figure>
       <div class="note n1 glass r-card absolute bottom-[3%] left-0 w-[78%] max-w-[300px] p-3 text-[14px] leading-snug text-ink" style="--r:-1.5deg"
-        role="img" aria-label="Exemplo: conversa com o bot da JornadaPet no Telegram, com o botão Abrir JornadaPet">
+        role="img" aria-label="Exemplo: conversa com a JornadaPet no Telegram, com o botão Abrir JornadaPet">
         <div class="flex items-center gap-2 border-b border-line/60 pb-2">
           <Simbolo tamanho="sm" forma="circulo" />
-          <div class="leading-tight"><div class="font-semibold">JornadaPet</div><div class="text-[12px] text-mute">bot</div></div>
+          <div class="leading-tight"><div class="font-semibold">JornadaPet</div><div class="text-[12px] text-mute">no Telegram</div></div>
           <Icon name="ph:telegram-logo" class="ml-auto size-[18px] text-mute" aria-hidden="true" />
         </div>
         <div class="mt-2.5 flex flex-col gap-2">

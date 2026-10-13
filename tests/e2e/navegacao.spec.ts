@@ -46,13 +46,13 @@ test('o topo mostra o selo redondo (NT-002) com 42px, sem fonte de ícones', asy
   expect(await page.locator('link[href*="phosphor"], .ph, svg[data-simbolo]').count()).toBe(0);
 });
 
-test('fora da página inicial, "Quero testar" leva ao formulário da página inicial', async ({ page, isMobile }) => {
+test('fora da página inicial, "Quero meu convite" leva ao formulário da página inicial', async ({ page, isMobile }) => {
   await page.goto('/privacidade');
   if (isMobile) {
     await page.getByRole('button', { name: 'Abrir menu' }).click();
-    await page.locator('#menu-mobile').getByRole('link', { name: 'Quero testar' }).click();
+    await page.locator('#menu-mobile').getByRole('link', { name: 'Quero meu convite' }).click();
   } else {
-    await page.locator('header').getByRole('link', { name: 'Quero testar' }).click();
+    await page.locator('header').getByRole('link', { name: 'Quero meu convite' }).click();
   }
   await expect(page).toHaveURL(/\/#participe$/);
   await expect(page.locator('#participe form')).toBeVisible();

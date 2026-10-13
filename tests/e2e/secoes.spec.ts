@@ -4,7 +4,7 @@ test('seções com conteúdo visível sem JS', async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });
   const page = await ctx.newPage();
   await page.goto('/');
-  for (const t of ['O seu dia, aberto no Telegram.', 'Feito primeiro para adestradores.', 'Passeadores e pet sitters', 'O que estamos estudando.', 'Uma empresa pequena, que prefere ouvir antes de vender.', 'Mario Guedes', 'Thiago Filadelfo']) {
+  for (const t of ['O seu dia, aberto no Telegram.', 'Feito primeiro para adestradores de cães.', 'Passeadores e pet sitters', 'O que estamos estudando.', 'Uma empresa pequena, que prefere ouvir antes de vender.', 'Mario Guedes', 'Thiago Filadelfo']) {
     await expect(page.getByText(t).first()).toBeVisible();
   }
   await ctx.close();

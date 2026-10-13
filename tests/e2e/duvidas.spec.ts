@@ -5,7 +5,7 @@ test('dúvidas abrem sem JS e a primeira já vem aberta', async ({ browser }) =>
   const page = await ctx.newPage();
   await page.goto('/#perguntas');
   const itens = page.locator('#perguntas details');
-  await expect(itens).toHaveCount(7);
+  await expect(itens).toHaveCount(8);
   await expect(itens.first()).toHaveAttribute('open', '');
   await page.getByText('Como eu entro?').click();
   await expect(page.getByText('você confirma o celular por SMS uma única vez')).toBeVisible();

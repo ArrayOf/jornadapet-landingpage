@@ -2,10 +2,10 @@ import { expect, test } from './fixtures';
 
 test('hero com o texto da spec, CTA e linha de apoio', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Adestrador: saiba quem já pagou e quem ainda falta.');
-  await expect(page.locator('#topo').getByRole('link', { name: 'Quero testar' })).toHaveAttribute('href', '#participe');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Adestrador: seus clientes, sua agenda e quem ainda falta pagar, num lugar só.');
+  await expect(page.locator('#topo').getByRole('link', { name: 'Quero meu convite' })).toHaveAttribute('href', '#participe');
   await expect(page.getByText('Acesso por convite. A gente chama você no WhatsApp.')).toBeVisible();
-  await expect(page.getByRole('img', { name: /conversa com o bot da JornadaPet/ })).toBeVisible();
+  await expect(page.getByRole('img', { name: /conversa com a JornadaPet no Telegram/ })).toBeVisible();
 });
 
 test('foto do hero carrega com prioridade e sem lazy', async ({ page }) => {

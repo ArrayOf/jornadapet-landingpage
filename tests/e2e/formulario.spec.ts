@@ -66,7 +66,7 @@ test('barra fixa some quando o formulário está na tela', async ({ page, isMobi
   test.skip(!isMobile, 'barra só no celular');
   await page.goto('/');
   await page.locator('#sobre').scrollIntoViewIfNeeded();
-  await expect(page.locator('.cta', { hasText: 'Quero testar' }).last()).toBeVisible();
+  await expect(page.locator('.cta', { hasText: 'Quero meu convite' }).last()).toBeVisible();
   await page.locator('#participe form').scrollIntoViewIfNeeded();
   await expect(page.locator('[x-show*="formVisivel"] .cta')).toBeHidden();
 });

@@ -172,4 +172,8 @@ contador de cliques nos botões; 301 do `workers.dev` para o domínio final pres
 - **SQL 003 depois do deploy:** se o banco ainda não tiver a coluna `codigo_indicacao` (PGRST204),
   o Worker grava o pedido sem o código e registra no log. A ordem certa continua sendo SQL antes
   do push, mas um engano não derruba mais o formulário.
+- **Views ajustadas** (`supabase/004_ajusta_views.sql`, `create or replace`): `atrasados` conta os dias
+  úteis pela coluna `dia` (Brasília) em vez de UTC; `indicacoes` mostra uma linha por par (quem
+  indicou, quem chegou), pelo primeiro pedido de cada um, e não conta quem pediu de novo pelo próprio
+  link (mesmo WhatsApp).
 

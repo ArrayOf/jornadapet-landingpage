@@ -2,6 +2,7 @@ import { TEXTO_DO_ACEITE } from '../lib/formulario';
 import { CHAVES_DE_ORIGEM } from '../lib/utm';
 import { validar, type Dados } from '../lib/validacao';
 import { digitosWhatsapp, mascararWhatsapp } from '../lib/whatsapp';
+import { codigoValido } from '../lib/indicacao';
 
 /** Binding de limite de envios do Cloudflare (ratelimits no wrangler.jsonc). */
 export interface Limitador { limit(opcoes: { key: string }): Promise<{ success: boolean }> }
@@ -63,8 +64,29 @@ async function turnstileOk(token: string, env: Ambiente, ip: string, fetchFn: ty
   }
 }
 
-function textoDoAviso(linha: Record<string, string>): string {
-  const origem = CHAVES_DE_ORIGEM.filter((k) => linha[k]).map((k) => `${k}: ${linha[k]}`);
+/** Chave nova (sb_secret_) vai só no apikey; a service_role antiga é um JWT e vai também no Authorization. */
+function cabecalhosSupabase(chave: string): Record<string, string> {
+  const c: Record<string, string> = { apikey: chave };
+  if (!chave.startsWith('sb_')) c.Authorization = `Bearer ${chave}`;
+  return c;
+}
+
+/** Nome e cidade de quem tem o código de indicação, para o aviso (NT-004 §2). Falha vira undefined. */
+async function quemIndicou(codigo: string, env: Ambiente, fetchFn: typeof fetch): Promise<string | undefined> {
+  try {
+    const url = `${env.SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/convites?select=nome,cidade&codigo_indicacao=eq.${codigo}&limit=1`;
+    const r = await fetchFn(url, { headers: cabecalhosSupabase(env.SUPABASE_SECRET_KEY) });
+    if (!r.ok) return undefined;
+    const [achado] = (await r.json()) as { nome: string; cidade: string }[];
+    return achado ? `Indicação de ${achado.nome} (${achado.cidade})` : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function textoDoAviso(linha: Record<string, string>, indicador?: string): string {
+  const origem = CHAVES_DE_ORIGEM.filter((k) => linha[k]).map((k) =>
+    k === 'ref' && codigoValido(linha[k]) ? (indicador ?? `Indicação: código ${linha[k]}`) : `${k}: ${linha[k]}`);
   return [
     'Novo pedido de convite',
     '',
@@ -77,12 +99,13 @@ function textoDoAviso(linha: Record<string, string>): string {
   ].join('\n');
 }
 
-async function avisarNoTelegram(linha: Record<string, string>, token: string, chat: string, fetchFn: typeof fetch): Promise<void> {
+async function avisarNoTelegram(linha: Record<string, string>, token: string, chat: string, env: Ambiente, fetchFn: typeof fetch): Promise<void> {
   try {
+    const indicador = codigoValido(linha.ref) ? await quemIndicou(linha.ref, env, fetchFn) : undefined;
     const r = await fetchFn(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chat, text: textoDoAviso(linha), disable_web_page_preview: true }),
+      body: JSON.stringify({ chat_id: chat, text: textoDoAviso(linha, indicador), disable_web_page_preview: true }),
     });
     if (!r.ok) console.error('convite: Telegram respondeu', r.status, await r.text().catch(() => ''));
   } catch (e) {
@@ -134,18 +157,17 @@ export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof
     const v = texto(bruto[k]).trim();
     if (v) linha[k] = v.slice(0, 100);
   }
+  const codigo = texto(bruto.codigo_indicacao);
+  if (codigoValido(codigo)) linha.codigo_indicacao = codigo;
 
-  const chave = env.SUPABASE_SECRET_KEY;
-  const cabecalhos: Record<string, string> = { apikey: chave, 'Content-Type': 'application/json', Prefer: 'return=minimal' };
-  // Chave nova (sb_secret_) vai só no apikey; a service_role antiga é um JWT e vai também no Authorization.
-  if (!chave.startsWith('sb_')) cabecalhos.Authorization = `Bearer ${chave}`;
+  const cabecalhos = { ...cabecalhosSupabase(env.SUPABASE_SECRET_KEY), 'Content-Type': 'application/json', Prefer: 'return=minimal' };
 
   try {
     const r = await fetchFn(`${env.SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/convites`, { method: 'POST', headers: cabecalhos, body: JSON.stringify(linha) });
-    // Mesmo WhatsApp no mesmo dia: o índice único do banco recusa; para quem envia, deu certo.
-    if (r.status === 409) return querJson ? json({ success: true }) : redirecionar('/obrigado');
     if (!r.ok) {
       const detalhe = await r.text().catch(() => '');
+      // Mesmo WhatsApp no mesmo dia: o índice recusa e, para quem envia, deu certo. Outro conflito é erro (NT-004 §2).
+      if (r.status === 409 && detalhe.includes('convites_whatsapp_por_dia')) return querJson ? json({ success: true }) : redirecionar('/obrigado');
       console.error('convite: Supabase respondeu', r.status, detalhe);
       // Só o status e o código do Postgres/PostgREST (ex.: 401/42501), para diagnóstico; nunca a mensagem.
       let codigo = '';
@@ -160,6 +182,6 @@ export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof
   // trim: espaço ou quebra de linha colados no painel fazem o Telegram recusar.
   const tokenTelegram = env.TELEGRAM_BOT_TOKEN?.trim();
   const chatTelegram = env.TELEGRAM_CHAT_ID?.trim();
-  if (tokenTelegram && chatTelegram) aguardar(avisarNoTelegram(linha, tokenTelegram, chatTelegram, fetchFn));
+  if (tokenTelegram && chatTelegram) aguardar(avisarNoTelegram(linha, tokenTelegram, chatTelegram, env, fetchFn));
   return querJson ? json({ success: true }) : redirecionar('/obrigado');
 }

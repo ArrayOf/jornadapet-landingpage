@@ -6,6 +6,7 @@ const SITE = 'https://site.test';
 const VERIFICA = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const SUPABASE = 'https://proj.supabase.co/rest/v1/convites';
 const TELEGRAM = 'https://api.telegram.org/bottg-token/sendMessage';
+const BUSCA = 'https://proj.supabase.co/rest/v1/convites?select=nome,cidade&codigo_indicacao=eq.k7m2pq9x&limit=1';
 
 const liberado = { limit: vi.fn(async () => ({ success: true })) };
 const env: Ambiente = { SUPABASE_URL: 'https://proj.supabase.co', SUPABASE_SECRET_KEY: 'sb_secret_abc', TURNSTILE_SECRET_KEY: 'ts_secret', LIMITE_CONVITE: liberado };
@@ -15,11 +16,12 @@ const CAB = { 'Content-Type': 'application/json', Accept: 'application/json', Or
 const json = (corpo: unknown, cab: Record<string, string> = CAB) => new Request(`${SITE}/api/convite`, { method: 'POST', headers: cab, body: JSON.stringify(corpo) });
 
 /** Simula o Turnstile e o Supabase. */
-function servicos({ turnstile = true, supabase = 201, corpoSupabase = '', telegram = 200 } = {}) {
+function servicos({ turnstile = true, supabase = 201, corpoSupabase = '', telegram = 200, indicador = null as { nome: string; cidade: string } | null | 'erro' } = {}) {
   return vi.fn(async (url: string, _init?: RequestInit) => {
     if (url === VERIFICA) return Response.json({ success: turnstile });
     if (url === SUPABASE) return new Response(corpoSupabase || null, { status: supabase });
     if (url === TELEGRAM) return Response.json({ ok: telegram === 200 }, { status: telegram });
+    if (url === BUSCA) return indicador === 'erro' ? new Response('', { status: 500 }) : Response.json(indicador ? [indicador] : []);
     throw new Error(`URL inesperada: ${url}`);
   });
 }
@@ -64,7 +66,7 @@ describe('tratarConvite: gravação', () => {
   });
 
   it('mesmo WhatsApp no mesmo dia (conflito no banco): responde sucesso sem erro', async () => {
-    const f = servicos({ supabase: 409, corpoSupabase: '{"code":"23505","message":"duplicate key"}' });
+    const f = servicos({ supabase: 409, corpoSupabase: '{"code":"23505","message":"duplicate key value violates unique constraint \\"convites_whatsapp_por_dia\\""}' });
     const r = await tratar(json(valido), f);
     expect(r.status).toBe(200);
     expect(await r.json()).toEqual({ success: true });
@@ -253,5 +255,53 @@ describe('tratarConvite: aviso no Telegram', () => {
     await d.terminar();
     expect(chamadas(f, TELEGRAM)).toHaveLength(0);
     expect(chamadas(f, SUPABASE)).toHaveLength(1);
+  });
+});
+
+describe('tratarConvite: indicação', () => {
+  const comTelegram = { ...env, TELEGRAM_BOT_TOKEN: 'tg-token', TELEGRAM_CHAT_ID: '-100123' };
+  async function avisoDe(corpo: object, indicador: { nome: string; cidade: string } | null | 'erro') {
+    const f = servicos({ indicador });
+    const pendentes: Promise<unknown>[] = [];
+    await tratarConvite(json(corpo), comTelegram, f as unknown as typeof fetch, (p) => { pendentes.push(p); });
+    await Promise.all(pendentes);
+    return { f, texto: JSON.parse(chamadas(f, TELEGRAM)[0][1].body as string).text as string };
+  }
+
+  it('grava o código válido e ignora o inválido sem recusar', async () => {
+    const f = servicos();
+    await tratar(json({ ...valido, codigo_indicacao: 'k7m2pq9x' }), f);
+    expect(linhaGravada(f).codigo_indicacao).toBe('k7m2pq9x');
+    const g = servicos();
+    expect((await tratar(json({ ...valido, codigo_indicacao: "x'; drop" }), g)).status).toBe(200);
+    expect(linhaGravada(g)).not.toHaveProperty('codigo_indicacao');
+  });
+
+  it('409 do mesmo WhatsApp no dia é sucesso; outro conflito é erro', async () => {
+    const dia = servicos({ supabase: 409, corpoSupabase: '{"code":"23505","message":"duplicate key value violates unique constraint \\"convites_whatsapp_por_dia\\""}' });
+    expect(await (await tratar(json(valido), dia)).json()).toEqual({ success: true });
+    const outro = servicos({ supabase: 409, corpoSupabase: '{"code":"23505","message":"duplicate key value violates unique constraint \\"outro_indice\\""}' });
+    const r = await tratar(json(valido), outro);
+    expect(r.status).toBe(502);
+    expect(await r.json()).toEqual({ success: false, codigo: '409/23505' });
+  });
+
+  it('aviso traz o nome e a cidade de quem indicou', async () => {
+    const { texto } = await avisoDe({ ...valido, ref: 'k7m2pq9x' }, { nome: 'Camila Duarte', cidade: 'Campinas, SP' });
+    expect(texto).toContain('Indicação de Camila Duarte (Campinas, SP)');
+    expect(texto).not.toContain('ref: k7m2pq9x');
+  });
+
+  it('sem quem indicou, ou com erro na busca, cai no código', async () => {
+    for (const indicador of [null, 'erro'] as const) {
+      const { texto } = await avisoDe({ ...valido, ref: 'k7m2pq9x' }, indicador);
+      expect(texto).toContain('Indicação: código k7m2pq9x');
+    }
+  });
+
+  it('ref que não é código não dispara busca', async () => {
+    const { f, texto } = await avisoDe({ ...valido, ref: 'marcos' }, null);
+    expect(chamadas(f, BUSCA)).toHaveLength(0);
+    expect(texto).toContain('ref: marcos');
   });
 });

@@ -59,3 +59,16 @@ test('metadados no workers.dev, JSON-LD sem e-mail e FAQPage com 8 perguntas', a
   expect(org).not.toHaveProperty('email');
   expect(ld.find((o) => o['@type'] === 'FAQPage').mainEntity).toHaveLength(8);
 });
+
+test('sem token, a página não carrega o Web Analytics', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('script[src*="cloudflareinsights"]')).toHaveCount(0);
+});
+
+test('política cita indicação, armazenamento local e Web Analytics', async ({ page }) => {
+  await page.goto('/privacidade');
+  const main = page.locator('main');
+  for (const t of ['código aleatório de indicação', 'armazenamento local do navegador', 'Cloudflare Web Analytics', 'sem cookies', 'Atualizada em 13 de outubro de 2026.']) {
+    await expect(main).toContainText(t);
+  }
+});

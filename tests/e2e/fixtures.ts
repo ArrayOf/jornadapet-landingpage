@@ -16,6 +16,8 @@ const TURNSTILE_FALSO = `
 export const test = base.extend<{ turnstileFalso: void }>({
   turnstileFalso: [async ({ context }, use) => {
     await context.route('https://challenges.cloudflare.com/turnstile/**', (r) => r.fulfill({ contentType: 'application/javascript', body: TURNSTILE_FALSO }));
+    // Web Analytics: quando o token for preenchido, os testes não dependem da rede.
+    await context.route('https://static.cloudflareinsights.com/**', (r) => r.fulfill({ contentType: 'application/javascript', body: '' }));
     await use();
   }, { auto: true }],
 });

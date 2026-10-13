@@ -9,6 +9,7 @@ const indexar = import.meta.env.PUBLIC_INDEXAR === 'true' && !noindex;
 // build.format 'file' gera /index.html e /privacidade.html; o endereço público não leva a extensão.
 const canonical = new URL(Astro.url.pathname.replace(/(index)?\.html$/, ''), Astro.site);
 const imagemOg = new URL('/og.png', Astro.site);
+import { CLOUDFLARE_ANALYTICS_TOKEN } from '../data/conteudo';
 ---
 <!doctype html>
 <html lang="pt-BR" class="no-js">
@@ -51,5 +52,8 @@ const imagemOg = new URL('/og.png', Astro.site);
   <body class="antialiased">
     <a href="#conteudo" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 bg-surface text-ink px-4 py-2 r-ctl">Pular para o conteúdo</a>
     <slot />
+    {CLOUDFLARE_ANALYTICS_TOKEN && (
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_ANALYTICS_TOKEN })}></script>
+  )}
   </body>
 </html>

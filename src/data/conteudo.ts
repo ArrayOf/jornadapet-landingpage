@@ -10,6 +10,9 @@ export const CONTATO_EMAIL = 'contato@jornadapet.com.br';
 /** WhatsApp da empresa para "Salve nosso número" (NT-004 §5). Vazio: o bloco não aparece. */
 export const WHATSAPP_EMPRESA = '';
 
+/** Token público do Cloudflare Web Analytics (NT-004 §5). Vazio: nenhum script de medição. */
+export const CLOUDFLARE_ANALYTICS_TOKEN = '';
+
 export const LINKS_DA_NAV = [
   { rotulo: 'Como funciona', href: '/#como-funciona' },
   { rotulo: 'Para quem', href: '/#para-quem' },

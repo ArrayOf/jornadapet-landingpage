@@ -103,3 +103,27 @@ Pendências na §9 da nota. As principais:
 - a arte final por ilustrador;
 - a checagem no INPI e dos @;
 - levar a marca ao DESIGN.md, ao protótipo e ao plano da landing.
+
+---
+
+## Copy v2, indicação e fila — 2026-10-13
+
+[`NT-003`](notas-tecnicas/NT-003-copy-v2.md) (copy) ·
+[`NT-004`](notas-tecnicas/NT-004-pos-inscricao-indicacao.md) (pós-inscrição, indicação e fila) ·
+spec [`2026-10-13-copy-v2-e-indicacao-design.md`](superpowers/specs/2026-10-13-copy-v2-e-indicacao-design.md) ·
+plano [`2026-10-13-copy-v2-e-indicacao.md`](superpowers/plans/2026-10-13-copy-v2-e-indicacao.md)
+
+Revisão de copy da página no ar, depois relida por SEO, UX, um segundo copywriter e marketing.
+Vocabulário único ("convite" para a ação), h1 sem duplo sentido, metadados sem o domínio de
+terceiro, tela de sucesso que convida a indicar um colega (código aleatório por WhatsApp, link com
+UTMs, aviso no Telegram com o nome de quem indicou), fila com estado no Supabase e Web Analytics
+opcional.
+
+```text
+┌─────┬──────────────────────────────────────┬───────────┬──────┬───────┬──────────────────────┐
+│  #  │                Frente                │ Protótipo │ Spec │ Plano │        Estado        │
+├─────┼──────────────────────────────────────┼───────────┼──────┼───────┼──────────────────────┤
+│ 2   │ Copy v2, indicação e fila            │ —         │ ✅   │ ✅    │ implementada (branch)│
+└─────┴──────────────────────────────────────┴───────────┴──────┴───────┴──────────────────────┘
+```
+

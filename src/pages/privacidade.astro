@@ -9,7 +9,7 @@ const PENDENTE = false;
 if (PENDENTE && import.meta.env.PUBLIC_INDEXAR === 'true') {
   throw new Error('Política de privacidade pendente: preencha src/pages/privacidade.astro antes de publicar (spec §10.2).');
 }
-const ATUALIZADA_EM = '12 de outubro de 2026';
+const ATUALIZADA_EM = '13 de outubro de 2026';
 
 interface Secao { titulo: string; paragrafos?: string[]; itens?: string[] }
 const secoes: Secao[] = [
@@ -26,6 +26,7 @@ const secoes: Secao[] = [
       'Os dados que você digita no pedido de convite: nome, WhatsApp, área de atuação e cidade e estado.',
       'O registro do seu aceite: o texto que você aceitou e a data e hora do envio.',
       'A origem da visita, quando o link que você usou tiver esses dados: os parâmetros utm e ref (por exemplo, "instagram").',
+      'Um código aleatório de indicação, que vai no link que você pode mandar a um colega. Ele não contém nenhum dado seu e serve só para sabermos quem indicou quem.',
       'Dados técnicos usados só para segurança, como endereço IP e informações do navegador. Eles servem para verificar que o envio veio de uma pessoa e para limitar abusos, e não são guardados no nosso banco de dados.',
     ],
   },
@@ -48,7 +49,7 @@ const secoes: Secao[] = [
     titulo: 'Com quem os dados são tratados',
     paragrafos: ['Usamos três serviços que tratam dados em nosso nome, só para as finalidades acima:'],
     itens: [
-      'Cloudflare: hospeda esta página, recebe o envio do formulário e faz a verificação contra robôs (Turnstile). Pode processar dados técnicos em servidores fora do Brasil.',
+      'Cloudflare: hospeda esta página, recebe o envio do formulário e faz a verificação contra robôs (Turnstile) e mede as visitas à página com o Cloudflare Web Analytics, sem cookies e sem identificar você. Pode processar dados técnicos em servidores fora do Brasil.',
       'Supabase: guarda os pedidos de convite num banco de dados em servidores em São Paulo.',
       'Telegram: recebemos um aviso de cada novo pedido, com os dados dele, num grupo privado dos sócios.',
     ],
@@ -62,7 +63,7 @@ const secoes: Secao[] = [
   {
     titulo: 'O que fica no seu navegador',
     paragrafos: [
-      'Esta página não usa cookies próprios nem ferramentas de análise ou de publicidade. Se você chegar por um link com origem (utm ou ref), guardamos essa origem no armazenamento da aba do navegador, que é apagado quando a aba é fechada. A verificação contra robôs da Cloudflare pode ler informações técnicas do navegador no momento do envio.',
+      'Esta página não usa cookies próprios nem ferramentas de publicidade. Medimos as visitas com o Cloudflare Web Analytics, sem cookies e sem identificar você. Se você chegar por um link com origem (utm ou ref), guardamos essa origem no armazenamento da aba, que é apagado quando a aba é fechada. O seu código aleatório de indicação fica no armazenamento local do navegador, para o link continuar o mesmo se você voltar. A verificação contra robôs da Cloudflare pode ler informações técnicas do navegador no momento do envio.',
     ],
   },
   {

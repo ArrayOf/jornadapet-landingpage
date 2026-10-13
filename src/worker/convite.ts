@@ -84,11 +84,11 @@ async function quemIndicou(codigo: string, env: Ambiente, fetchFn: typeof fetch)
   }
 }
 
-function textoDoAviso(linha: Record<string, string>, indicador?: string): string {
+function textoDoAviso(linha: Record<string, string>, indicador?: string, reenvio = false): string {
   const origem = CHAVES_DE_ORIGEM.filter((k) => linha[k]).map((k) =>
     k === 'ref' && codigoValido(linha[k]) ? (indicador ?? `Indicação: código ${linha[k]}`) : `${k}: ${linha[k]}`);
   return [
-    'Novo pedido de convite',
+    reenvio ? 'Reenvio do mesmo WhatsApp hoje (dados novos, não gravados: corrija na fila)' : 'Novo pedido de convite',
     '',
     `Nome: ${linha.nome}`,
     `WhatsApp: ${mascararWhatsapp(linha.whatsapp)}`,
@@ -99,13 +99,13 @@ function textoDoAviso(linha: Record<string, string>, indicador?: string): string
   ].join('\n');
 }
 
-async function avisarNoTelegram(linha: Record<string, string>, token: string, chat: string, env: Ambiente, fetchFn: typeof fetch): Promise<void> {
+async function avisarNoTelegram(linha: Record<string, string>, token: string, chat: string, env: Ambiente, fetchFn: typeof fetch, reenvio = false): Promise<void> {
   try {
     const indicador = codigoValido(linha.ref) ? await quemIndicou(linha.ref, env, fetchFn) : undefined;
     const r = await fetchFn(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chat, text: textoDoAviso(linha, indicador), disable_web_page_preview: true }),
+      body: JSON.stringify({ chat_id: chat, text: textoDoAviso(linha, indicador, reenvio), disable_web_page_preview: true }),
     });
     if (!r.ok) console.error('convite: Telegram respondeu', r.status, await r.text().catch(() => ''));
   } catch (e) {
@@ -161,13 +161,23 @@ export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof
   if (codigoValido(codigo)) linha.codigo_indicacao = codigo;
 
   const cabecalhos = { ...cabecalhosSupabase(env.SUPABASE_SECRET_KEY), 'Content-Type': 'application/json', Prefer: 'return=minimal' };
+  const inserir = () => fetchFn(`${env.SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/convites`, { method: 'POST', headers: cabecalhos, body: JSON.stringify(linha) });
+  let reenvio = false;
 
   try {
-    const r = await fetchFn(`${env.SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/convites`, { method: 'POST', headers: cabecalhos, body: JSON.stringify(linha) });
-    if (!r.ok) {
-      const detalhe = await r.text().catch(() => '');
-      // Mesmo WhatsApp no mesmo dia: o índice recusa e, para quem envia, deu certo. Outro conflito é erro (NT-004 §2).
-      if (r.status === 409 && detalhe.includes('convites_whatsapp_por_dia')) return querJson ? json({ success: true }) : redirecionar('/obrigado');
+    let r = await inserir();
+    let detalhe = r.ok ? '' : await r.text().catch(() => '');
+    // Banco ainda sem a coluna (SQL 003 não aplicado antes do deploy): grava sem o código em vez de perder o pedido.
+    if (r.status === 400 && detalhe.includes('PGRST204') && detalhe.includes('codigo_indicacao')) {
+      console.error('convite: coluna codigo_indicacao ausente; gravando sem ela (rode supabase/003)');
+      delete linha.codigo_indicacao;
+      r = await inserir();
+      detalhe = r.ok ? '' : await r.text().catch(() => '');
+    }
+    // Mesmo WhatsApp no mesmo dia: o índice recusa e, para quem envia, deu certo; o aviso leva os dados
+    // novos, para os sócios verem a correção ("Errou algum dado?"). Outro conflito é erro (NT-004 §2).
+    if (r.status === 409 && detalhe.includes('convites_whatsapp_por_dia')) reenvio = true;
+    else if (!r.ok) {
       console.error('convite: Supabase respondeu', r.status, detalhe);
       // Só o status e o código do Postgres/PostgREST (ex.: 401/42501), para diagnóstico; nunca a mensagem.
       let codigo = '';
@@ -182,6 +192,6 @@ export async function tratarConvite(req: Request, env: Ambiente, fetchFn: typeof
   // trim: espaço ou quebra de linha colados no painel fazem o Telegram recusar.
   const tokenTelegram = env.TELEGRAM_BOT_TOKEN?.trim();
   const chatTelegram = env.TELEGRAM_CHAT_ID?.trim();
-  if (tokenTelegram && chatTelegram) aguardar(avisarNoTelegram(linha, tokenTelegram, chatTelegram, env, fetchFn));
+  if (tokenTelegram && chatTelegram) aguardar(avisarNoTelegram(linha, tokenTelegram, chatTelegram, env, fetchFn, reenvio));
   return querJson ? json({ success: true }) : redirecionar('/obrigado');
 }

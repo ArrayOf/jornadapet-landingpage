@@ -162,3 +162,14 @@ a aba) e o Web Analytics sem cookies. Data de atualização: 13/10/2026.
 
 Recompensa por indicação; regra de prioridade para quem indica (quando houver capacidade medida);
 contador de cliques nos botões; 301 do `workers.dev` para o domínio final preservando a query.
+
+## 8. Revisão final da implementação (13/10/2026)
+
+- **"Errou algum dado? Enviar de novo" no mesmo dia:** o banco recusa o segundo pedido do mesmo
+  WhatsApp, então a correção não é gravada. O Worker passa a mandar ao grupo um aviso marcado
+  "Reenvio do mesmo WhatsApp hoje (dados novos, não gravados: corrija na fila)", com os dados
+  novos, para os sócios corrigirem a linha à mão.
+- **SQL 003 depois do deploy:** se o banco ainda não tiver a coluna `codigo_indicacao` (PGRST204),
+  o Worker grava o pedido sem o código e registra no log. A ordem certa continua sendo SQL antes
+  do push, mas um engano não derruba mais o formulário.
+

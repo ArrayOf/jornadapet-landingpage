@@ -229,8 +229,9 @@ describe('tratarConvite: aviso no Telegram', () => {
     await expect(d.terminar()).resolves.toBeDefined();
   });
 
-  it('duplicado do dia, isca e falha no Supabase não avisam', async () => {
-    for (const [corpo, opcoes] of [[valido, { supabase: 409 }], [{ ...valido, botcheck: 'on' }, {}], [valido, { supabase: 500 }]] as const) {
+  // O duplicado do dia passou a avisar como reenvio (revisão final, 'Errou algum dado?').
+  it('isca e falha no Supabase não avisam', async () => {
+    for (const [corpo, opcoes] of [[{ ...valido, botcheck: 'on' }, {}], [valido, { supabase: 500 }]] as const) {
       const f = servicos(opcoes);
       const d = depois();
       await tratarConvite(json(corpo), comTelegram, f as unknown as typeof fetch, d.aguardar);
@@ -305,3 +306,41 @@ describe('tratarConvite: indicação', () => {
     expect(texto).toContain('ref: marcos');
   });
 });
+
+describe('tratarConvite: revisão final', () => {
+  const comTelegram = { ...env, TELEGRAM_BOT_TOKEN: 'tg-token', TELEGRAM_CHAT_ID: '-100123' };
+
+  it('reenvio do mesmo WhatsApp no dia: responde sucesso e avisa o grupo com os dados novos, marcado como reenvio', async () => {
+    const f = servicos({ supabase: 409, corpoSupabase: '{"code":"23505","message":"duplicate key value violates unique constraint \\"convites_whatsapp_por_dia\\""}' });
+    const pendentes: Promise<unknown>[] = [];
+    const r = await tratarConvite(json({ ...valido, nome: 'Camila Duarte Souza', cidade: 'Valinhos, SP' }), comTelegram, f as unknown as typeof fetch, (p) => { pendentes.push(p); });
+    expect(await r.json()).toEqual({ success: true });
+    await Promise.all(pendentes);
+    const texto = JSON.parse(chamadas(f, TELEGRAM)[0][1].body as string).text as string;
+    expect(texto).toContain('Reenvio do mesmo WhatsApp hoje');
+    expect(texto).toContain('Camila Duarte Souza');
+    expect(texto).toContain('Valinhos, SP');
+  });
+
+  it('banco ainda sem a coluna codigo_indicacao (SQL 003 não aplicado): grava o pedido sem o código', async () => {
+    let tentativa = 0;
+    const corpos: Record<string, string>[] = [];
+    const f = vi.fn(async (url: string, init?: RequestInit) => {
+      if (url === VERIFICA) return Response.json({ success: true });
+      if (url === SUPABASE) {
+        corpos.push(JSON.parse(init?.body as string));
+        return tentativa++ === 0
+          ? new Response('{"code":"PGRST204","message":"Could not find the \'codigo_indicacao\' column of \'convites\' in the schema cache"}', { status: 400 })
+          : new Response(null, { status: 201 });
+      }
+      throw new Error(`URL inesperada: ${url}`);
+    });
+    const r = await tratarConvite(json({ ...valido, codigo_indicacao: 'k7m2pq9x' }), env, f as unknown as typeof fetch);
+    expect(r.status).toBe(200);
+    expect(corpos).toHaveLength(2);
+    expect(corpos[0].codigo_indicacao).toBe('k7m2pq9x');
+    expect(corpos[1]).not.toHaveProperty('codigo_indicacao');
+    expect(corpos[1].nome).toBe('Camila Duarte');
+  });
+});
+

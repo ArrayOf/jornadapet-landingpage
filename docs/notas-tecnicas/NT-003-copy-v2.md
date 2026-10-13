@@ -75,10 +75,34 @@ desejo, o segundo é a ação.
 ## 5. Selo do hero
 
 "Convites abertos aos poucos" criaria escassez honesta, mas repetiria "Acesso por convite", que está
-duas linhas abaixo. "Em teste com adestradores" diz a fase e para quem, sem repetir. Ícone: frasco
-(`ph:flask`), o mesmo da faixa "Em estudo".
+duas linhas abaixo. "Em teste com adestradores" diz a fase e para quem, sem repetir. Ícone:
+`ph:seal-check` (a primeira versão usava o frasco, que é o ícone das ideias "Em estudo", sem data:
+ligaria o produto da v1 ao que não existe; ver §7).
 
 ## 6. Pendências que destravam o resto
 
 Domínio e e-mail (achado 4), números reais de credibilidade e prova social (8, 15), respostas de
 produto para o FAQ (10). Ver spec §7.
+
+## 7. Revisão por especialistas (13/10/2026)
+
+SEO, UX, um segundo copywriter e marketing leram a primeira versão da spec. O que mudou na copy:
+
+| Achado | Quem | Mudança |
+|---|---|---|
+| h2 do formulário "Teste antes de todo mundo." usa "teste" como ação (escapou da tabela) | UX, copy, SEO | **Peça seu convite.** |
+| Title começava pela marca, que ninguém busca, e não tinha "cães" | SEO | **Agenda, clientes e pagamentos para adestrador de cães \| JornadaPet**; og:title encurtado para 55 caracteres |
+| Prévia se contradizia: "onde você já conversa" (Telegram) x "a conversa continua no WhatsApp" | copy | Subtítulo novo; "Para o tutor, nada muda." em 1º; sai "No celular e no computador" (repete o hero) e a coluna fica 2 + 2 (UX) |
+| "Mande o link para ele" exclui adestradoras; a página usa a Camila como persona | copy | **Conhece mais alguém que adestra?** / **Mande o link para pedir o convite também.** |
+| Mensagem de indicação soava como anúncio e não dizia que é grátis | copy, marketing | Na voz do colega, com "É feita para adestrador e não custa nada durante o teste." |
+| "Respondemos" supõe pergunta; o prazo prometia também o convite | copy, marketing | **A gente chama você no WhatsApp em até 3 dias úteis.** (só o primeiro contato) |
+| "Agende" + "Agenda…" parece erro; o adestrador fala "horário fixo" | copy | Texto novo do passo; "aula" ou "sessão" fica para confirmar com adestradores |
+| Para quem: intro e cartão diziam o mesmo; "carteira recorrente" ficou na intro | copy | Intro sem jargão; cartão com informação nova; h2 com "de cães" (SEO) |
+| "bot" no rótulo e no aria-label do hero | UX, SEO | "no Telegram" |
+| FAQ dos dados: "outro fim" sem complemento e confusão com a política da página | copy | Texto novo |
+| A pergunta nova não respondia "é um aplicativo?" | SEO | **Preciso baixar algum aplicativo? Funciona no iPhone e no Android?** |
+| h1 de 78 caracteres pode passar de 3 linhas | UX | Medir; primeiro o tipo (2 rem é o mínimo da escala), depois encurtar o texto |
+
+Ficou como estava, por concordância dos quatro: o h1 (opção c), "Quero meu convite" e "Pedir meu
+convite", tirar "canal certo" do Sobre, os exemplos com nomes e valores, a microcopy de erro.
+

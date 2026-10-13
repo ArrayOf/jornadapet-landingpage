@@ -1,13 +1,13 @@
 import type { Magia } from './tipos';
 
 export interface Pagina {
-  menu: boolean; scrolled: boolean; heroCta: boolean; formVisivel: boolean;
+  menu: boolean; scrolled: boolean; heroCta: boolean; formVisivel: boolean; pedido: boolean;
   init(): void; abrirMenu(): void; fecharMenu(devolverFoco?: boolean): void;
 }
 
 export function pagina(): Pagina & ThisType<Pagina & Magia> {
   return {
-    menu: false, scrolled: false, heroCta: true, formVisivel: false,
+    menu: false, scrolled: false, heroCta: true, formVisivel: false, pedido: false,
     init() {
       const marca = document.createElement('div');
       marca.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:1px';

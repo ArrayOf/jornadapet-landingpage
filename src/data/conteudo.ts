@@ -7,6 +7,9 @@ import socioThiago from '../assets/socio-thiago.jpg';
 
 export const CONTATO_EMAIL = 'contato@jornadapet.com.br';
 
+/** WhatsApp da empresa para "Salve nosso número" (NT-004 §5). Vazio: o bloco não aparece. */
+export const WHATSAPP_EMPRESA = '';
+
 export const LINKS_DA_NAV = [
   { rotulo: 'Como funciona', href: '/#como-funciona' },
   { rotulo: 'Para quem', href: '/#para-quem' },

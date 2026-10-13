@@ -57,3 +57,25 @@ test('com reduzir movimento não troca sozinho', async ({ page }) => {
   await page.clock.runFor(13000);
   await expect(page.locator('#painel-cadastre')).toHaveAttribute('data-on', 'true');
 });
+
+test('abaixo de 1024 px, o cartão do passo não cobre o texto nem sai do painel', async ({ browser }) => {
+  for (const largura of [360, 412, 700, 900]) {
+    const ctx = await browser.newContext({ viewport: { width: largura, height: 900 }, reducedMotion: 'reduce' });
+    const page = await ctx.newPage();
+    await page.route('https://challenges.cloudflare.com/**', (r) => r.fulfill({ contentType: 'application/javascript', body: '' }));
+    await page.goto('/');
+    await page.locator('#como-funciona').scrollIntoViewIfNeeded();
+    for (const aba of ['Cadastre', 'Agende', 'Acompanhe']) {
+      await page.getByRole('tab', { name: aba }).click();
+      const medidas = await page.evaluate(() => {
+        const palco = document.querySelector('.palco')!.getBoundingClientRect();
+        const texto = [...document.querySelectorAll('.palco > p')].find((p) => getComputedStyle(p).display !== 'none')!.getBoundingClientRect();
+        const cartao = [...document.querySelectorAll('.stage-card')].find((c) => c.getAttribute('data-on') === 'true')!.getBoundingClientRect();
+        return { textoFim: texto.bottom, cartaoInicio: cartao.top, cartaoFim: cartao.bottom, palcoFim: palco.bottom };
+      });
+      expect(medidas.cartaoInicio, `${largura}px ${aba}: cartão cobre o texto`).toBeGreaterThanOrEqual(medidas.textoFim);
+      expect(medidas.cartaoFim, `${largura}px ${aba}: cartão sai do painel`).toBeLessThanOrEqual(medidas.palcoFim);
+    }
+    await ctx.close();
+  }
+});

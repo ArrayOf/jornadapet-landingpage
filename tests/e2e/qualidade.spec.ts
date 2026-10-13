@@ -39,3 +39,33 @@ test('um h1 só, e títulos sem saltos', async ({ page }) => {
   expect(niveis.filter((n) => n === 1)).toHaveLength(1);
   for (let i = 1; i < niveis.length; i++) expect(niveis[i] - niveis[i - 1]).toBeLessThanOrEqual(1);
 });
+
+const APARELHOS = [[360, 740], [390, 844], [412, 915], [768, 1024], [820, 1180], [1024, 768], [1180, 820]] as const;
+
+test('celular e tablet: sem rolagem lateral em nenhuma largura', async ({ browser }) => {
+  for (const [w, h] of APARELHOS) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, hasTouch: true });
+    const page = await ctx.newPage();
+    await page.route('https://challenges.cloudflare.com/**', (r) => r.fulfill({ contentType: 'application/javascript', body: '' }));
+    for (const rota of ['/', '/privacidade']) {
+      await page.goto(rota);
+      const sobra = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(sobra, `${w}px ${rota}`).toBeLessThanOrEqual(0);
+    }
+    await ctx.close();
+  }
+});
+
+test('celular e tablet: links do menu e do rodapé com alvo de toque de 44 px', async ({ browser }) => {
+  for (const [w, h] of APARELHOS) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, hasTouch: true });
+    const page = await ctx.newPage();
+    await page.route('https://challenges.cloudflare.com/**', (r) => r.fulfill({ contentType: 'application/javascript', body: '' }));
+    await page.goto('/');
+    const pequenos = await page.evaluate(() => [...document.querySelectorAll('header nav ul a, footer a')]
+      .filter((a) => { const r = a.getBoundingClientRect(); return r.width > 0 && r.height < 44 && !a.closest('p, span'); })
+      .map((a) => `${(a.textContent || '').trim()} ${Math.round(a.getBoundingClientRect().height)}px`));
+    expect(pequenos, `${w}px`).toEqual([]);
+    await ctx.close();
+  }
+});

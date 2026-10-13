@@ -34,7 +34,7 @@ import thorAvatar from '../assets/thor-avatar.jpg';
         ))}
       </div>
 
-      <div class="palco relative min-h-[560px] overflow-hidden r-card bg-bg p-5 sm:min-h-[460px] sm:p-8">
+      <div class="palco relative min-h-[560px] overflow-hidden r-card bg-bg p-5 sm:p-8 lg:min-h-[460px]">
         <div class="blob b1 -top-16 -left-10 size-72"></div>
         <div class="blob b2 -bottom-20 right-0 size-80"></div>
         <button type="button" x-cloak x-show="!reduzido" class="absolute right-3 top-3 z-10 hidden size-9 place-items-center rounded-full border border-line bg-surface/80 text-ink hover:bg-surface lg:grid"
@@ -44,7 +44,7 @@ import thorAvatar from '../assets/thor-avatar.jpg';
         </button>
         {PASSOS.map((p, i) => <p class="relative pr-10 text-[16px] leading-relaxed text-body lg:hidden" x-show={`cur === ${i}`} {...(i !== 0 ? { 'x-cloak': '' } : {})}>{p.texto}</p>)}
 
-        <div id="painel-cadastre" role="tabpanel" tabindex="0" aria-labelledby="tab-cadastre" class="stage-card absolute inset-x-4 top-32 sm:inset-x-10 sm:top-10 lg:top-12" data-on="true" :data-on="(cur === 0).toString()" :inert="cur !== 0">
+        <div id="painel-cadastre" role="tabpanel" tabindex="0" aria-labelledby="tab-cadastre" class="stage-card absolute inset-x-4 top-32 sm:inset-x-10 lg:top-12" data-on="true" :data-on="(cur === 0).toString()" :inert="cur !== 0">
           <div class="glass r-card mx-auto max-w-[390px] p-5 text-[14px]">
             <div class="flex items-center gap-3">
               <Image src={thorAvatar} width={56} height={56} alt="" class="size-14 rounded-full object-cover" />
@@ -61,7 +61,7 @@ import thorAvatar from '../assets/thor-avatar.jpg';
           </div>
         </div>
 
-        <div id="painel-agende" role="tabpanel" tabindex="0" aria-labelledby="tab-agende" class="stage-card absolute inset-x-4 top-32 sm:inset-x-10 sm:top-10 lg:top-12" data-on="false" :data-on="(cur === 1).toString()" :inert="cur !== 1">
+        <div id="painel-agende" role="tabpanel" tabindex="0" aria-labelledby="tab-agende" class="stage-card absolute inset-x-4 top-32 sm:inset-x-10 lg:top-12" data-on="false" :data-on="(cur === 1).toString()" :inert="cur !== 1">
           <div class="glass r-card mx-auto max-w-[400px] p-5 text-[14px]">
             <div class="flex items-center justify-between"><div class="display text-[20px] font-semibold text-ink">Terça, 14 de outubro</div><span class="r-ctl border border-line bg-surface px-2.5 py-1 text-[12px] font-medium text-ink">Semana</span></div>
             <ol class="mt-4 space-y-2">
@@ -73,7 +73,7 @@ import thorAvatar from '../assets/thor-avatar.jpg';
           </div>
         </div>
 
-        <div id="painel-acompanhe" role="tabpanel" tabindex="0" aria-labelledby="tab-acompanhe" class="stage-card absolute inset-x-4 top-32 sm:inset-x-10 sm:top-10 lg:top-12" data-on="false" :data-on="(cur === 2).toString()" :inert="cur !== 2">
+        <div id="painel-acompanhe" role="tabpanel" tabindex="0" aria-labelledby="tab-acompanhe" class="stage-card absolute inset-x-4 top-32 sm:inset-x-10 lg:top-12" data-on="false" :data-on="(cur === 2).toString()" :inert="cur !== 2">
           <div class="glass r-card mx-auto max-w-[390px] p-5 text-[14px]">
             <div class="text-[12px] font-medium text-mute">Valor a receber de Marina Alves</div>
             <div class="display mt-1 text-[20px] font-semibold text-ink">Pacote de outubro, Thor</div>

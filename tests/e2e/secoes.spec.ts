@@ -37,3 +37,13 @@ test('selo redondo aparece no Sobre com pelo menos 96px (NT-002 §7), um por tem
   const caixa = await selo.boundingBox();
   expect(caixa!.width).toBeGreaterThanOrEqual(96);
 });
+
+test('tablet (768 px): os destaques da Prévia ficam em duas colunas, sem metade vazia', async ({ browser }) => {
+  const ctx = await browser.newContext({ viewport: { width: 768, height: 1024 }, hasTouch: true });
+  const page = await ctx.newPage();
+  await page.goto('/');
+  const [esquerda, direita] = await page.locator('section.previa ul').evaluateAll((uls) => uls.map((u) => { const r = u.getBoundingClientRect(); return { top: r.top, left: r.left, right: r.right }; }));
+  expect(direita.left).toBeGreaterThanOrEqual(esquerda.right);
+  expect(Math.abs(direita.top - esquerda.top)).toBeLessThan(4);
+  await ctx.close();
+});

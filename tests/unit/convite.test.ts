@@ -344,3 +344,25 @@ describe('tratarConvite: revisão final', () => {
   });
 });
 
+
+describe('tratarConvite: grupo do Telegram migrado para supergrupo', () => {
+  it('reenvia o aviso para o novo chat que o Telegram informar', async () => {
+    const chats: string[] = [];
+    const f = vi.fn(async (url: string, init?: RequestInit) => {
+      if (url === VERIFICA) return Response.json({ success: true });
+      if (url === SUPABASE) return new Response(null, { status: 201 });
+      if (url === TELEGRAM) {
+        const chat = JSON.parse(init?.body as string).chat_id as string;
+        chats.push(chat);
+        return chat === '-100123'
+          ? Response.json({ ok: false, description: 'Bad Request: group chat was upgraded to a supergroup chat', parameters: { migrate_to_chat_id: -1009876 } }, { status: 400 })
+          : Response.json({ ok: true });
+      }
+      throw new Error(`URL inesperada: ${url}`);
+    });
+    const pendentes: Promise<unknown>[] = [];
+    await tratarConvite(json(valido), { ...env, TELEGRAM_BOT_TOKEN: 'tg-token', TELEGRAM_CHAT_ID: '-100123' }, f as unknown as typeof fetch, (p) => { pendentes.push(p); });
+    await Promise.all(pendentes);
+    expect(chats).toEqual(['-100123', '-1009876']);
+  });
+});

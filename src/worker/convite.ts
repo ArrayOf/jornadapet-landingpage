@@ -102,12 +102,27 @@ function textoDoAviso(linha: Record<string, string>, indicador?: string, reenvio
 async function avisarNoTelegram(linha: Record<string, string>, token: string, chat: string, env: Ambiente, fetchFn: typeof fetch, reenvio = false): Promise<void> {
   try {
     const indicador = codigoValido(linha.ref) ? await quemIndicou(linha.ref, env, fetchFn) : undefined;
-    const r = await fetchFn(`https://api.telegram.org/bot${token}/sendMessage`, {
+    const texto = textoDoAviso(linha, indicador, reenvio);
+    const mandar = (para: string) => fetchFn(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chat, text: textoDoAviso(linha, indicador, reenvio), disable_web_page_preview: true }),
+      body: JSON.stringify({ chat_id: para, text: texto, disable_web_page_preview: true }),
     });
-    if (!r.ok) console.error('convite: Telegram respondeu', r.status, await r.text().catch(() => ''));
+    let r = await mandar(chat);
+    if (!r.ok) {
+      const detalhe = await r.text().catch(() => '');
+      // Grupo virou supergrupo (muda o ID): o Telegram informa o novo; manda para ele e avisa no log
+      // para atualizar o TELEGRAM_CHAT_ID no painel.
+      let novo: unknown;
+      try { novo = (JSON.parse(detalhe) as { parameters?: { migrate_to_chat_id?: unknown } }).parameters?.migrate_to_chat_id; } catch { /* corpo sem JSON */ }
+      if (typeof novo === 'number' || typeof novo === 'string') {
+        console.error(`convite: grupo do Telegram migrou para ${novo}; atualize TELEGRAM_CHAT_ID`);
+        r = await mandar(String(novo));
+        if (!r.ok) console.error('convite: Telegram respondeu', r.status, await r.text().catch(() => ''));
+      } else {
+        console.error('convite: Telegram respondeu', r.status, detalhe);
+      }
+    }
   } catch (e) {
     console.error('convite: falha de rede com o Telegram', e);
   }

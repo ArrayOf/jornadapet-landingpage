@@ -3,6 +3,7 @@ import { mascararWhatsapp } from '../lib/whatsapp';
 import { primeiroCampoComErro, validar, validarCampo, type Campo, type Dados, type Erros } from '../lib/validacao';
 import { guardarOrigem, type Origem } from '../lib/utm';
 import { enviar, montarEnvio } from '../lib/formulario';
+import { esperarToken, vigiarTurnstile } from './turnstile-tardio';
 import { codigoParaWhatsapp, linkCompartilharWhatsapp, linkDeIndicacao, mensagemDeIndicacao } from '../lib/indicacao';
 
 const ID_DO_CAMPO: Record<Campo, string> = { nome: 'f-nome', whatsapp: 'f-whats', perfil: 'f-perfil-0', cidade: 'f-cidade', aceite: 'f-aceite' };
@@ -28,11 +29,30 @@ export interface Formulario {
 
 const vazio = (): Dados => ({ nome: '', whatsapp: '', perfil: '', cidade: '', aceite: false });
 
+/** O que a pessoa já preencheu no HTML antes de o Alpine ligar (vazio se nada). */
+function digitadoAntes(form: HTMLFormElement | null): Dados {
+  if (!form) return vazio();
+  const campo = (nome: string) => (form.elements.namedItem(nome) as HTMLInputElement | null);
+  const perfil = form.querySelector<HTMLInputElement>('input[name="perfil"]:checked')?.value ?? '';
+  return {
+    nome: campo('nome')?.value ?? '',
+    whatsapp: mascararWhatsapp(campo('whatsapp')?.value ?? ''),
+    perfil,
+    cidade: campo('cidade')?.value ?? '',
+    aceite: campo('aceite')?.checked ?? false,
+  };
+}
+
 export function formulario(endpoint: string): Formulario & ThisType<Formulario & Magia> {
   return {
     f: vazio(), isca: false, err: {}, status: 'idle', origem: {}, primeiroNome: '', whatsEnviado: '',
     codigo: '', linkWhats: '', linkCopia: '', compartilhar: '', copiado: false, mostrarLink: false, aviso: '',
-    init() { this.origem = guardarOrigem(sessao(), window.location.search); },
+    init() {
+      // Alpine liga depois do load: quem já digitou não pode perder o texto quando o x-model assumir.
+      this.f = digitadoAntes(this.$el.querySelector('form'));
+      this.origem = guardarOrigem(sessao(), window.location.search);
+      vigiarTurnstile(this.$el, this.$refs.caixaTurnstile);
+    },
     mascarar() { this.f.whatsapp = mascararWhatsapp(this.f.whatsapp); },
     tocar(c) { this.err = { ...this.err, [c]: validarCampo(c, this.f) || undefined }; },
     async enviarFormulario() {
@@ -42,7 +62,7 @@ export function formulario(endpoint: string): Formulario & ThisType<Formulario &
       const campo = primeiroCampoComErro(this.err);
       if (campo) { document.getElementById(ID_DO_CAMPO[campo])?.focus(); return; }
       this.status = 'enviando';
-      const token = this.$el.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]')?.value ?? '';
+      const token = await esperarToken(this.$el, this.$refs.caixaTurnstile);
       // Um código por WhatsApp (NT-004 §2): outro contato no mesmo aparelho ganha código próprio.
       this.codigo = codigoParaWhatsapp(local(), this.f.whatsapp);
       const resultado = await enviar({ ...montarEnvio(this.f, this.origem), 'cf-turnstile-response': token, codigo_indicacao: this.codigo }, endpoint);

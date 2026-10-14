@@ -49,8 +49,8 @@ test('celular e tablet: sem rolagem lateral em nenhuma largura', async ({ browse
     await page.route('https://challenges.cloudflare.com/**', (r) => r.fulfill({ contentType: 'application/javascript', body: '' }));
     for (const rota of ['/', '/privacidade']) {
       await page.goto(rota);
-      const sobra = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-      expect(sobra, `${w}px ${rota}`).toBeLessThanOrEqual(0);
+      // Reconfere por alguns instantes: sob carga, a medida no meio do carregamento oscilava; sobra que fica, reprova.
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth), { message: `${w}px ${rota}` }).toBeLessThanOrEqual(0);
     }
     await ctx.close();
   }

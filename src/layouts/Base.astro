@@ -1,6 +1,9 @@
 ---
 import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/instrument-sans';
+// Pré-carga das duas fontes (subset latin, o que a página usa): o navegador não espera o CSS para descobri-las.
+import fonteTitulos from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url';
+import fonteTexto from '@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url';
 import '../styles/global.css';
 
 interface Props { title: string; description: string; noindex?: boolean; jsonLd?: object[]; ogTitle?: string; ogDescription?: string }
@@ -15,6 +18,8 @@ import { CLOUDFLARE_ANALYTICS_TOKEN } from '../data/conteudo';
 <html lang="pt-BR" class="no-js">
   <head>
     <meta charset="utf-8" />
+    <link rel="preload" as="font" type="font/woff2" href={fonteTitulos} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={fonteTexto} crossorigin />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -55,5 +60,11 @@ import { CLOUDFLARE_ANALYTICS_TOKEN } from '../data/conteudo';
     {CLOUDFLARE_ANALYTICS_TOKEN && (
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: CLOUDFLARE_ANALYTICS_TOKEN })}></script>
   )}
-  </body>
+    <script>
+    // Alpine liga assim que a página é montada (script de módulo). Ligar só depois do load ganhava ~0,14 s
+    // no laboratório, mas perdia toques e cliques de quem interage cedo num celular lento (13/10/2026).
+    import { iniciar } from '../scripts/iniciar-alpine';
+    iniciar();
+  </script>
+</body>
 </html>

@@ -1,0 +1,4 @@
+# Cloudflare Workers (assets estáticos). Arquivos em /_astro/ têm hash no nome: um conteúdo novo
+# ganha nome novo, então podem ficar em cache por um ano sem revalidar (plano de desempenho, 13/10/2026).
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

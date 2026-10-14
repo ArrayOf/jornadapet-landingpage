@@ -8,17 +8,30 @@
     "directory": "./dist",
     "binding": "ASSETS",
     // Só /api/* passa pelo Worker; o resto é servido direto dos arquivos.
-    "run_worker_first": ["/api/*"],
+    "run_worker_first": [
+      "/api/*"
+    ],
     // /privacidade serve privacidade.html; endereço inexistente serve 404.html com status 404
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
   },
   // A URL não é sigilosa e fica aqui (variável só do painel some a cada deploy).
   // SUPABASE_SECRET_KEY e TURNSTILE_SECRET_KEY são Secrets no painel (Variables and Secrets) e nunca vem para o repositório.
-  "vars": { "SUPABASE_URL": "https://stmjxrciznwdbemgoiyk.supabase.co" },
+  "vars": {
+    "SUPABASE_URL": "https://stmjxrciznwdbemgoiyk.supabase.co"
+  },
   // Limite por IP para /api/convite: 5 pedidos por minuto (o período só pode ser 10 ou 60 s).
   "ratelimits": [
-    { "name": "LIMITE_CONVITE", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } }
+    {
+      "name": "LIMITE_CONVITE",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 5,
+        "period": 60
+      }
+    }
   ],
-  "observability": { "enabled": true }
+  "observability": {
+    "enabled": true
+  }
 }

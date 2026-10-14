@@ -10,6 +10,7 @@ referência visual desta página: a direção foi reescolhida na NT-001.
 
 ## Estrutura
 
+- `notas-de-negocio/NN-00X-*.md` — mercado, concorrência, busca e decisões de negócio.
 - `notas-tecnicas/NT-00X-*.md` — decisões, com o motivo de cada uma e as direções descartadas.
   - `notas-tecnicas/prototipos/` — protótipos HTML autocontidos (abrem direto do disco).
   - `notas-tecnicas/imagens/NT-00X/` — capturas das direções e dos resultados.
@@ -126,4 +127,11 @@ opcional.
 │ 2   │ Copy v2, indicação e fila            │ —         │ ✅   │ ✅    │ implementada (branch)│
 └─────┴──────────────────────────────────────┴───────────┴──────┴───────┴──────────────────────┘
 ```
+
+---
+
+## Notas de negócio
+
+- [`NN-001`](notas-de-negocio/NN-001-sondagem-de-busca.md) — sondagem de busca (13/10/2026): ninguém
+  disputa o nome "JornadaPet"; gestão para o adestrador autônomo parece pouco disputada em português.
 

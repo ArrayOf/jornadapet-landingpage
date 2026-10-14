@@ -1,0 +1,10 @@
+{
+  // O VS Code oferece instalar estas ao abrir o projeto.
+  "recommendations": [
+    "astro-build.astro-vscode",
+    "bradlc.vscode-tailwindcss",
+    "vitest.explorer",
+    "ms-playwright.playwright",
+    "davidanson.vscode-markdownlint"
+  ]
+}

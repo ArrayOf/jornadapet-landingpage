@@ -1,0 +1,52 @@
+{
+  // Editor: o mesmo estilo do código que já existe (2 espaços, LF, UTF-8).
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "files.eol": "\n",
+  "files.encoding": "utf8",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "[markdown]": { "files.trimTrailingWhitespace": false },
+
+  // TypeScript do projeto (5.9), não o que vem com o VS Code.
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+
+  // Astro e Tailwind 4: classes nos .astro e at-rules do Tailwind (@theme, @custom-variant) sem aviso falso.
+  "[astro]": { "editor.defaultFormatter": "astro-build.astro-vscode" },
+  "tailwindCSS.includeLanguages": { "astro": "html" },
+  "tailwindCSS.experimental.configFile": "src/styles/global.css",
+  "files.associations": { "*.css": "tailwindcss" },
+  "css.lint.unknownAtRules": "ignore",
+
+  // Busca e explorador sem gerados, dependências e rascunhos.
+  "files.exclude": {
+    "**/.astro": true,
+    "**/.wrangler": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.astro": true,
+    "**/.wrangler": true,
+    "**/.superpowers": true,
+    "**/test-results": true,
+    "**/playwright-report": true,
+    "references/**": true,
+    "docs/notas-tecnicas/prototipos/.artifact-build/**": true
+  },
+
+  // Markdown das notas técnicas: tabelas e HTML inline são intencionais.
+  "markdownlint.config": {
+    "MD013": false,
+    "MD024": { "siblings_only": true },
+    "MD033": false,
+    "MD034": false,
+    "MD041": false,
+    "MD060": false
+  },
+
+  // Testes: Vitest (unidade) e Playwright (e2e) no painel de testes.
+  "vitest.enable": true,
+  "playwright.reuseBrowser": false
+}

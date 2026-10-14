@@ -5,7 +5,10 @@ dist/
 .env
 .env.*
 .DS_Store
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .idea/
 .playwright-mcp/
 docs/notas-tecnicas/prototipos/.artifact-build/
